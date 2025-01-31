@@ -1,0 +1,1006 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Taskronaut API",
+    "version": "1.0.0",
+    "description": "API documentation for Taskronaut"
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Operations related to user authentication such as login, registration, and logout."
+    },
+    {
+      "name": "Task",
+      "description": "Operations for managing tasks within the application."
+    },
+    {
+      "name": "Board",
+      "description": "Operations related to boards management."
+    },
+    {
+      "name": "BoardMember",
+      "description": "Operations for managing board members."
+    },
+    {
+      "name": "List",
+      "description": "Operations related to task lists."
+    },
+    {
+      "name": "Message",
+      "description": "Operations for managing tasks within the application."
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "get": {
+        "summary": "Holt alle Tasks",
+        "description": "Gibt eine Liste aller vorhandenen Tasks aus der Datenbank zurück.",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Eine Liste von Tasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "taskID": {
+                        "type": "integer"
+                      },
+                      "taskCreator": {
+                        "type": "string"
+                      },
+                      "taskName": {
+                        "type": "string"
+                      },
+                      "dueDate": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Erstellt einen neuen Task",
+        "description": "Fügt einen neuen Task in die Datenbank hinzu.",
+        "tags": [
+          "Task"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskCreator": {
+                    "type": "string"
+                  },
+                  "taskCreatorID": {
+                    "type": "integer"
+                  },
+                  "dueDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "responsible": {
+                    "type": "string"
+                  },
+                  "taskDescription": {
+                    "type": "string"
+                  },
+                  "taskName": {
+                    "type": "string"
+                  },
+                  "priorities": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "taskStatus": {
+                    "type": "string"
+                  },
+                  "authorizedUser": {
+                    "type": "string"
+                  },
+                  "comments": {
+                    "type": "string"
+                  },
+                  "taskHistoryID": {
+                    "type": "integer"
+                  },
+                  "boardID": {
+                    "type": "integer"
+                  },
+                  "listID": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task erfolgreich erstellt"
+          },
+          "400": {
+            "description": "Fehler beim Erstellen des Tasks"
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "put": {
+        "summary": "Updatet einen bestimmten Task",
+        "description": "Aktualisiert die Eigenschaften eines bestehenden Tasks.",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID des zu aktualisierenden Tasks"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskCreator": {
+                    "type": "string"
+                  },
+                  "taskCreationDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "dueDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "responsible": {
+                    "type": "string"
+                  },
+                  "taskDescription": {
+                    "type": "string"
+                  },
+                  "taskName": {
+                    "type": "string"
+                  },
+                  "priorities": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "taskStatus": {
+                    "type": "string"
+                  },
+                  "authorizedUser": {
+                    "type": "string"
+                  },
+                  "comments": {
+                    "type": "string"
+                  },
+                  "taskHistoryID": {
+                    "type": "integer"
+                  },
+                  "boardID": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task erfolgreich aktualisiert"
+          },
+          "404": {
+            "description": "Task nicht gefunden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Löscht einen Task",
+        "description": "Löscht einen Task basierend auf der übergebenen ID.",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID des zu löschenden Tasks"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task erfolgreich gelöscht"
+          },
+          "404": {
+            "description": "Task nicht gefunden"
+          }
+        }
+      }
+    },
+    "/tasks/{id}/listId": {
+      "patch": {
+        "summary": "Aktualisiert die listId eines bestimmten Tasks",
+        "description": "Setzt eine neue listId für den gegebenen Task basierend auf seiner ID.",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID des zu aktualisierenden Tasks"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "listId": {
+                    "type": "integer",
+                    "description": "Neue List-ID für den Task"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task erfolgreich aktualisiert"
+          },
+          "400": {
+            "description": "Fehlende listId im Request Body"
+          },
+          "404": {
+            "description": "Task nicht gefunden"
+          }
+        }
+      }
+    },
+    "/tasks/{user}": {
+      "post": {
+        "summary": "Get user-specific tasks",
+        "description": "Retrieves tasks specific to a user based on their user ID and session.",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session": {
+                    "type": "string",
+                    "description": "The session token of the user."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user-specific tasks.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "taskID": {
+                        "type": "integer"
+                      },
+                      "taskCreator": {
+                        "type": "string"
+                      },
+                      "taskName": {
+                        "type": "string"
+                      },
+                      "dueDate": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access due to invalid session."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/getListIdFromTaskId/{id}": {
+      "get": {
+        "summary": "Get the list ID associated with a specific task ID.",
+        "description": "This endpoint retrieves the list ID that corresponds to the given task ID.",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ID of the task.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the list ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "listId": {
+                          "type": "string",
+                          "example": "1234abcd"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task ID not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Task ID not found."
+                    },
+                    "data": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error."
+                    },
+                    "data": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards": {
+      "get": {
+        "summary": "Liefert alle Boards als JSON zurück",
+        "tags": [
+          "Board"
+        ],
+        "description": "Gibt eine Liste aller Boards zurück.",
+        "responses": {
+          "200": {
+            "description": "Eine Liste von Boards",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "boardId": {
+                        "type": "integer",
+                        "description": "Die ID des Boards"
+                      },
+                      "boardName": {
+                        "type": "string",
+                        "description": "Der Name des Boards"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Erstellt ein neues Board",
+        "tags": [
+          "Board"
+        ],
+        "requestBody": {
+          "description": "Name des neuen Boards",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardName": {
+                    "type": "string",
+                    "description": "Der Name des Boards"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Board erfolgreich erstellt"
+          },
+          "400": {
+            "description": "Fehler beim Erstellen des Boards"
+          }
+        }
+      }
+    },
+    "/boards/{id}": {
+      "delete": {
+        "summary": "Löscht ein existierendes Board",
+        "tags": [
+          "Board"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID des zu löschenden Boards"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Board erfolgreich entfernt"
+          },
+          "404": {
+            "description": "Board nicht gefunden"
+          }
+        }
+      }
+    },
+    "/board-members": {
+      "get": {
+        "summary": "Gibt alle Board-Mitglieder zurück",
+        "tags": [
+          "BoardMember"
+        ],
+        "description": "Liefert eine Liste aller Mitglieder eines Boards.",
+        "responses": {
+          "200": {
+            "description": "Eine Liste von Board-Mitgliedern",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "integer",
+                        "description": "Die ID des Mitglieds"
+                      },
+                      "boardId": {
+                        "type": "integer",
+                        "description": "Die ID des Boards"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Fügt ein Mitglied einem Board hinzu",
+        "tags": [
+          "BoardMember"
+        ],
+        "requestBody": {
+          "description": "ID des Users und ID des Boards",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer",
+                    "description": "Die ID des Users"
+                  },
+                  "boardId": {
+                    "type": "integer",
+                    "description": "Die ID des Boards"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Mitglied erfolgreich hinzugefügt"
+          },
+          "400": {
+            "description": "Fehler beim Hinzufügen des Mitglieds"
+          }
+        }
+      }
+    },
+    "/board-members/{id}": {
+      "delete": {
+        "summary": "Entfernt ein Mitglied von einem Board",
+        "tags": [
+          "BoardMember"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID des Mitglieds"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mitglied erfolgreich entfernt"
+          },
+          "404": {
+            "description": "Mitglied nicht gefunden"
+          }
+        }
+      }
+    },
+    "/lists": {
+      "get": {
+        "summary": "Liefert alle Listen zurück",
+        "description": "Gibt eine Liste aller vorhandenen Listen aus der Datenbank zurück.",
+        "tags": [
+          "List"
+        ],
+        "responses": {
+          "200": {
+            "description": "Eine Liste von Listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "listID": {
+                        "type": "integer",
+                        "description": "Die eindeutige ID der Liste"
+                      },
+                      "listName": {
+                        "type": "string",
+                        "description": "Der Name der Liste"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehler beim Zugriff auf die Datenbank"
+          }
+        }
+      },
+      "post": {
+        "summary": "Erstellt eine neue Liste",
+        "description": "Fügt eine neue Liste in die Datenbank hinzu.",
+        "tags": [
+          "List"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "listName": {
+                    "type": "string",
+                    "description": "Der Name der neuen Liste",
+                    "example": "Meine Aufgabenliste"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Liste erfolgreich erstellt"
+          },
+          "400": {
+            "description": "Fehler beim Erstellen der Liste"
+          }
+        }
+      }
+    },
+    "/lists/{id}": {
+      "delete": {
+        "summary": "Löscht eine Liste",
+        "description": "Löscht eine Liste basierend auf der übergebenen ID.",
+        "tags": [
+          "List"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID der zu löschenden Liste"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste erfolgreich gelöscht"
+          },
+          "404": {
+            "description": "Liste nicht gefunden"
+          },
+          "500": {
+            "description": "Fehler beim Löschen der Liste"
+          }
+        }
+      }
+    },
+    "/get-messages": {
+      "get": {
+        "summary": "Retrieves all messages",
+        "tags": [
+          "Message"
+        ],
+        "description": "Fetches a list of all messages from the database and returns them as HTML.",
+        "responses": {
+          "200": {
+            "description": "List of messages retrieved successfully.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/add-messages": {
+      "post": {
+        "summary": "Adds a new message",
+        "tags": [
+          "Message"
+        ],
+        "description": "Adds a new message to the database with sender, recipient, and content details.",
+        "requestBody": {
+          "description": "Message details including sender, recipient, and content.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "description": "The sender of the message."
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "The recipient of the message."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "The content of the message."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message added successfully and returned as HTML.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing message details"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/registration": {
+      "post": {
+        "summary": "Registriert einen neuen Benutzer",
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Führt eine Benutzerregistrierung durch, überprüft die Eingaben und speichert sie in der Datenbank.",
+        "requestBody": {
+          "description": "E-Mail, Passwort, Vorname und Nachname des neuen Benutzers.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registrierung erfolgreich"
+          },
+          "400": {
+            "description": "Ungültige Eingaben oder E-Mail bereits vergeben"
+          },
+          "500": {
+            "description": "Fehler bei der Datenbankoperation"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Benutzer-Login",
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Authentifiziert einen Benutzer basierend auf E-Mail und Passwort.",
+        "requestBody": {
+          "description": "E-Mail und Passwort des Benutzers.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Login erfolgreich"
+          },
+          "401": {
+            "description": "Ungültige Anmeldedaten"
+          },
+          "500": {
+            "description": "Datenbankfehler"
+          }
+        }
+      }
+    },
+    "/isEmailActivated/{userId}": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Check user email activation status",
+        "description": "Returns the activation status of a user's email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the user."
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The email is already activated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "user@example.com wurde bereits bestätigt"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "The email is not activated or there was a database error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "examples": {
+                    "notActivated": {
+                      "value": "Email wurde nicht bestätigt"
+                    },
+                    "dbError": {
+                      "value": "Datenbankfehler"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activateEmail/{token}": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Activate User Email",
+        "description": "This endpoint allows the activation of a user email by verifying the provided activation token. If the token matches an existing user, the user's email activation status will be updated to `true`.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "The activation token sent to the user's email address.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's email successfully activated."
+          },
+          "400": {
+            "description": "Invalid token or token does not match any registered user."
+          },
+          "500": {
+            "description": "Server error, unable to process the request."
+          }
+        },
+        "security": []
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "Benutzer-Logout",
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Beendet die Benutzersitzung und loggt den Benutzer aus.",
+        "responses": {
+          "202": {
+            "description": "Logout erfolgreich"
+          }
+        }
+      }
+    }
+  }
+}

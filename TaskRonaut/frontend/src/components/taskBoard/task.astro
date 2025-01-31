@@ -1,0 +1,30 @@
+---
+import TaskDetails from "./taskDetails.astro";
+const {tasks} = Astro.props;
+---
+
+{tasks.length === 0 ? (
+<></>) : (
+<>
+    {tasks.map(task => (
+            <div
+                    class="task"
+                    draggable="true"
+                    @dragstart="startDrag({ taskID: task.taskID, listID: listID })"
+                    x-data="{ open: false }"
+            >
+                <div @click="open = !open" style="flex-direction: column">
+                    <div class={`task-status status-${task.taskStatus}`}
+                         style="float: left; height: 60px; width: 2%;">
+                    </div>
+                    <div style="width: 95%; float: right;">
+                        <h3>{task.taskName}</h3>
+                        {task.dueDate && (<p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                    </div>
+                </div>
+                <div x-show="open" @click.away="open = false" class="dropdown">
+                    <TaskDetails task={task}></TaskDetails>
+                </div>
+            </div>))}
+</>
+    )}

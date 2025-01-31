@@ -1,0 +1,64 @@
+---
+import TaskBoard from "../components/projectBoard/projectBoard.astro";
+import Header from "../components/boardHeader.astro";
+import Sidebar from "../components/boardSidebar.astro";
+import ProjectBoard from "../components/taskBoard/taskBoard.astro";
+
+import '../styles/global.css'
+import {sessionCookie} from "./user";
+import {clientURL} from "./conf";
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskRonaut</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.svg"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
+</head>
+
+<body>
+<script>
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+    Alpine.start();
+
+    import {sessionId} from './user.js';
+    import {clientURL} from './conf.js';
+
+    if (document.cookie.includes('sessionId') === null) {
+        window.location.href = `/getCookies`;
+    }
+
+    if (sessionId === null) {
+        window.location.href = `/login`;
+    }
+</script>
+
+<main class="content" x-data="{ showProjectBoard: false }">
+    <Header></Header>
+    <div class="main">
+
+        <div x-show="showProjectBoard" class="board scrollable">
+            <ProjectBoard></ProjectBoard>
+        </div>
+        <div x-show="!showProjectBoard" class="board scrollable">
+            <TaskBoard></TaskBoard>
+        </div>
+        <Sidebar></Sidebar>
+    </div>
+</main>
+</body>
+</html>
+<script>
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+
+    Alpine.start();
+</script>

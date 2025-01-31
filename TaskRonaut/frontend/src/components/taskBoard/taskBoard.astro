@@ -1,0 +1,14 @@
+---
+import List from "./taskList.astro";
+---
+
+<section x-data="{ draggedTaskId: null, sourceListId: null }">
+    <ul class="board-header">
+        <li><h1>Board-Name</h1></li>
+        <li><p>Task-Board</p></li>
+    </ul>
+    <div class="board-content">
+        <List></List>
+    </div>
+
+</section>

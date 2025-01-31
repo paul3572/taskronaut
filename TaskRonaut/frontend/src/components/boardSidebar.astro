@@ -1,0 +1,55 @@
+---
+import Alpine from 'alpinejs';
+import Ptp from "./ptp.astro";
+
+import {serverURL} from "../pages/conf";
+
+let sessionId = Astro.cookies.get('sessionId').value;
+console.log('List Session ID:', sessionId);
+
+const boardMembers = await fetch(`${serverURL}/board-members/`, {
+    method: 'POST', headers: {
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
+});
+
+console.log(sessionId)
+
+const {data: users} = await boardMembers.json();
+---
+<aside class="sidebar">
+    <nav class="sidebar-content">
+        <hr>
+        <h1> Mitglieder</h1>
+        <hr>
+        <ul>
+            {users.map(user => (
+                    <li class="user-item">
+                        <div x-data="{ showComponent: false }">
+                            <button class="profileIcon" @click="showComponent = !showComponent">
+                                <span x-show="!showComponent"><i class="fa-solid fa-user"></i></span>
+                                <span x-show="showComponent"><i class="fa-solid fa-user"></i></span>
+                            </button>
+                            <div x-show="showComponent">
+                            </div>
+                        </div>
+                        <p>{user?.firstName} {user?.lastName}</p>
+                        <div x-data="{ showComponent: false }">
+                            <button class="chatCheckBox" @click="showComponent = !showComponent" style="cursor: pointer">
+                                <span x-show="!showComponent"><i class="fa-regular fa-comment"></i></span>
+                                <span x-show="showComponent"><i class="fa-regular fa-comment"></i></span>
+                            </button>
+                            <div x-show="showComponent">
+                                <Ptp/>
+                            </div>
+                            <div x-show="showComponent">
+                            </div>
+                        </div>
+                    </li>))}
+        </ul>
+        <hr/>
+    </nav>
+    <div class="sidebar-footer">
+        <p></p>
+    </div>
+</aside>

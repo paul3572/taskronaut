@@ -1,0 +1,79 @@
+---
+import {serverURL} from './conf.js';
+
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>TaskRonaut - Einloggen</title>
+</head>
+<body>
+<script>
+    import {sessionId} from "./user";
+    if (sessionId) {
+        window.location.href = '/';
+    }
+</script>
+
+<div class="login-register-container">
+    <div class="login" id="login-container">
+        <a class="close-button"
+           hx-post="/"
+           hx-trigger="click"
+           hx-target="body"
+           hx-push-url="/"
+        >&#10006</a>
+        <h2>Einloggen</h2>
+
+        <form id="login-form"
+              hx-post=`${serverURL}/login`
+              hx-target="#response"
+              hx-swap="innerHTML"
+        >
+
+            <!-- EMAIL -->
+            <label for="email">Email</label>
+            <input type="email"
+                   name="email"
+                   id="email"
+                   required
+                   placeholder="Geben Sie Ihre E-Mail ein"
+                   minlength="1">
+
+            <!-- PASSWORD -->
+            <label for="password">Passwort</label>
+            <input type="password"
+                   name="password"
+                   id="password"
+                   required
+                   placeholder="Passwort eingeben"
+                   minlength="6">
+
+            <button type="submit">Einloggen</button>
+        </form>
+
+        <div id="response" style="padding-top: 10px;"></div>
+        <p>Du hast noch keinen Account?
+            <a hx-push-url="register" hx-get="/register" hx-target="#login-register-container" hx-swap="innerHTML"
+               aria-label="Registrieren" class="login-register-button">
+                Registrieren
+            </a>
+        </p>
+    </div>
+</div>
+
+
+<script>
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+    import {forwarding} from './forward.js';
+
+    Alpine.start();
+
+    document.addEventListener('htmx:afterRequest', forwarding);
+
+</script>
+</body>
+</html>

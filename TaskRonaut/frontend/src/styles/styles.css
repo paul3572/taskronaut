@@ -1,0 +1,1000 @@
+@charset "UTF-8";
+:root {
+  --primary: #0050c4;
+  --primary-content: #c4dcff;
+  --primary-dark: #003b91;
+  --primary-light: #0065f7;
+  --secondary: #c400b2;
+  --secondary-content: #ffc4fa;
+  --secondary-dark: #910084;
+  --secondary-light: #f700e0;
+  --background: #18191b;
+  --foreground: #232629;
+  --border: #3b3f45;
+  --copy: #fbfbfb;
+  --copy-light: #d6d8dc;
+  --copy-lighter: #9fa5ac;
+  --success: #00c400;
+  --warning: #c4c400;
+  --error: #c40000;
+  --success-content: #c4ffc4;
+  --warning-content: #000000;
+  --error-content: #ffc4c4;
+  --test: #13e6bf;
+}
+
+.profile-button {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.profile-button .user-dropdown {
+  position: absolute;
+  top: 120%;
+  right: -5px;
+  background: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-button .user-icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.profile-button #logout-button {
+  background-color: var(--error);
+  color: var(--copy);
+  border: none;
+  font-size: x-large;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+.profile-button span {
+  vertical-align: bottom;
+  font-size: large;
+}
+
+.growing-delete-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+.growing-delete-button .svgIcon {
+  width: 15px;
+  transition-duration: 0.3s;
+}
+.growing-delete-button .svgIcon path {
+  fill: white;
+}
+.growing-delete-button:hover {
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+}
+.growing-delete-button:hover .svgIcon {
+  width: 50px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+}
+.growing-delete-button:hover::before {
+  font-size: medium;
+  opacity: 1;
+  transform: translateY(30px);
+  transition-duration: 0.3s;
+}
+.growing-delete-button::before {
+  position: absolute;
+  top: -20px;
+  content: "Delete";
+  color: white;
+  transition-duration: 0.3s;
+  font-size: xx-small;
+}
+
+.growing-save-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+.growing-save-button .svgIcon {
+  width: 15px;
+  transition-duration: 0.3s;
+}
+.growing-save-button .svgIcon path {
+  fill: white;
+}
+.growing-save-button:hover {
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(72, 172, 4);
+  align-items: center;
+}
+.growing-save-button:hover .svgIcon {
+  width: 50px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+}
+.growing-save-button:hover::before {
+  font-size: medium;
+  opacity: 1;
+  transform: translateY(30px);
+  transition-duration: 0.3s;
+}
+.growing-save-button::before {
+  position: absolute;
+  top: -20px;
+  content: "Save";
+  color: white;
+  transition-duration: 0.3s;
+  font-size: xx-small;
+}
+
+.animated-delete-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+  gap: 2px;
+}
+.animated-delete-button .svgIcon {
+  width: 8px;
+  transition-duration: 0.3s;
+}
+.animated-delete-button .svgIcon path {
+  fill: white;
+}
+.animated-delete-button:hover {
+  transition-duration: 0.3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+  gap: 0;
+}
+.animated-delete-button:hover .bin-top {
+  transform-origin: bottom right;
+  transition-duration: 0.5s;
+  transform: rotate(160deg);
+}
+
+body {
+  margin: 0;
+  color: var(--copy);
+  overflow: hidden;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: var(--background);
+}
+
+.content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  padding: 10px 20px 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--foreground);
+  /* Stil für das Dropdown */
+}
+.header .left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.header .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.header h1 {
+  margin: 0;
+}
+.header .board-header-buttons {
+  background-color: var(--background);
+  color: var(--copy);
+  border: none;
+  margin-left: 15px;
+  font-size: x-large;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+.header .board-header-buttons:hover {
+  background-color: var(--border);
+}
+.header .login-register-button {
+  background-color: var(--background);
+  color: var(--copy);
+  border: none;
+  margin-left: 15px;
+  font-size: x-large;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+.header button:hover {
+  background-color: var(--foreground);
+}
+.header .modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.header .dropdown {
+  position: absolute;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  color: var(--copy);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  top: 59px;
+  left: 245px;
+}
+.header .dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.header .dropdown li {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.header .dropdown li:hover {
+  background-color: var(--foreground);
+  color: var(--copy);
+}
+.header .dropdown a {
+  text-decoration: none;
+  background-color: var(--background);
+  color: var(--copy);
+}
+.header .dropdown a:hover {
+  background-color: var(--foreground);
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: auto;
+}
+
+.board {
+  background: linear-gradient(-30deg, var(--primary-dark) 30%, var(--secondary-dark) 90%);
+  background-size: cover;
+  height: auto;
+  width: calc(100% - 300px);
+  padding: 10px 20px;
+}
+.board .board-content {
+  display: flex;
+}
+.board .board-content input {
+  padding: 10px;
+}
+.board .board-header {
+  list-style-type: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 0 10px 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--copy);
+}
+.board .board-header li {
+  float: left;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+.board .board-header li h1 {
+  padding: 0;
+  margin: 0;
+  font-size: x-large;
+}
+.board .board-header li p {
+  padding: 4px 0 0 5px;
+  margin: 0;
+  font-size: larger;
+}
+
+.sidebar {
+  width: 300px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--background);
+  text-align: left;
+}
+.sidebar hr {
+  color: var(--border);
+  margin: 0;
+}
+.start .start-header {
+  width: 80vw;
+  height: 20vh;
+  padding: 10vh 10vw;
+  background: linear-gradient(180deg, var(--primary) 30%, var(--secondary) 90%);
+  background-blend-mode: normal, normal;
+  background-size: 101vw;
+  color: var(--copy);
+  flex-direction: row;
+  display: flex;
+}
+.start .start-header .left {
+  width: 30%;
+}
+.start .start-header .left h1 {
+  margin: 0;
+  font-size: xxx-large;
+  text-align: left;
+}
+.start .start-header .left h2 {
+  margin: 0;
+}
+.start .start-header .right {
+  width: 70%;
+}
+.start .start-header .right h1 {
+  margin: 0;
+  font-size: xx-large;
+  text-align: right;
+}
+.start .start-header .right p {
+  text-align: right;
+}
+.start .start-body {
+  width: 80vw;
+  height: 20vh;
+  padding: 10vh 10vw;
+  background-blend-mode: normal, normal;
+  background-size: 101vw;
+  color: var(--copy);
+  flex-direction: row;
+  display: flex;
+  background-color: var(--background);
+}
+.start .start-body .left-right .left {
+  width: 60%;
+}
+.start .start-body .left-right .left h1 {
+  margin: 0;
+  font-size: xxx-large;
+  color: orange;
+}
+.start .start-body .left-right .left h2 {
+  margin: 0;
+}
+.start .start-body .left-right .right {
+  width: 40%;
+}
+.start .start-body .left-right .right h1 {
+  margin: 0;
+  font-size: xxx-large;
+  color: orange;
+  text-align: right;
+}
+.start .start-body .left-right .right .image-stack {
+  position: relative;
+}
+.start .start-body .left-right .right .image-stack img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.start .start-body .left-right .right .image-stack img:nth-child(1) {
+  top: -8vh;
+  left: 0;
+}
+.start .start-body .left-right .right .image-stack img:nth-child(2) {
+  top: -9vh;
+  left: 190px;
+  z-index: 2;
+}
+.start .start-body .left-right .right .image-stack img:nth-child(3) {
+  top: -2vh;
+  left: 0;
+  z-index: 3;
+}
+
+.dragAndDrop {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.dragAndDrop .list {
+  min-width: 250px;
+  border: var(--border);
+  flex-direction: column;
+  background: var(--foreground);
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.dragAndDrop .list .list-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  overflow-x: hidden; /* Verhindert horizontales Scrollen */
+  white-space: pre-wrap; /* Behandelt Zeilenumbrüche und fügt sie hinzu */
+  word-wrap: break-word; /* Zeilen werden gebrochen, wenn nötig */
+  word-break: break-word; /* Alternative Unterstützung für ältere Browser */
+}
+.dragAndDrop .list .list-header h2 {
+  max-width: 80%;
+}
+.dragAndDrop .list h2 {
+  margin: 0 0 10px 0;
+}
+.dragAndDrop .list .add-task-button {
+  padding: 10px 10px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--foreground);
+  border-radius: 5px;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+.dragAndDrop .list .add-task-button:hover {
+  background-color: var(--background);
+  cursor: pointer;
+}
+.dragAndDrop .list .task-name-input {
+  width: 92%;
+  margin-bottom: 10px;
+  border: 1px solid var(--foreground);
+  border-radius: 5px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--background);
+  text-align: left;
+  cursor: pointer;
+}
+.dragAndDrop .list .submit-task-button {
+  padding: 10px 10px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--primary-dark);
+  border-radius: 5px;
+  border: none;
+  text-align: left;
+  width: auto;
+  cursor: pointer;
+}
+.dragAndDrop .list .submit-task-button:hover {
+  background-color: var(--primary);
+}
+.dragAndDrop .list .cancel-task-button {
+  padding: 10px 10px 10px 10px;
+  font-size: medium;
+  cursor: pointer;
+  color: var(--copy);
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.dragAndDrop .list .cancel-task-button:hover {
+  background-color: var(--background);
+}
+.dragAndDrop .list.drag-over {
+  background-color: rgba(75, 75, 75, 0.9);
+}
+.dragAndDrop .list h2 {
+  font-size: x-large;
+  margin-bottom: 0.5rem;
+}
+.dragAndDrop .add-list {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  /* Add this container for the buttons to align them next to each other */
+}
+.dragAndDrop .add-list .add-list-space {
+  display: flex;
+  flex-direction: column;
+}
+.dragAndDrop .add-list .add-list-button {
+  margin-right: 15px;
+  padding: 10px 10px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--foreground);
+  border-radius: 5px;
+  border: none;
+  text-align: left;
+  width: 140px;
+}
+.dragAndDrop .add-list .add-list-button:hover {
+  background-color: var(--background);
+  cursor: pointer;
+}
+.dragAndDrop .add-list .list-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px; /* Adjust gap between buttons */
+}
+.dragAndDrop .add-list .list-name-input {
+  width: 140px;
+  margin-bottom: 10px;
+  border: 1px solid var(--foreground);
+  border-radius: 5px;
+  padding: 10px 10px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--background);
+  text-align: left;
+  cursor: pointer;
+}
+.dragAndDrop .add-list .save-list-space {
+  display: flex;
+  flex-direction: row;
+}
+.dragAndDrop .add-list .save-list-space .submit-list-button {
+  padding: 10px 10px;
+  font-size: medium;
+  color: var(--copy);
+  background-color: var(--primary-dark);
+  border-radius: 5px;
+  border: none;
+  text-align: left;
+  width: 125px;
+  cursor: pointer;
+}
+.dragAndDrop .add-list .save-list-space .submit-list-button:hover {
+  background-color: var(--primary);
+}
+.dragAndDrop .add-list .save-list-space .cancel-list-button {
+  padding: 10px 10px 10px 10px;
+  font-size: medium;
+  cursor: pointer;
+  color: var(--copy);
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.dragAndDrop .add-list .save-list-space .cancel-list-button:hover {
+  background-color: var(--background);
+}
+.dragAndDrop .task {
+  background: var(--background);
+  color: var(--copy);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid transparent;
+  flex-direction: column;
+}
+.dragAndDrop .task h3 {
+  margin: 0 0 5px 0;
+  overflow-x: hidden; /* Verhindert horizontales Scrollen */
+  white-space: pre-wrap; /* Behandelt Zeilenumbrüche und fügt sie hinzu */
+  word-wrap: break-word; /* Zeilen werden gebrochen, wenn nötig */
+  word-break: break-word; /* Alternative Unterstützung für ältere Browser */
+}
+.dragAndDrop .task p {
+  margin: 10px 1px;
+  font-size: medium;
+  display: flex;
+  justify-content: flex-start;
+}
+.dragAndDrop .task:hover {
+  border: 1px solid var(--copy);
+  cursor: pointer;
+}
+.dragAndDrop .task p {
+  margin: 0;
+  font-size: medium;
+}
+.dragAndDrop .task:hover {
+  background-color: var(--foreground);
+}
+.dragAndDrop .task .task-details-block {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  background-color: var(--background);
+  padding: 10px 20px;
+  border: 3px solid var(--border);
+  border-radius: 10px;
+  width: 75vw;
+  height: 90vh;
+  top: 7%;
+  left: 5%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.dragAndDrop .task .task-details-block .closeButton {
+  position: absolute;
+  top: 2px;
+  right: 15px;
+  cursor: pointer;
+  color: var(--copy);
+  font-size: x-large;
+}
+.dragAndDrop .task .task-details-block label {
+  display: block;
+  font-weight: bold;
+  color: var(--copy);
+  margin-top: 5px;
+  font-size: large;
+}
+.dragAndDrop .task .task-details-block input[type=text],
+.dragAndDrop .task .task-details-block input[type=date],
+.dragAndDrop .task .task-details-block textarea {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin: 5px 0 5px 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  user-select: text; /* Sicherstellen, dass der Text auswählbar ist */
+}
+.dragAndDrop .task .task-details-block textarea {
+  resize: vertical;
+}
+.dragAndDrop .task .task-details-block select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 5px 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  cursor: pointer;
+}
+.dragAndDrop .task .task-details-block select:hover {
+  background-color: var(--background);
+}
+.dragAndDrop .task .task-details-block select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.dragAndDrop .task .task-details-block select option {
+  background-color: var(--foreground);
+  color: var(--copy);
+}
+.dragAndDrop .task .task-details-block button[type=submit] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: var(--primary);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: medium;
+}
+.dragAndDrop .task .task-details-block button[type=submit]:hover {
+  background-color: var(--primary-dark);
+}
+
+.login-register-container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.login-register-container .login {
+  background-color: var(--foreground);
+  padding: 40px;
+  border: var(--border);
+  border-style: solid;
+  border-radius: 15px;
+  width: 320px;
+  position: relative;
+  text-align: left;
+}
+.login-register-container .login .close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  color: var(--copy);
+  font-size: medium;
+  margin: 0;
+}
+.login-register-container .login h2 {
+  margin-bottom: 20px;
+  color: var(--copy);
+  text-align: center;
+}
+.login-register-container .login input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--copy);
+  border-radius: 5px;
+}
+.login-register-container .login button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 0 0;
+  background-color: var(--primary);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.login-register-container .login button:hover {
+  background-color: var(--primary-dark);
+}
+.login-register-container .login .form-info {
+  margin-top: 10px;
+  color: var(--copy);
+}
+.login-register-container .login a {
+  color: var(--primary);
+  text-decoration: none;
+}
+.login-register-container .login a:hover {
+  cursor: pointer;
+}
+.login-register-container .login small {
+  color: var(--error);
+  display: none;
+  text-align: left;
+}
+.login-register-container .login small[x-show="!emailValid"],
+.login-register-container .login small[x-show="!passwordValid"] {
+  display: block;
+}
+.login-register-container .login input {
+  display: block;
+  background-color: var(--foreground);
+  color: var(--copy);
+}
+.login-register-container .register {
+  background-color: var(--foreground);
+  padding: 40px;
+  border: var(--border);
+  border-style: solid;
+  border-radius: 15px;
+  width: 320px;
+  position: relative;
+  text-align: left;
+}
+.login-register-container .register .close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  color: var(--copy);
+  font-size: medium;
+  margin: 0;
+}
+.login-register-container .register h2 {
+  margin-bottom: 20px;
+  color: var(--copy);
+  text-align: center;
+}
+.login-register-container .register input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid var(--copy);
+  border-radius: 5px;
+  display: block;
+  background-color: var(--foreground);
+  color: var(--copy);
+}
+.login-register-container .register .nameDiv {
+  display: flex;
+  justify-content: space-between;
+}
+.login-register-container .register .nameDiv .labelInput {
+  flex-direction: column;
+  text-align: left;
+}
+.login-register-container .register .nameDiv #lastName {
+  margin-left: 5px;
+}
+.login-register-container .register hr {
+  margin: 5px 0 5px 0;
+  color: var(--primary-light);
+}
+.login-register-container .register button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 0 0;
+  background-color: var(--primary);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.login-register-container .register button:hover {
+  background-color: var(--primary-dark);
+}
+.login-register-container .register .form-info {
+  margin-top: 10px;
+  color: var(--copy);
+}
+.login-register-container .register a {
+  color: var(--primary);
+  text-decoration: none;
+}
+.login-register-container .register a:hover {
+  cursor: pointer;
+}
+.login-register-container .register small {
+  color: var(--error);
+  display: none;
+  text-align: left;
+}
+.login-register-container .register small[x-show="!emailValid"],
+.login-register-container .register small[x-show="!passwordValid"] {
+  display: block;
+}
+
+.ptp {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  width: 30vw;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  top: 70px;
+  right: 80px;
+  bottom: 0;
+  background-color: var(--foreground);
+  padding: 10px;
+  border: var(--border);
+  border-style: solid;
+  border-radius: 15px;
+}
+.ptp .close {
+  position: relative;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: var(--copy);
+  background-color: var(--foreground);
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  font-size: medium;
+  margin: 0;
+}
+.ptp .ptp-messages {
+  background-color: var(--foreground);
+  width: 100%;
+  height: 93%;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.ptp .ptp-messages::-webkit-scrollbar {
+  width: 10px;
+}
+.ptp .ptp-messages::-webkit-scrollbar-track {
+  background: var(--border);
+}
+.ptp .ptp-messages::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+.ptp .ptp-input {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+.ptp .ptp-input input {
+  width: 75%;
+  color: var(--copy);
+  background-color: var(--background);
+  border: none;
+  padding: 5px;
+  font-size: medium;
+  border-radius: 5px;
+}
+.ptp .ptp-input button {
+  width: 20%;
+  background-color: var(--primary);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  font-size: medium;
+}
+
+.task-status {
+  border-radius: 2px;
+}
+
+.status-todo {
+  background-color: #ff1500;
+}
+
+.status-doing {
+  background-color: #ffea00;
+}
+
+.status-validated {
+  background-color: #008cff;
+}
+
+.status-done {
+  background-color: #178000;
+}
+
+/*# sourceMappingURL=styles.css.map */

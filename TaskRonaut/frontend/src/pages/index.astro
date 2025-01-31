@@ -1,0 +1,73 @@
+---
+import StartHeader from "../components/startHeader.astro";
+
+import '../styles/global.css';
+---
+
+
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskRonaut</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.svg"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+
+<body>
+<div id="login-register-container"></div>
+<main class="content">
+    <StartHeader></StartHeader>
+    <div class="main">
+        <div class="start">
+            <div class="start-header">
+                <div class="left">
+                    <h1>TaskRonaut</h1>
+                    <h2>Ziel sind die Sterne</h2>
+
+
+                </div>
+                <div class="right">
+                    <h1>Projektmanagement - Vereinfacht</h1>
+                    <p>coole bilder von tasks und chats oder so</p>
+                </div>
+
+            </div>
+            <div class="start-body">
+                <div class="left">
+                    <h1>Der AHA Stack</h1>
+                    <h2>Ziel sind die Sterne</h2>
+
+
+                </div>
+                <div class="right">
+                    <div class="image-stack">
+                        <!--
+                        <img src="https://place.dog/210/210">
+                        <img src="https://place.dog/210/300">
+                        <img src="https://place.dog/210/200"/>
+                        -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>
+
+<script>
+
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+    import {forwarding} from './forward.js';
+
+    Alpine.start();
+
+    document.addEventListener('htmx:afterRequest', forwarding);
+
+</script>

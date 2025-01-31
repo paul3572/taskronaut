@@ -1,0 +1,18 @@
+export const responseMessages = {
+    200: 'Success: The request has succeeded.',
+    201: 'Created: The request has been fulfilled and resulted in a new resource being created.',
+    202: '',
+    204: 'No Content: The request was successful, but there is no content to send in the response.',
+    400: 'Bad Request: The server could not understand the request due to invalid syntax.',
+    401: 'Unauthorized: You must authenticate yourself to get the requested response.',
+    403: 'Forbidden: You do not have the necessary permissions for this resource.',
+    404: 'Not Found: The requested resource could not be found.',
+    405: 'Method Not Allowed: The HTTP method is not supported for this resource.',
+    409: 'Conflict: There was a conflict with the current state of the resource.',
+    429: 'Too Many Requests: You have sent too many requests in a given time frame.',
+    500: 'Internal Server Error: The server encountered an unexpected condition.',
+    501: 'Not Implemented: The requested functionality is not supported by the server.',
+    503: 'Service Unavailable: The server is not ready to handle the request.',
+    504: 'Gateway Timeout: The server did not receive a timely response.',
+    default: 'An unexpected error occurred.',
+};

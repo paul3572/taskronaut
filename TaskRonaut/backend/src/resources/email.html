@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Email</title>
+    <script type="module">
+        //import {getToken} from '../routes/authentication/loginRoutes.mjs'; // Importiere den Token aus der Moduldatei
+
+        document.addEventListener('DOMContentLoaded', () => {
+            //const serverURL = `http://localhost:3001/activateEmail/${getToken()}`;
+
+            // Die Anfrage wird automatisch ausgeführt, wenn die Seite geladen wird.
+            fetch(serverURL, {
+                method: 'GET'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server response:', data);
+                    document.body.innerHTML = `<h1>Activation successful</h1>`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.body.innerHTML = `<h1>Activation failed</h1><p>${error.message}</p>`;
+                });
+        });
+    </script>
+</head>
+<body>
+<h1>Loading...</h1>
+</body>
+</html>

@@ -1,0 +1,80 @@
+---
+import Task from './task.astro';
+import {serverURL} from '../../pages/conf.js';
+
+let sessionId = Astro.cookies.get('sessionId').value;
+console.log('List Session ID:', sessionId);
+
+const responseTasks = await fetch(`${serverURL}/tasks/user/`, {
+    method: 'POST', headers: {
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify({sessionId: sessionId})
+});
+
+const lists = [{listID: 'todo', listName: 'Zu erledigen'}, {
+    listID: 'doing',
+    listName: 'In Bearbeitung'
+}, {listID: 'validated', listName: 'Geprüft'}, {listID: 'done', listName: 'Erledigt'}];
+
+const filteredTasks = {
+    todo: [], doing: [], validated: [], done: []
+};
+
+const {data: tasks} = await responseTasks.json();
+let taskList = [];
+for (let task of tasks) {
+    for (let key of task) {
+        console.log(key)
+        taskList.push(key);
+
+        if (key.taskStatus === 'todo') {
+            filteredTasks.todo.push(key);
+        } else if (key.taskStatus === 'doing') {
+            filteredTasks.doing.push(key);
+        } else if (key.taskStatus === 'validated') {
+            filteredTasks.validated.push(key);
+        } else if (key.taskStatus === 'done') {
+            filteredTasks.done.push(key);
+        }
+    }
+}
+---
+
+<div class="dragAndDrop">
+    {lists.map(list => (
+            <div
+                    class="list"
+                    @dragover.prevent
+                    @drop="dropTask(event, { listID: list.listID })"
+                    id={`list-${list.listID}`}
+            >
+                <h2>{list.listName}</h2>
+                <Task listID={list.listID} tasks={filteredTasks[list.listID]}></Task>
+            </div>))}
+</div>
+
+<script>
+    import {serverURL} from '../../pages/conf.js';
+
+    function dragAndDrop() {
+        return {
+            draggedTask: null,
+
+            startDrag(task) {
+                this.draggedTask = task;
+            },
+
+            async dropTask(event, targetList) {
+                if (!this.draggedTask) return;
+
+                await fetch(`${serverURL}/tasks/${this.draggedTask.taskID}/listId`, {
+                    method: 'PATCH', headers: {
+                        'Content-Type': 'application/json',
+                    }, body: JSON.stringify({listId: targetList.listID}),
+                });
+
+                location.reload();
+            },
+        };
+    }
+</script>

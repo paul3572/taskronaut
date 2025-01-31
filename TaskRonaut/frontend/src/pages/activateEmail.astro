@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authorize</title>
+</head>
+<body>
+<div id="message"></div>
+<script>
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+
+    Alpine.start();
+
+    // Function to get the token from the URL
+    function getTokenFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('token');
+    }
+
+    import {serverURL} from "./conf";
+
+    function activateEmail() {
+        fetch(`${serverURL}/activateEmail/${getTokenFromUrl()}`, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify({token: getTokenFromUrl()})
+        })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('message').innerText = 'Email Aktivierung erfolgreich! \n Sie werden in Kürze weitergeleitet.';
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    document.getElementById('message').innerText = 'Email activation failed.';
+                }
+            })
+            .catch(error => {
+                document.getElementById('message').innerText = 'An error occurred: ' + error.message;
+            });
+    }
+
+    console.log(getTokenFromUrl());
+    activateEmail();
+</script>
+</body>
+</html>

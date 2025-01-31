@@ -1,0 +1,89 @@
+---
+import {serverURL} from "../../pages/conf.js";
+import TaskDetails from "../taskBoard/taskDetails.astro";
+const {listID, tasks} = Astro.props;
+
+// Filter the tasks that match the current listID
+const listTasks = tasks.filter(task => task.listID === listID);
+---
+<div x-data="{
+    sessionId: sessionStorage.getItem('sessionID').slice(1, -1),
+    userId: sessionStorage.getItem('userId')}">
+    {listTasks.length === 0 ? (
+            <></>) : (
+            <>
+                {listTasks.map(task => (
+                        <div
+                                class="task"
+                                draggable="true"
+                                x-data="{ open: false }"
+                        >
+                            <div @click="open = !open" style="flex-direction: column">
+                                <div class={`task-status status-${task.taskStatus}`}
+                                     style="float: left; height: 60px; width: 2%;">
+                                </div>
+                                <div style="width: 95%; float: right;">
+                                    <h3>{task.taskName}</h3>
+                                    <p>{task.dueDate && (<p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                                </div>
+                            </div>
+                            <div x-show="open" @click.away="open = true" class="dropdown">
+                                <TaskDetails task={task}></TaskDetails>
+                            </div>
+                        </div>))}
+                    </>)}
+
+                <div x-data=`{
+    taskData: {
+        sessionId: sessionId,
+        taskName: '',
+        listID: ${listID},
+        boardID: 1,
+    },
+    showInput: false
+}`>
+    <button
+    x-show="!showInput"
+    @click="showInput = true"
+    class="add-task-button">
+    + Create Task
+    </button>
+
+    <div x-show="showInput" x-transition class="task-input">
+        <input
+        type="text"
+        x-model="taskData.taskName"
+        placeholder="Task Name"
+        class="task-name-input"
+        required
+        />
+    <br>
+    <button
+        @click=`
+            if (taskData.taskName.trim()) {
+                fetch("${serverURL}/tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                        body: JSON.stringify(taskData)
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                        showInput = false;
+                    } else {
+                    alert("Please enter a name for the task");
+            }
+            `
+        class="submit-task-button">
+        Create Task
+    </button>
+        <button
+            @click="showInput = false;
+            taskData.taskName = ''"
+            class="cancel-task-button">
+            X
+        </button>
+        </div>
+    </div>
+</div>

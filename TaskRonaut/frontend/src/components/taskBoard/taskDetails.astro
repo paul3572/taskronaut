@@ -1,0 +1,93 @@
+---
+const {task} = Astro.props;
+
+import {serverURL} from '../../pages/conf.js';
+---
+
+<div class="task-details-block" x-data=`{
+    taskData: {
+        sessionID: sessionId,        
+        taskID: '${task.taskID}',
+        taskName: '${task.taskName}',
+        taskCreator: '${task.taskCreator}', 
+        taskCreationDate: '${task.taskCreationDate}',
+        dueDate: '${task.dueDate}',
+        taskDescription: '${task.taskDescription}',
+        priorities: '${task.priorities}',
+        taskStatus: '${task.taskStatus}',
+        comments: '${task.comments}',
+        taskHistoryID: ${task.taskHistoryID},
+        boardID: '${task.boardID}',
+    },
+    showInput: false,
+}`>
+
+    <p class="closeButton" @click="open = !open">&#10006</p>
+    <label for="sessionID">sessionID:</label>
+    <input type="text" id="sessionID" name="sessionID" x-model="taskData.sessionID">
+
+    <label for="taskID">taskID:</label>
+    <input type="text" id="taskID" name="taskName" x-model="taskData.taskID">
+
+    <label for="taskName">Name:</label>
+    <input type="text" id="taskName" name="taskName" x-model="taskData.taskName">
+
+    <label for="taskDescription">Beschreibung:</label>
+    <input type="text" id="taskDescription" name="taskDescription" x-model="taskData.taskDescription">
+
+    <label for="taskCreator">Erstellt von:</label>
+    <input type="text" id="taskCreator" name="taskCreator" x-model="taskData.taskCreator">
+
+    <label for="taskCreationDate">Erstellt am:</label>
+    <input type="text" id="taskCreationDate" name="taskCreationDate" x-model="taskData.taskCreationDate">
+
+    <label for="dueDate">Fällig am:</label>
+    <input type="text" id="dueDate" name="dueDate" x-model="taskData.dueDate">
+
+    <label for="priorities">Priorität:</label>
+    <select id="priorities" name="priorities" x-model="taskData.priorities">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+
+    <label for="category">Kategorie:</label>
+    <input type="text" id="category" name="category" x-model="taskData.category">
+
+    <label for="taskStatus">Status:</label>
+    <select id="taskStatus" name="taskStatus" x-model="taskData.taskStatus">
+        <option value="todo">Zu erledigen</option>
+        <option value="doing">In Bearbeitung</option>
+        <option value="validated">Geprüft</option>
+        <option value="done">Erledigt</option>
+    </select>
+
+    <label for="comments">Kommentare:</label>
+    <textarea id="comments" name="comments" rows="4" x-model="taskData.comments"></textarea>
+
+    <div style="display: flex; flex-direction: row">
+
+        <button class="growing-delete-button" hx-delete={`${serverURL}/tasks/${task.taskID}`}>
+            <svg viewBox="0 0 448 512" class="svgIcon">
+                <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+            </svg>
+        </button>
+
+        <button class="growing-save-button" @click=`
+            fetch('${serverURL}/tasks/update', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(taskData)
+                });
+            `>
+            <svg viewBox="0 0 448 512" class="svgIcon">
+                <path d="M433.9 129.9L318.1 14.1C310.7 6.7 300.2 0 288 0H48C21.5 0 0 21.5 0 48V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V160c0-12.2-6.7-22.7-14.1-30.1zM224 416c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm96-208c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h224c8.8 0 16 7.2 16 16v128z"></path>
+            </svg>
+        </button>
+
+    </div>
+</div>
