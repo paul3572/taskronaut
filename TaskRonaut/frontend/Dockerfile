@@ -1,18 +1,15 @@
-FROM ubuntu:latest
-LABEL authors="paulp"
-
-ENTRYPOINT ["top", "-b"]
-
-FROM node:16-alpine AS build
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
+
 RUN npm run build
 
-FROM nginx:alpine
+EXPOSE 4321
 
-COPY --from=build /app/dist /usr/share/nginx/html
+CMD ["npm", "start", "--", "--host", "0.0.0.0"]

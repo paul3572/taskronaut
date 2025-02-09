@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "dev": "nodemon server.mjs"
+    "dev": "nodemon server.mjs",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -19,11 +20,11 @@
     "express-mysql-session": "^3.0.3",
     "express-session": "^1.18.1",
     "module-alias": "^2.2.3",
+    "nodemailer": "^6.10.0",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0"
   },
   "_moduleAliases": {
     "@": "src"
   }
-
 }
