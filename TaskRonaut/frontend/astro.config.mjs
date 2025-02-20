@@ -8,6 +8,6 @@ export default defineConfig({
         host: true,
         port: 4321,
         strictPort: true,
-        allowedHosts: ['taskronaut.at'],
+        allowedHosts: true,
     },
 });
