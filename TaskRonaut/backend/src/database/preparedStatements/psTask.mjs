@@ -27,9 +27,10 @@ export async function createDefaultTask(taskCreatorID, taskName, boardID, listID
     }
 }
 
-export async function patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistroryId) {
+export async function patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
     try {
-        const [result] = await dbConnection.query(taskQueries.updateTask, [taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistroryId]);
+        logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]}`);
+        const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]);
         if (result.affectedRows === 0) {
             return [result, 1];
         } else {

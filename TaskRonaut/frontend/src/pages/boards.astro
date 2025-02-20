@@ -1,6 +1,5 @@
 ---
 import TaskBoard from "../components/projectBoard/projectBoard.astro";
-import Header from "../components/boardHeader.astro";
 import Sidebar from "../components/boardSidebar.astro";
 import ProjectBoard from "../components/taskBoard/taskBoard.astro";
 
@@ -25,10 +24,6 @@ import {clientURL} from "./conf";
 
 <body>
 <script>
-    import 'htmx.org';
-    import Alpine from 'alpinejs';
-    Alpine.start();
-
     import {sessionId} from './user.js';
     import {clientURL} from './conf.js';
 
@@ -41,17 +36,16 @@ import {clientURL} from "./conf";
     }
 </script>
 
-<main class="content" x-data="{ showProjectBoard: false }">
-    <Header></Header>
+<main class="content" x-data="{ showProjectBoard: true }">
     <div class="main">
 
-        <div x-show="showProjectBoard" class="board scrollable">
+
+        <div class="board" x-show="!showProjectBoard">
             <ProjectBoard></ProjectBoard>
         </div>
-        <div x-show="!showProjectBoard" class="board scrollable">
+        <div class="board" x-show="showProjectBoard">
             <TaskBoard></TaskBoard>
         </div>
-        <Sidebar></Sidebar>
     </div>
 </main>
 </body>

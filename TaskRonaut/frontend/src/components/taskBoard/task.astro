@@ -9,8 +9,6 @@ const {tasks} = Astro.props;
     {tasks.map(task => (
             <div
                     class="task"
-                    draggable="true"
-                    @dragstart="startDrag({ taskID: task.taskID, listID: listID })"
                     x-data="{ open: false }"
             >
                 <div @click="open = !open" style="flex-direction: column">

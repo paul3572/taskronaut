@@ -1,23 +1,18 @@
 ---
-import {serverURL} from "../pages/conf.js";
+const { boards } = Astro.props;
 
-let sessionId = Astro.cookies.get('sessionId').value;
-console.log('List Session ID:', sessionId);
+import { serverURL } from '../pages/conf.js';
 
-const response = await fetch(`${serverURL}/boards/get`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({sessionId: sessionId})
-});
-
-const {data: boards} = await response.json();
 ---
 
 <header class="header">
     <div class="left">
-        <h1><a href="/" style="color: whitesmoke; text-decoration: none "><i class="fa-brands fa-space-awesome"></i> TaskRonaut</a></h1>
+        <h1>
+            <a href="/" style="color: whitesmoke; text-decoration: none ">
+                <i class="fa-brands fa-space-awesome"></i>
+                TaskRonaut
+            </a>
+        </h1>
 
         <div x-data="{ open: false }">
             <button class="board-header-buttons" @click="open = !open">
@@ -25,20 +20,36 @@ const {data: boards} = await response.json();
             </button>
             <div x-show="open" @click.away="open = false" class="dropdown">
                 <ul>
-                    {boards.flat().map(board => (
-                            <li>{board.boardName}</li>
+                    {boards?.flat().map(board => (
+                            <a href={`?boardId=${board.boardID}`}>
+                                <li>{board.boardName}</li>
+                            </a>
                     ))}
                 </ul>
             </div>
         </div>
-        <button class="board-header-buttons">Erstellen +</button>
+
+        <!-- TODO board wird erstellt aber bekommt keine rechte dazu -->
+        <div x-data="{ showForm: false, boardName: '' }">
+            <button class="board-header-buttons" @click="showForm = !showForm">Erstellen +</button>
+
+            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards`} hx-swap="none">
+                <input
+                        type="text"
+                        name="boardName"
+                        placeholder="Board Name"
+                        x-model="boardName"
+                        class="board-name-input"
+                />
+                <button class="submit-board-button" type="submit" @click="showForm = false">
+                    Create Board
+                </button>
+                <button class="cancel-board-button" type="button" @click="showForm = false">
+                    &#10006
+                </button>
+            </form>
+        </div>
+
     </div>
 
-    <div>
-        <input type="checkbox" id="toggle" class="toggleCheckbox" @click="showProjectBoard = !showProjectBoard"/>
-        <label for="toggle" class='toggleContainer'>
-            <div>Projekt-Strukturplan</div>
-            <div>Task-Board</div>
-        </label>
-    </div>
 </header>

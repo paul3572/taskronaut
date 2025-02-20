@@ -15,7 +15,6 @@ const listTasks = tasks.filter(task => task.listID === listID);
                 {listTasks.map(task => (
                         <div
                                 class="task"
-                                draggable="true"
                                 x-data="{ open: false }"
                         >
                             <div @click="open = !open" style="flex-direction: column">

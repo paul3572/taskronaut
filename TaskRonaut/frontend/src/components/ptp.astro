@@ -12,3 +12,36 @@ import {serverURL} from "../pages/conf.js";
     </form>
 
 </div>
+
+<!--
+
+---
+import {serverURL} from "../pages/conf.js";
+---
+
+<div class="ptp" style="display: block">
+    <button class="close" style="right: 0; top: 0" @click="showComponent = false">X</button>
+    <div id="messages" class="ptp-messages"></div>
+    <form hx-post=`${serverURL}/add-messages` hx-target="#messages" hx-swap="innerHTML" hx-ext="json-enc"
+          class="ptp-input">
+        <input type="text" name="message" placeholder="Schreibe eine Nachricht...">
+        <button type="submit">Senden</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const sessionId = document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1];
+        const response = await fetch(`${serverURL}/get-messages/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sessionId: sessionId })
+        });
+        const messages = await response.text();
+        document.getElementById('messages').innerHTML = messages;
+    });
+</script>
+
+-->

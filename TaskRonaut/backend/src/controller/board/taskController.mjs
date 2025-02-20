@@ -47,9 +47,8 @@ export async function addNewDefaultTask(sessionId, taskName, boardID, listID) {
     }
 }
 
-export async function updateTask(sessionId, taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistroryId) {
-    const userId = await findUserBySessionId(sessionId);
-    const result = await patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistroryId);
+export async function updateTask(sessionId, taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
+    const result = await patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID);
     switch (result[1]) {
         case 0:
             logger.info(chalk.hex(styles.success)`Task successfully updated`);

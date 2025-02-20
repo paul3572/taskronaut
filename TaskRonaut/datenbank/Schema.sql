@@ -15,7 +15,7 @@ CREATE TABLE Users
     UNIQUE (email)
 );
 
--- Tabelle 'Board' erstellen
+-- Tabelle 'Boards' erstellen
 DROP TABLE IF EXISTS Boards;
 CREATE TABLE Boards
 (
@@ -34,7 +34,7 @@ CREATE TABLE Lists
 );
 
 
--- Tabelle 'Task' erstellen
+-- Tabelle 'Tasks' erstellen
 DROP TABLE IF EXISTS Tasks;
 CREATE TABLE Tasks
 (
@@ -42,11 +42,11 @@ CREATE TABLE Tasks
     taskCreatorID    INT,
     taskCreationDate DATE DEFAULT CURRENT_TIMESTAMP,
     dueDate          DATE DEFAULT CURRENT_TIMESTAMP,
-    taskDescription  VARCHAR(255),
+    taskDescription  VARCHAR(800) DEFAULT '' COLLATE utf32_general_nopad_ci,
     taskName         VARCHAR(255),
-    priorities       INT,
-    taskStatus       VARCHAR(255) DEFAULT "todo",
-    comments         VARCHAR(255),
+    priorities       INT DEFAULT 1,
+    taskStatus       VARCHAR(255) DEFAULT 'todo',
+    comments         VARCHAR(800) DEFAULT '' COLLATE utf32_general_nopad_ci,
     taskHistoryID    INT,
     boardID          INT,
     listID           INT,

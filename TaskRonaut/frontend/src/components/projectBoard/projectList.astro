@@ -4,7 +4,6 @@ import Task from './project.astro';
 import {serverURL} from '../../pages/conf.js';
 
 let sessionId = Astro.cookies.get('sessionId').value;
-console.log('List Session ID:', sessionId);
 
 
 
@@ -20,18 +19,16 @@ const {data: tasks} = await responseTasks.json();
 let taskList = [];
 for (let task of tasks) {
     for (let key of task) {
-        console.log(key)
         taskList.push(key);
     }
 }
 
-
-
+const {boardId} = Astro.props;
 
 const responseLists = await fetch(`${serverURL}/lists/board/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardId})
 });
 
 
@@ -44,12 +41,11 @@ const {data: lists} = await responseLists.json();
       userId: sessionStorage.getItem('userId')
       }">
     {lists && lists.length === 0 ? (
-    <hr>) : (
+    <hr style="width: 0; margin: 0">) : (
         <>
             {lists && lists.map(list => (
             <div
                             class="list"
-                            @dragover.prevent
                             id={`list-${list.listID}`}
                     >
 
@@ -108,7 +104,6 @@ const {data: lists} = await responseLists.json();
     <script>
         import {sessionId} from '../../pages/user.js';
 
-        console.log("funktioniert?:" + sessionId);
     </script>
     <div class="add-list" x-data=`{
         showInput: false,
@@ -125,7 +120,7 @@ const {data: lists} = await responseLists.json();
                 },
                 body: JSON.stringify({ 
                     sessionId: sessionId.replace(/"/g, ''), 
-                    boardId: 1,
+                    boardId: ${boardId},
                     listName: this.taskData.listName 
                 })
                 }).then(() => {

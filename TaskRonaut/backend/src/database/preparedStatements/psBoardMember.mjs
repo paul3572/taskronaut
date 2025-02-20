@@ -3,7 +3,7 @@ import {boardMemberQueries} from "../dbQueries.mjs";
 import connection from "../dbCon.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../loggingStyle.mjs";
+import {styles} from "../../database/loggingStyle.mjs";
 
 export async function selectAllBoardMembersId(boardId) {
     try {

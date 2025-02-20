@@ -3,7 +3,8 @@ import Task from './task.astro';
 import {serverURL} from '../../pages/conf.js';
 
 let sessionId = Astro.cookies.get('sessionId').value;
-console.log('List Session ID:', sessionId);
+
+let boardId = Astro.props.boardId;
 
 const responseTasks = await fetch(`${serverURL}/tasks/user/`, {
     method: 'POST', headers: {
@@ -24,7 +25,6 @@ const {data: tasks} = await responseTasks.json();
 let taskList = [];
 for (let task of tasks) {
     for (let key of task) {
-        console.log(key)
         taskList.push(key);
 
         if (key.taskStatus === 'todo') {
@@ -44,7 +44,6 @@ for (let task of tasks) {
     {lists.map(list => (
             <div
                     class="list"
-                    @dragover.prevent
                     @drop="dropTask(event, { listID: list.listID })"
                     id={`list-${list.listID}`}
             >
@@ -52,29 +51,3 @@ for (let task of tasks) {
                 <Task listID={list.listID} tasks={filteredTasks[list.listID]}></Task>
             </div>))}
 </div>
-
-<script>
-    import {serverURL} from '../../pages/conf.js';
-
-    function dragAndDrop() {
-        return {
-            draggedTask: null,
-
-            startDrag(task) {
-                this.draggedTask = task;
-            },
-
-            async dropTask(event, targetList) {
-                if (!this.draggedTask) return;
-
-                await fetch(`${serverURL}/tasks/${this.draggedTask.taskID}/listId`, {
-                    method: 'PATCH', headers: {
-                        'Content-Type': 'application/json',
-                    }, body: JSON.stringify({listId: targetList.listID}),
-                });
-
-                location.reload();
-            },
-        };
-    }
-</script>

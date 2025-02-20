@@ -19,14 +19,12 @@ import '../styles/global.css';
         window.location.href = `${clientURL}/`;
     }
 </script>
-<div class="login-register-container">
+<div class="login-register-container" id="login-register-container">
     <div class="register">
-        <a class="close-button"
-           hx-post="/"
-           hx-trigger="click"
-           hx-target="body"
-           hx-push-url="/"
-        >&#10006</a>
+        <a class="close-button clickable"
+           href="/"
+           aria-label="Close"
+        >&#10006;</a>
         <h2>Registrieren</h2>
 
         <form id="registration-form"
@@ -34,7 +32,6 @@ import '../styles/global.css';
               hx-target="#response"
               hx-swap="innerHTML">
             <div class="nameDiv">
-                <!-- FIRST NAME -->
                 <div class="labelInput">
                     <label for="firstName">Vorname</label>
                     <input type="text"
@@ -45,7 +42,6 @@ import '../styles/global.css';
                            minlength="1">
                 </div>
 
-                <!-- LAST NAME -->
                 <div class="labelInput">
                     <label for="lastName">Nachname</label>
                     <input type="text"
@@ -56,10 +52,7 @@ import '../styles/global.css';
                            minlength="1">
                 </div>
             </div>
-            <hr>
 
-            <!-- EMAIL -->
-            <!-- Seite 1: Email eingeben -->
             <div x-data="{ email: '' }">
                 <label for="email">Email</label>
                 <input type="email"
@@ -70,39 +63,41 @@ import '../styles/global.css';
                        required
                        placeholder="Geben Sie Ihre E-Mail ein"
                        minlength="1">
-                <hr>
+
             </div>
 
+            <div class="password-div">
+                <label for="password">Passwort</label>
+                <input type="password"
+                       name="password"
+                       id="password"
+                       required
+                       placeholder="Passwort eingeben"
+                       minlength="6"
+                       title="6 Zeichen, Groß-, Kleinbuchstaben und Zeichen">
 
-            <!-- PASSWORD -->
-            <label for="password">Passwort</label>
-            <input type="password"
-                   name="password"
-                   id="password"
-                   required
-                   placeholder="Passwort eingeben"
-                   minlength="6"
-                   title="6 Zeichen, Groß-, Kleinbuchstaben und Zeichen">
-
-            <!-- REPEATED PASSWORD -->
-            <label for="repeatedPassword">Passwort wiederholen</label>
-            <input type="password"
-                   name="repeatedPassword"
-                   id="repeatedPassword"
-                   required
-                   placeholder="Passwort wiederholen"
-                   title="Passwort wiederholt eingeben"
-                   minlength="6">
-
-            <button type="submit">Registrieren</button>
+                <label for="repeatedPassword">Passwort wiederholen</label>
+                <input type="password"
+                       name="repeatedPassword"
+                       id="repeatedPassword"
+                       required
+                       placeholder="Passwort wiederholen"
+                       title="Passwort wiederholt eingeben"
+                       minlength="6">
+            </div>
+            <button type="submit" class="clickable">Registrieren</button>
         </form>
 
         <div id="response" style="padding-top: 10px;"></div>
 
         <p>Du hast schon einen Account?
-            <a hx-push-url="login" hx-get="/login" hx-target="#login-register-container" hx-swap="innerHTML"
-               aria-label="Einloggen" class="login-register-button">
-                Einloggen
+            <a hx-push-url="/login"
+            hx-get="/login"
+            hx-target="#login-register-container"
+            hx-swap="innerHTML transition:true"
+            aria-label="Einloggen"
+            class="login-register-button clickable">
+            Einloggen
             </a>
         </p>
     </div>
@@ -120,11 +115,23 @@ import '../styles/global.css';
         if (event.detail.elt.id === 'registration-form') {
             const email = document.getElementById('email').value;
             localStorage.setItem('userEmail', email);
+
+            // Password validation
+            const password = document.getElementById('password').value;
+            const repeatedPassword = document.getElementById('repeatedPassword').value;
+            const responseDiv = document.getElementById('response');
+
+            if (password !== repeatedPassword) {
+                responseDiv.innerHTML = 'Die Passwörter stimmen nicht überein!';
+                responseDiv.style.color = 'red';
+                event.preventDefault(); // Stop the request
+                return;
+            } else {
+                responseDiv.innerHTML = ''; // Clear error on success
+            }
         }
     });
     document.addEventListener('htmx:afterRequest', forwarding);
-
-
 </script>
 </body>
 </html>

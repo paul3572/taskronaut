@@ -19,10 +19,9 @@ const {data: users} = await boardMembers.json();
 ---
 <aside class="sidebar">
     <nav class="sidebar-content">
-        <hr>
+        <hr/>
         <h1> Mitglieder</h1>
-        <hr>
-        <ul>
+        <ul class="sidebar-users">
             {users.map(user => (
                     <li class="user-item">
                         <div x-data="{ showComponent: false }">
@@ -35,7 +34,8 @@ const {data: users} = await boardMembers.json();
                         </div>
                         <p>{user?.firstName} {user?.lastName}</p>
                         <div x-data="{ showComponent: false }">
-                            <button class="chatCheckBox" @click="showComponent = !showComponent" style="cursor: pointer">
+                            <button class="chatCheckBox" @click="showComponent = !showComponent"
+                                    style="cursor: pointer">
                                 <span x-show="!showComponent"><i class="fa-regular fa-comment"></i></span>
                                 <span x-show="showComponent"><i class="fa-regular fa-comment"></i></span>
                             </button>
@@ -47,6 +47,23 @@ const {data: users} = await boardMembers.json();
                         </div>
                     </li>))}
         </ul>
+        <ul>
+            <li>Add user</li>
+            <div x-data="{ userEmail: '' }">
+                <input type="text" placeholder="Enter user email" x-model="userEmail" />
+                <button
+                    @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
+                    hx-post=`${serverURL}/board-members`
+                    hx-headers='{"Content-Type": "application/json"}'
+                    hx-trigger="click"
+                    hx-include="[x-model]"
+                    hx-swap="outerHTML"
+                >
+                    Add
+                </button>
+            </div>
+        </ul>
+
         <hr/>
     </nav>
     <div class="sidebar-footer">

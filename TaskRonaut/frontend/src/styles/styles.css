@@ -1,4 +1,3 @@
-@charset "UTF-8";
 :root {
   --primary: #0050c4;
   --primary-content: #c4dcff;
@@ -21,6 +20,14 @@
   --warning-content: #000000;
   --error-content: #ffc4c4;
   --test: #13e6bf;
+  --neon-glow: 0 0 15px currentColor;
+  --astro: #ff5533;
+  --htmx: #3e72d7;
+  --alpine: #77c1d2;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .profile-button {
@@ -55,106 +62,6 @@
 .profile-button span {
   vertical-align: bottom;
   font-size: large;
-}
-
-.growing-delete-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: rgb(20, 20, 20);
-  border: none;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
-  cursor: pointer;
-  transition-duration: 0.3s;
-  overflow: hidden;
-  position: relative;
-}
-.growing-delete-button .svgIcon {
-  width: 15px;
-  transition-duration: 0.3s;
-}
-.growing-delete-button .svgIcon path {
-  fill: white;
-}
-.growing-delete-button:hover {
-  width: 140px;
-  border-radius: 50px;
-  transition-duration: 0.3s;
-  background-color: rgb(255, 69, 69);
-  align-items: center;
-}
-.growing-delete-button:hover .svgIcon {
-  width: 50px;
-  transition-duration: 0.3s;
-  transform: translateY(60%);
-}
-.growing-delete-button:hover::before {
-  font-size: medium;
-  opacity: 1;
-  transform: translateY(30px);
-  transition-duration: 0.3s;
-}
-.growing-delete-button::before {
-  position: absolute;
-  top: -20px;
-  content: "Delete";
-  color: white;
-  transition-duration: 0.3s;
-  font-size: xx-small;
-}
-
-.growing-save-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: rgb(20, 20, 20);
-  border: none;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
-  cursor: pointer;
-  transition-duration: 0.3s;
-  overflow: hidden;
-  position: relative;
-}
-.growing-save-button .svgIcon {
-  width: 15px;
-  transition-duration: 0.3s;
-}
-.growing-save-button .svgIcon path {
-  fill: white;
-}
-.growing-save-button:hover {
-  width: 140px;
-  border-radius: 50px;
-  transition-duration: 0.3s;
-  background-color: rgb(72, 172, 4);
-  align-items: center;
-}
-.growing-save-button:hover .svgIcon {
-  width: 50px;
-  transition-duration: 0.3s;
-  transform: translateY(60%);
-}
-.growing-save-button:hover::before {
-  font-size: medium;
-  opacity: 1;
-  transform: translateY(30px);
-  transition-duration: 0.3s;
-}
-.growing-save-button::before {
-  position: absolute;
-  top: -20px;
-  content: "Save";
-  color: white;
-  transition-duration: 0.3s;
-  font-size: xx-small;
 }
 
 .animated-delete-button {
@@ -202,20 +109,12 @@ body {
   background-color: var(--background);
 }
 
-.content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
 .header {
   display: flex;
   padding: 10px 20px 10px 20px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--foreground);
-  /* Stil für das Dropdown */
 }
 .header .left {
   display: flex;
@@ -246,15 +145,17 @@ body {
 .header .login-register-button {
   background-color: var(--background);
   color: var(--copy);
-  border: none;
   margin-left: 15px;
   font-size: x-large;
   cursor: pointer;
   padding: 5px 10px 5px 10px;
   border-radius: 5px;
+  border: var(--foreground) 1px solid;
+  transition: border 0.3s ease;
 }
 .header button:hover {
-  background-color: var(--foreground);
+  border: var(--primary) 1px solid;
+  transition: border 0.3s ease;
 }
 .header .modal-bg {
   position: fixed;
@@ -309,35 +210,141 @@ body {
   height: 100vh;
 }
 
-.scrollable {
+.start-content {
+  background: var(--background);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.start-content .start {
+  text-align: center;
+  padding: 2rem 0;
+  margin: 0 auto;
+}
+.start-content .start .start-header h1 {
+  font-size: 5rem;
+  background: linear-gradient(to right, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.start-content .start .start-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.start-content .start .aha-stack {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin: 6rem 0;
+}
+.start-content .start .aha-card {
+  background: var(--foreground);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+.start-content .start .aha-card h3 {
+  font-size: 1.5rem;
+  color: var(--copy);
+}
+.start-content .start .aha-card svg {
+  width: 150px;
+  height: 150px;
+}
+.start-content .start .aha-card.astro {
+  color: var(--astro);
+}
+.start-content .start .aha-card.htmx {
+  color: var(--htmx);
+}
+.start-content .start .aha-card.alpine {
+  color: var(--alpine);
+}
+.start-content .start .hero-section {
+  margin: 6rem 0;
+  padding: 4rem 2rem;
+  background: var(--foreground);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.start-content .start .hero-section h1 {
+  font-size: 3rem;
+  background: linear-gradient(to right, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.start-content .start .hero-section p {
+  font-size: 1.2rem;
+  color: var(--copy-light);
+  margin-bottom: 2.5rem;
+}
+.start-content .start .cta-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background: var(--primary);
+  color: var(--primary-content);
+  border: 2px solid transparent;
+}
+.start-content .start .cta-button i {
+  margin-right: 0.8rem;
+  color: var(--primary-content);
+}
+.start-content .start .cta-button:hover {
+  transform: scale(1.1);
+}
+.start-content .start .status-success {
+  color: var(--success-content);
+  background: var(--success);
+}
+.start-content .start .status-warning {
+  color: var(--warning-content);
+  background: var(--warning);
+}
+.start-content .start .status-error {
+  color: var(--error-content);
+  background: var(--error);
+}
+
+.board-list-view {
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap;
   scrollbar-width: auto;
+  width: calc(85% - 15px);
+  padding: 10px;
 }
 
 .board {
   background: linear-gradient(-30deg, var(--primary-dark) 30%, var(--secondary-dark) 90%);
   background-size: cover;
-  height: auto;
-  width: calc(100% - 300px);
-  padding: 10px 20px;
+  height: 100%;
+  width: 100%;
 }
 .board .board-content {
   display: flex;
+  height: 100%;
 }
 .board .board-content input {
   padding: 10px;
 }
 .board .board-header {
-  list-style-type: none;
   margin: 0;
-  overflow: hidden;
   padding: 0 0 10px 0;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
   color: var(--copy);
+  top: 0;
+  z-index: 1;
 }
 .board .board-header li {
   float: left;
@@ -357,103 +364,46 @@ body {
 }
 
 .sidebar {
-  width: 300px;
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: var(--background);
+  width: 15%;
+  min-width: 220px;
+  background-color: var(--foreground);
   text-align: left;
+  right: 0;
+  height: 100%;
 }
 .sidebar hr {
   color: var(--border);
   margin: 0;
 }
-.start .start-header {
-  width: 80vw;
-  height: 20vh;
-  padding: 10vh 10vw;
-  background: linear-gradient(180deg, var(--primary) 30%, var(--secondary) 90%);
-  background-blend-mode: normal, normal;
-  background-size: 101vw;
-  color: var(--copy);
-  flex-direction: row;
+.sidebar .sidebar-content {
+  padding: 0 10px;
+}
+.sidebar .sidebar-content .sidebar-users {
+  max-height: 30rem;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+.sidebar .sidebar-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar .sidebar-content .user-item {
   display: flex;
+  align-items: center;
+  justify-content: left;
 }
-.start .start-header .left {
-  width: 30%;
+.sidebar .sidebar-content .chatCheckBox {
+  color: white;
+  background-color: black;
+  border: none;
+  border-radius: 50px;
 }
-.start .start-header .left h1 {
-  margin: 0;
-  font-size: xxx-large;
-  text-align: left;
-}
-.start .start-header .left h2 {
-  margin: 0;
-}
-.start .start-header .right {
-  width: 70%;
-}
-.start .start-header .right h1 {
-  margin: 0;
-  font-size: xx-large;
-  text-align: right;
-}
-.start .start-header .right p {
-  text-align: right;
-}
-.start .start-body {
-  width: 80vw;
-  height: 20vh;
-  padding: 10vh 10vw;
-  background-blend-mode: normal, normal;
-  background-size: 101vw;
-  color: var(--copy);
-  flex-direction: row;
-  display: flex;
-  background-color: var(--background);
-}
-.start .start-body .left-right .left {
-  width: 60%;
-}
-.start .start-body .left-right .left h1 {
-  margin: 0;
-  font-size: xxx-large;
-  color: orange;
-}
-.start .start-body .left-right .left h2 {
-  margin: 0;
-}
-.start .start-body .left-right .right {
-  width: 40%;
-}
-.start .start-body .left-right .right h1 {
-  margin: 0;
-  font-size: xxx-large;
-  color: orange;
-  text-align: right;
-}
-.start .start-body .left-right .right .image-stack {
-  position: relative;
-}
-.start .start-body .left-right .right .image-stack img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-.start .start-body .left-right .right .image-stack img:nth-child(1) {
-  top: -8vh;
-  left: 0;
-}
-.start .start-body .left-right .right .image-stack img:nth-child(2) {
-  top: -9vh;
-  left: 190px;
-  z-index: 2;
-}
-.start .start-body .left-right .right .image-stack img:nth-child(3) {
-  top: -2vh;
-  left: 0;
-  z-index: 3;
+.sidebar .sidebar-content .profileIcon {
+  color: white;
+  background-color: black;
+  border: none;
+  border-radius: 50px;
 }
 
 .dragAndDrop {
@@ -467,22 +417,22 @@ body {
   flex-direction: column;
   background: var(--foreground);
   padding: 1rem;
-  margin: 1rem;
+  margin-right: 0.5rem;
   border-radius: 8px;
   width: 250px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   height: auto;
-  max-height: 80vh;
+  max-height: 80%;
   overflow-y: auto;
 }
 .dragAndDrop .list .list-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow-x: hidden; /* Verhindert horizontales Scrollen */
-  white-space: pre-wrap; /* Behandelt Zeilenumbrüche und fügt sie hinzu */
-  word-wrap: break-word; /* Zeilen werden gebrochen, wenn nötig */
-  word-break: break-word; /* Alternative Unterstützung für ältere Browser */
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 .dragAndDrop .list .list-header h2 {
   max-width: 80%;
@@ -542,25 +492,21 @@ body {
 .dragAndDrop .list .cancel-task-button:hover {
   background-color: var(--background);
 }
-.dragAndDrop .list.drag-over {
-  background-color: rgba(75, 75, 75, 0.9);
-}
 .dragAndDrop .list h2 {
   font-size: x-large;
   margin-bottom: 0.5rem;
 }
 .dragAndDrop .add-list {
-  padding-top: 1rem;
   display: flex;
   flex-direction: row;
-  /* Add this container for the buttons to align them next to each other */
 }
 .dragAndDrop .add-list .add-list-space {
   display: flex;
   flex-direction: column;
 }
 .dragAndDrop .add-list .add-list-button {
-  margin-right: 15px;
+  margin-right: 0.5rem;
+  margin-left: 0;
   padding: 10px 10px;
   font-size: medium;
   color: var(--copy);
@@ -568,7 +514,8 @@ body {
   border-radius: 5px;
   border: none;
   text-align: left;
-  width: 140px;
+  width: 170px;
+  text-align: center;
 }
 .dragAndDrop .add-list .add-list-button:hover {
   background-color: var(--background);
@@ -578,10 +525,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 10px; /* Adjust gap between buttons */
+  gap: 10px;
 }
 .dragAndDrop .add-list .list-name-input {
-  width: 140px;
+  width: 150px;
   margin-bottom: 10px;
   border: 1px solid var(--foreground);
   border-radius: 5px;
@@ -604,7 +551,7 @@ body {
   border-radius: 5px;
   border: none;
   text-align: left;
-  width: 125px;
+  width: 130px;
   cursor: pointer;
 }
 .dragAndDrop .add-list .save-list-space .submit-list-button:hover {
@@ -637,10 +584,10 @@ body {
 }
 .dragAndDrop .task h3 {
   margin: 0 0 5px 0;
-  overflow-x: hidden; /* Verhindert horizontales Scrollen */
-  white-space: pre-wrap; /* Behandelt Zeilenumbrüche und fügt sie hinzu */
-  word-wrap: break-word; /* Zeilen werden gebrochen, wenn nötig */
-  word-break: break-word; /* Alternative Unterstützung für ältere Browser */
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 .dragAndDrop .task p {
   margin: 10px 1px;
@@ -659,85 +606,6 @@ body {
 .dragAndDrop .task:hover {
   background-color: var(--foreground);
 }
-.dragAndDrop .task .task-details-block {
-  display: block;
-  z-index: 10;
-  position: absolute;
-  background-color: var(--background);
-  padding: 10px 20px;
-  border: 3px solid var(--border);
-  border-radius: 10px;
-  width: 75vw;
-  height: 90vh;
-  top: 7%;
-  left: 5%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-.dragAndDrop .task .task-details-block .closeButton {
-  position: absolute;
-  top: 2px;
-  right: 15px;
-  cursor: pointer;
-  color: var(--copy);
-  font-size: x-large;
-}
-.dragAndDrop .task .task-details-block label {
-  display: block;
-  font-weight: bold;
-  color: var(--copy);
-  margin-top: 5px;
-  font-size: large;
-}
-.dragAndDrop .task .task-details-block input[type=text],
-.dragAndDrop .task .task-details-block input[type=date],
-.dragAndDrop .task .task-details-block textarea {
-  width: calc(100% - 22px);
-  padding: 10px;
-  margin: 5px 0 5px 0;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background-color: var(--foreground);
-  color: var(--copy);
-  user-select: text; /* Sicherstellen, dass der Text auswählbar ist */
-}
-.dragAndDrop .task .task-details-block textarea {
-  resize: vertical;
-}
-.dragAndDrop .task .task-details-block select {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0 5px 0;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background-color: var(--foreground);
-  color: var(--copy);
-  cursor: pointer;
-}
-.dragAndDrop .task .task-details-block select:hover {
-  background-color: var(--background);
-}
-.dragAndDrop .task .task-details-block select:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-.dragAndDrop .task .task-details-block select option {
-  background-color: var(--foreground);
-  color: var(--copy);
-}
-.dragAndDrop .task .task-details-block button[type=submit] {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: var(--primary);
-  color: var(--copy);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: medium;
-}
-.dragAndDrop .task .task-details-block button[type=submit]:hover {
-  background-color: var(--primary-dark);
-}
 
 .login-register-container {
   position: fixed;
@@ -747,175 +615,142 @@ body {
   height: 100vh;
   width: 100vw;
   backdrop-filter: blur(5px);
-  z-index: 100;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
+  transition: all 1s ease-in-out;
 }
-.login-register-container .login {
-  background-color: var(--foreground);
-  padding: 40px;
-  border: var(--border);
-  border-style: solid;
-  border-radius: 15px;
-  width: 320px;
+.login-register-container .login, .login-register-container .register {
+  background: var(--foreground);
+  padding: 0 2.5rem 1rem 2.5rem;
+  border-radius: 16px;
+  border: var(--border) 2px solid;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   position: relative;
-  text-align: left;
 }
-.login-register-container .login .close-button {
+.login-register-container .login .close-button, .login-register-container .register .close-button {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  color: var(--copy);
-  font-size: medium;
-  margin: 0;
+  top: 0.5rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--copy-light);
+  transition: all 0.3s ease;
 }
-.login-register-container .login h2 {
-  margin-bottom: 20px;
+.login-register-container .login .close-button:hover, .login-register-container .register .close-button:hover {
+  color: var(--primary);
+  transform: scale(1.1);
+}
+.login-register-container .login h2, .login-register-container .register h2 {
+  font-size: 2rem;
+  background: linear-gradient(to right, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+.login-register-container .login .nameDiv, .login-register-container .register .nameDiv {
+  display: flex;
+}
+.login-register-container .login .nameDiv input, .login-register-container .register .nameDiv input {
+  width: 81%;
+  flex-direction: column;
+  padding: 1rem;
+  margin: 0.5rem 0 0;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--background-light);
   color: var(--copy);
+  transition: all 0.3s ease;
+}
+.login-register-container .login .nameDiv input:focus, .login-register-container .register .nameDiv input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.1);
+}
+.login-register-container .login .password-div, .login-register-container .register .password-div {
+  padding-bottom: 0.5rem;
+}
+.login-register-container .login input, .login-register-container .register input {
+  width: 91%;
+  padding: 1rem;
+  margin: 0.5rem 0 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--background-light);
+  color: var(--copy);
+  transition: all 0.3s ease;
+}
+.login-register-container .login input:focus, .login-register-container .register input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.1);
+}
+.login-register-container .login button, .login-register-container .register button {
+  font-size: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary);
+  color: var(--primary-content);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+.login-register-container .login button:hover, .login-register-container .register button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+.login-register-container .login .form-info, .login-register-container .register .form-info {
+  margin-top: 1.5rem;
+  color: var(--copy-light);
   text-align: center;
 }
-.login-register-container .login input {
-  width: calc(100% - 22px);
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid var(--copy);
-  border-radius: 5px;
-}
-.login-register-container .login button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0 0 0;
-  background-color: var(--primary);
-  color: var(--copy);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.login-register-container .login button:hover {
-  background-color: var(--primary-dark);
-}
-.login-register-container .login .form-info {
-  margin-top: 10px;
-  color: var(--copy);
-}
-.login-register-container .login a {
+.login-register-container .login a, .login-register-container .register a {
   color: var(--primary);
+  font-weight: 500;
+  transition: all 0.3s ease;
   text-decoration: none;
 }
-.login-register-container .login a:hover {
-  cursor: pointer;
+.login-register-container .login a:hover, .login-register-container .register a:hover {
+  color: var(--primary-dark);
 }
-.login-register-container .login small {
-  color: var(--error);
-  display: none;
-  text-align: left;
-}
-.login-register-container .login small[x-show="!emailValid"],
-.login-register-container .login small[x-show="!passwordValid"] {
+.login-register-container .login small, .login-register-container .register small {
   display: block;
-}
-.login-register-container .login input {
-  display: block;
-  background-color: var(--foreground);
-  color: var(--copy);
-}
-.login-register-container .register {
-  background-color: var(--foreground);
-  padding: 40px;
-  border: var(--border);
-  border-style: solid;
-  border-radius: 15px;
-  width: 320px;
-  position: relative;
-  text-align: left;
-}
-.login-register-container .register .close-button {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  color: var(--copy);
-  font-size: medium;
-  margin: 0;
-}
-.login-register-container .register h2 {
-  margin-bottom: 20px;
-  color: var(--copy);
-  text-align: center;
-}
-.login-register-container .register input {
-  width: calc(100% - 22px);
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid var(--copy);
-  border-radius: 5px;
-  display: block;
-  background-color: var(--foreground);
-  color: var(--copy);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin: -0.5rem 0 1rem;
+  background: var(--error);
+  color: var(--error-content);
+  font-weight: 500;
 }
 .login-register-container .register .nameDiv {
-  display: flex;
-  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
-.login-register-container .register .nameDiv .labelInput {
-  flex-direction: column;
-  text-align: left;
+.login-register-container .register .nameDiv > div {
+  flex: 1;
 }
 .login-register-container .register .nameDiv #lastName {
-  margin-left: 5px;
+  margin-left: 0;
 }
 .login-register-container .register hr {
-  margin: 5px 0 5px 0;
-  color: var(--primary-light);
-}
-.login-register-container .register button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0 0 0;
-  background-color: var(--primary);
-  color: var(--copy);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.login-register-container .register button:hover {
-  background-color: var(--primary-dark);
-}
-.login-register-container .register .form-info {
-  margin-top: 10px;
-  color: var(--copy);
-}
-.login-register-container .register a {
-  color: var(--primary);
-  text-decoration: none;
-}
-.login-register-container .register a:hover {
-  cursor: pointer;
-}
-.login-register-container .register small {
-  color: var(--error);
-  display: none;
-  text-align: left;
-}
-.login-register-container .register small[x-show="!emailValid"],
-.login-register-container .register small[x-show="!passwordValid"] {
-  display: block;
+  border: 1px solid var(--border-color);
+  margin: 0.1rem 0;
 }
 
 .ptp {
-  position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
+  height: 40%;
   width: 30vw;
   backdrop-filter: blur(5px);
   z-index: 100;
   top: 70px;
-  right: 80px;
+  right: 5px;
   bottom: 0;
   background-color: var(--foreground);
   padding: 10px;
@@ -995,6 +830,205 @@ body {
 
 .status-done {
   background-color: #178000;
+}
+
+.toggle-button {
+  padding: 7px 10px;
+  margin: 0 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.toggle-button.active {
+  background-color: var(--background);
+}
+.toggle-button:hover {
+  background-color: var(--foreground);
+}
+
+.task-details-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  cursor: default;
+}
+.task-details-screen .task-details-block {
+  background-color: var(--foreground);
+  padding: 20px;
+  border: var(--border) solid;
+  border-radius: 15px;
+  width: 800px;
+  max-height: 80vh;
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 5;
+}
+.task-details-screen .closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  color: var(--copy);
+  font-size: medium;
+  margin: 0;
+}
+.task-details-screen .task-details-content {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+.task-details-screen .left-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.task-details-screen .left-top {
+  flex: 0 0 auto;
+}
+.task-details-screen .left-middle,
+.task-details-screen .left-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.task-details-screen .left-middle input,
+.task-details-screen .left-bottom textarea {
+  min-width: 0;
+  z-index: 10;
+}
+.task-details-screen .left-middle textarea {
+  flex: 1;
+  min-width: 0;
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  z-index: 10;
+  resize: none;
+}
+.task-details-screen .left-middle input,
+.task-details-screen .left-bottom textarea {
+  flex: 1;
+  min-width: 0;
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  z-index: 10;
+  resize: none;
+}
+.task-details-screen .right-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+.task-details-screen label {
+  display: block;
+  margin: 10px 0 5px;
+  color: var(--copy);
+}
+.task-details-screen input, .task-details-screen select, .task-details-screen textarea {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background-color: var(--foreground);
+  color: var(--copy);
+  z-index: 20;
+}
+.task-details-screen .slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+.task-details-screen input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background-color: var(--foreground);
+  background-image: radial-gradient(circle, var(--copy) 2px, transparent 0), radial-gradient(circle, var(--copy) 2px, transparent 0), radial-gradient(circle, var(--copy) 2px, transparent 0), radial-gradient(circle, var(--copy) 2px, transparent 0), radial-gradient(circle, var(--copy) 2px, transparent 0);
+  background-size: 10px 10px;
+  background-position: 5% 50%, 27.5% 50%, 50% 50%, 72.5% 50%, 95% 50%;
+  background-repeat: no-repeat;
+  outline: none;
+}
+.task-details-screen input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 2px solid var(--border);
+}
+.task-details-screen input[type=range]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 2px solid var(--border);
+}
+.task-details-screen .buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  z-index: 10;
+}
+.task-details-screen .delete-button,
+.task-details-screen .save-button {
+  width: 48%;
+  padding: 10px;
+  background-color: var(--primary);
+  color: var(--copy);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.task-details-screen .delete-button:hover {
+  background-color: var(--error);
+  transition: background-color 0.5s ease;
+}
+.task-details-screen .save-button:hover {
+  background-color: var(--success);
+  transition: background-color 0.5s ease;
+}
+.task-details-screen .svgIcon {
+  width: 20px;
 }
 
 /*# sourceMappingURL=styles.css.map */

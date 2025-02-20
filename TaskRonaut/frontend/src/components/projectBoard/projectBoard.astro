@@ -1,13 +1,73 @@
 ---
 import List from "./projectList.astro";
+import {serverURL} from "../../pages/conf";
+import BoardHeader from "../boardHeader.astro";
+import Sidebar from "../boardSidebar.astro";
+
+let sessionId = Astro.cookies.get('sessionId').value;
+
+const response = await fetch(`${serverURL}/boards/get`, {
+    method: 'POST', headers: {
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify({sessionId: sessionId})
+});
+
+const {data: boards} = await response.json();
+
+let boardList = [];
+for (let task of boards) {
+    for (let key of task) {
+        boardList.push(key);
+    }
+}
+console.log(boardList);
+
+const url = Astro.url;
+const boardIdParam = url.searchParams.get('boardId');
+
+// Flatten the boards array
+const allBoards = boards.flat();
+
+// Find the selected board
+let selectedBoardId = allBoards[0]?.boardID; // Default to first board
+if (boardIdParam) {
+    const parsedId = parseInt(boardIdParam);
+    const exists = allBoards.some(board => board.boardID === parsedId);
+    selectedBoardId = exists ? parsedId : selectedBoardId;
+    }
+
+const selectedBoard = allBoards.find(board => board.boardID === selectedBoardId);
+const boardName = selectedBoard?.boardName || 'Default Board Name';
+
 ---
 
-<section>
-    <ul class="board-header">
-        <li><h1>Board-Name</h1></li>
-        <li><p>Projekt-Strukturplan</p></li>
-    </ul>
-    <div class="board-content">
-        <List></List>
+<BoardHeader {boards}></BoardHeader>
+
+
+<div class="board-content">
+    <div class="board-list-view">
+        <div class="board-header">
+            <li><h1>{boardName}</h1></li>
+                <div class="toggle-container">
+                    <button
+                            :class="{ 'toggle-button': true, 'active': showProjectBoard }"
+                            @click="showProjectBoard = true"
+                    >
+                        Show Project Board
+                    </button>
+                    <button
+                            :class="{ 'toggle-button': true, 'active': !showProjectBoard }"
+                            @click="showProjectBoard = false"
+                    >
+                        Show Task Board
+                    </button>
+                </div>
+        </div>
+
+        <div>
+            <List boardId={selectedBoardId}></List>
+        </div>
+
     </div>
-</section>
+    <Sidebar></Sidebar>
+</div>
