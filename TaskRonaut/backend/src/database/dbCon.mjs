@@ -5,7 +5,7 @@ import mysql from 'mysql2/promise';
  * @type {{queueLimit: number, password: string, database: string, waitForConnections: boolean, connectionLimit: number, host: string, user: string}}
  */
 const dbOptions = {
-    host: 'localhost',
+    host: '147.93.57.98:3306',
     user: 'root',
     password: '',
     database: 'taskronaut',
