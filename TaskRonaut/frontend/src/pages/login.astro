@@ -86,7 +86,7 @@ import '../styles/global.css';
         const status = xhr.status;
         const responseText = xhr.responseText;
 
-        const requestOrigin = new URL(xhr.responseURL).origin;
+        const requestOrigin = new URL(xhr.responseURL).origin + '/api';
         if (requestOrigin !== `${serverURL}`) {
             console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + serverURL);
             return;
