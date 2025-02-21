@@ -60,7 +60,7 @@ const listTasks = tasks.filter(task => task.listID === listID);
     <button
         @click=`
             if (taskData.taskName.trim()) {
-                fetch("${serverURL}/tasks", {
+                fetch("${serverURL}/tasks/tasks", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -80,7 +80,8 @@ const listTasks = tasks.filter(task => task.listID === listID);
         <button
             @click="showInput = false;
             taskData.taskName = ''"
-            class="cancel-task-button">
+            class="cancel-task-button"
+        >
             X
         </button>
         </div>

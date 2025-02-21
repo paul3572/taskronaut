@@ -30,7 +30,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const apiRouter = express.Router();
 
-apiRouter.use('/login', loginRoutes);
+apiRouter.use('/authentication', loginRoutes);
 apiRouter.use('/chat', ptpRoutes);
 apiRouter.use('/tasks', taskRoutes);
 apiRouter.use('/boards', boardRoutes);

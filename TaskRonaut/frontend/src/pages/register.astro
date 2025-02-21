@@ -28,7 +28,7 @@ import '../styles/global.css';
         <h2>Registrieren</h2>
 
         <form id="registration-form"
-              hx-post=`${serverURL}/registration`
+              hx-post=`${serverURL}/authentication/registration`
               hx-target="#response"
               hx-swap="innerHTML">
             <div class="nameDiv">

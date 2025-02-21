@@ -24,7 +24,7 @@ if (typeof window !== 'undefined') {
 }
 async function getUserId(sessionId) {
     try {
-        const response = await fetch(`${serverURL}/userId`, {
+        const response = await fetch(`${serverURL}/user/userId`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ async function getUserId(sessionId) {
     }
 }
 async function getCompleteUser(sessionId) {
-    fetch(`${serverURL}/user`, {
+    fetch(`${serverURL}/user/user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ async function getCompleteUser(sessionId) {
 }
 
 async function logout(sessionId) {
-    fetch(`${serverURL}/logout`, {
+    fetch(`${serverURL}/user/logout`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

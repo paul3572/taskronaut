@@ -21,7 +21,7 @@ import '../styles/global.css';
         <h2>Einloggen</h2>
 
         <form id="login-form"
-              hx-post=`${serverURL}/login`
+              hx-post=`${serverURL}/authentication/login`
               hx-target="#response"
               hx-swap="innerHTML"
         >

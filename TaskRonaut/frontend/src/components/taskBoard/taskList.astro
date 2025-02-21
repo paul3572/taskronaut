@@ -6,7 +6,7 @@ let sessionId = Astro.cookies.get('sessionId').value;
 
 let boardId = Astro.props.boardId;
 
-const responseTasks = await fetch(`${serverURL}/tasks/user/`, {
+const responseTasks = await fetch(`${serverURL}/tasks/tasks/user/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
     }, body: JSON.stringify({sessionId: sessionId})

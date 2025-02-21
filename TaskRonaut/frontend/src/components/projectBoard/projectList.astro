@@ -8,7 +8,7 @@ let sessionId = Astro.cookies.get('sessionId').value;
 
 
 
-const responseTasks = await fetch(`${serverURL}/tasks/user/`, {
+const responseTasks = await fetch(`${serverURL}/tasks/tasks/user/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
     }, body: JSON.stringify({sessionId: sessionId})
@@ -25,7 +25,7 @@ for (let task of tasks) {
 
 const {boardId} = Astro.props;
 
-const responseLists = await fetch(`${serverURL}/lists/board/`, {
+const responseLists = await fetch(`${serverURL}/lists/lists/board/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
     }, body: JSON.stringify({sessionId: sessionId, boardId: boardId})
@@ -52,7 +52,7 @@ const {data: lists} = await responseLists.json();
                         <div class="list-header">
                             <h2>{list.listName}</h2>
                             <button class="animated-delete-button"
-                                    hx-delete={`${serverURL}/lists/${list.listID}`}
+                                    hx-delete={`${serverURL}/lists/lists/${list.listID}`}
                                     hx-target={`#list-${list.listID}`}
                                     hx-swap="delete">
                                 <svg
@@ -113,7 +113,7 @@ const {data: lists} = await responseLists.json();
         },
         saveList() {
             if (this.taskData.listName.trim() !== "") {
-                fetch("${serverURL}/lists", {
+                fetch("${serverURL}/lists/lists", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

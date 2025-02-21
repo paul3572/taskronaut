@@ -33,7 +33,7 @@ import { serverURL } from '../pages/conf.js';
         <div x-data="{ showForm: false, boardName: '' }">
             <button class="board-header-buttons" @click="showForm = !showForm">Erstellen +</button>
 
-            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards`} hx-swap="none">
+            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards/boards`} hx-swap="none">
                 <input
                         type="text"
                         name="boardName"

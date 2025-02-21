@@ -22,7 +22,7 @@
     import {serverURL} from "./conf";
 
     function activateEmail() {
-        fetch(`${serverURL}/activateEmail/${getTokenFromUrl()}`, {
+        fetch(`${serverURL}/user/activateEmail/${getTokenFromUrl()}`, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json'
             }, body: JSON.stringify({token: getTokenFromUrl()})

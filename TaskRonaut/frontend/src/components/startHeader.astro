@@ -64,7 +64,7 @@
 
 
         logoutButton.addEventListener('click', () => {
-            fetch(`${serverURL}/logout`, {
+            fetch(`${serverURL}/authentication/logout`, {
                 method: 'POST', headers: {
                     'Content-Type': 'application/json'
                 }, body: JSON.stringify({sessionId: sessionId})

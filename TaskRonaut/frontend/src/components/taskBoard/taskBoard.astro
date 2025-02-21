@@ -7,7 +7,7 @@ import Sidebar from "../boardSidebar.astro";
 const url = Astro.url;
 let sessionId = Astro.cookies.get('sessionId').value;
 
-const response = await fetch(`${serverURL}/boards/get`, {
+const response = await fetch(`${serverURL}/chat/boards/get`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
