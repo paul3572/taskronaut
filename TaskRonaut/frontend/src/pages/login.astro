@@ -82,8 +82,8 @@ import '../styles/global.css';
         const responseText = xhr.responseText;
 
         const requestOrigin = new URL(xhr.responseURL).origin;
-        if (requestOrigin !== `${serverURL.slice(0, -4)}`) {
-            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + serverURL.slice(0, -4));
+        if (requestOrigin !== "http://taskronaut.at") {
+            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at");
             return;
         }
 
