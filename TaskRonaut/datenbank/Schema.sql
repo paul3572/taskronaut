@@ -126,3 +126,16 @@ CREATE TABLE Sessions
     FOREIGN KEY (user_id) REFERENCES Users (id),
     KEY expires (`expires`)
 );
+
+-- Tabelle 'Sessions' erstellen
+DROP TABLE IF EXISTS sessions;
+CREATE TABLE sessions
+(
+    session_id varchar(128)     NOT NULL,
+    expires    int(11) unsigned NOT NULL,
+    data       text,
+    user_id    int(11),
+    PRIMARY KEY (`session_id`),
+    FOREIGN KEY (user_id) REFERENCES Users (id),
+    KEY expires (`expires`)
+);
