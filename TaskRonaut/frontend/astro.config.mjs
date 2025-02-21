@@ -10,6 +10,7 @@ export default defineConfig({
         strictPort: true,
     }, vite: {
         server: {
+            protocol: 'ws',       // Websocket-Protokoll
             host: 'taskronaut.at', // Domain, über die deine Seite erreichbar ist
             port: 4321,            // Muss mit deinem Dev-Server-Port übereinstimmen
             allowedHosts: ['taskronaut.at'],
