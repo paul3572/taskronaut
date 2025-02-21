@@ -42,7 +42,7 @@ export function forwarding(event) {
             break;
 
         case HTTP_STATUS.CREATED:
-            if (window.location.pathname === "/register") {
+            if (window.location.pathname === "/api/authentication/register") {
                 updateResponse('#009900', "Erfolgreich erstellt!");
                 console.log("Erstellung erfolgreich!");
 
