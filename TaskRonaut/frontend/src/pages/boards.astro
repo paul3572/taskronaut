@@ -3,6 +3,7 @@ import ProjectBoard from "../components/projectBoard/projectBoard.astro";
 import TaskBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
+import BoardHeader from "../components/boardHeader.astro";
 
 ---
 
@@ -42,6 +43,7 @@ import '../styles/global.css'
 
 <main class="content" x-data="{ showProjectBoard: true }">
     <div class="main">
+        <BoardHeader></BoardHeader>
         <p>1</p>
         <div class="board" x-show="!showProjectBoard">
             <TaskBoard></TaskBoard>
