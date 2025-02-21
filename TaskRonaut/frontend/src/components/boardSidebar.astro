@@ -53,7 +53,7 @@ const {data: users} = await boardMembers.json();
                 <input type="text" placeholder="Enter user email" x-model="userEmail" />
                 <button
                     @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
-                    hx-post=`${serverURL}/boards/board-members`
+                    hx-post=`${serverURL}/boards/board-member-to-board`
                     hx-headers='{"Content-Type": "application/json"}'
                     hx-trigger="click"
                     hx-include="[x-model]"
