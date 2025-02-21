@@ -14,7 +14,7 @@ import '../styles/global.css';
     <div class="login" id="login-container">
         <a class="close-button clickable"
            href="/"
-        aria-label="Close"
+           aria-label="Close"
         >&#10006;</a>
         <h2>Einloggen</h2>
 
@@ -66,12 +66,7 @@ import '../styles/global.css';
     import {serverURL} from './conf.js';
 
     const HTTP_STATUS = {
-        BAD_REQUEST: 400,
-        CREATED: 201,
-        OK: 200,
-        CONFLICT: 409,
-        Internal_Server_Error: 500,
-        Unauthorized: 401
+        BAD_REQUEST: 400, CREATED: 201, OK: 200, CONFLICT: 409, Internal_Server_Error: 500, Unauthorized: 401
     };
 
     function updateResponse(color, message) {
@@ -86,9 +81,9 @@ import '../styles/global.css';
         const status = xhr.status;
         const responseText = xhr.responseText;
 
-        const requestOrigin = new URL(xhr.responseURL).origin + '/api';
-        if (requestOrigin !== `${serverURL}`) {
-            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + serverURL);
+        const requestOrigin = new URL(xhr.responseURL).origin;
+        if (requestOrigin !== `${serverURL.slice(0, -4)}`) {
+            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + serverURL.slice(0, -4));
             return;
         }
 
@@ -183,9 +178,9 @@ import '../styles/global.css';
         }
 
         if (isSuccessful) {
-            console.log("Anfrage erfolgreich:", { status, responseText, target });
+            console.log("Anfrage erfolgreich:", {status, responseText, target});
         } else if (isFailed) {
-            console.error("Anfrage fehlgeschlagen:", { status, responseText, target });
+            console.error("Anfrage fehlgeschlagen:", {status, responseText, target});
         }
     }
 
