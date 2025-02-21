@@ -21,6 +21,7 @@ console.log('Session ID:', sessionId);
             document.cookie = `sessionId=${sessionId}; path=/; max-age=86400`; // 1 tag
         } else {
             document.getElementById('sessionIdDisplay').textContent = "No session ID found";
+            window.location.href = '/login';
         }
         window.location.href = '/boards'
     </script>
