@@ -133,8 +133,8 @@ import Alpine from "alpinejs";
         const responseText = xhr.responseText;
 
         const requestOrigin = new URL(xhr.responseURL).origin;
-        if (requestOrigin !== `${serverURL}`) {
-            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + serverURL);
+        if (requestOrigin !== "http://taskronaut.at") {
+            console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at");
             return;
         }
 
