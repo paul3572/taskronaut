@@ -89,7 +89,8 @@ export function forwarding(event) {
                 }
 
                 setTimeout(() => {
-                    window.location.href = '/getCookies';
+                    //window.location.href = '/getCookies';
+                    console.log("Redirecting to /getCookies");
                 }, 100);
             }
             break;
