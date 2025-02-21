@@ -26,6 +26,16 @@ export async function getUserIdBySessionId(sessionId) {
         return error;
     }
 }
+export async function getUserIdByEmail(email) {
+    try {
+        const [rows] = await dbConnection.query(authenticationQueries.getUserIdBySessionId, [email]);
+        return rows[0]?.user_id;
+    }
+    catch (error) {
+        console.error("Error getting user id by session id:", error);
+        return error;
+    }
+}
 export async function getActivationStatusFromUserID(id) {
     const [rows] = await dbConnection.query(authenticationQueries.userIdEmailActivated, [id]);
     console.log(rows[0]?.activated);

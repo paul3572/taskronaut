@@ -38,6 +38,18 @@ router.post('/tasks', async (req, res) => {
     await serverResponse(res, await addNewDefaultTask(sessionId, taskName, boardID, listID));
 });
 
+router.post('/tasks/byBoardUser', async (req, res) => {
+    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
+    logger.info(chalk.hex(styles.dialogStart)`NEW TASK : `);
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
+    let {sessionId, borardId} = req.body;
+
+
+
+    await serverResponse(res, await getSpecificTasks(sessionId, borardId));
+});
+
 router.put('/tasks/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`UPDATE TASK: `);

@@ -116,3 +116,19 @@ export async function getUserSpecificTasks(sessionId) {
             return {statusCode: 500};
     }
 }
+export async function getSpecificTasks(sessionId, boardId) {
+    const userid = await findUserBySessionId(sessionId);
+    // TODO: where boardId = ....
+    const result = await selectUserTasks(userid);
+    switch (result[1]) {
+        case true:
+            logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
+            return {statusCode: 200, data: result[0]};
+        case false:
+            logger.error(chalk.hex(styles.critical)`DATABASE ERROR: ${result[0]}`);
+            return {statusCode: 500, data: JSON.stringify(result[0])};
+        default:
+            logger.error(chalk.hex(styles.critical)`ERROR`);
+            return {statusCode: 500};
+    }
+}

@@ -3,7 +3,7 @@ import {
     insertNewBoardMembers,
     selectAllBoardMembersId
 } from "../../database/preparedStatements/psBoardMember.mjs";
-import {getUserById} from "../../database/preparedStatements/psAuthentication.mjs";
+import {getUserById, getUserIdByEmail} from "../../database/preparedStatements/psAuthentication.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
@@ -34,6 +34,25 @@ export async function getAllBoardMembers(sessionId, boardId) {
 }
 
 export async function createNewBoardMember(userId, boardId) {
+
+    const result = await insertNewBoardMembers(userId, boardId);
+    switch (result[1]) {
+        case true:
+            logger.debug(chalk.hex(styles.debug)`User added to Board: ${result[0]}`);
+            logger.info(chalk.hex(styles.success)`User added to Board successfully!`);
+            return {statusCode: 201, data: result[0]};
+        case false:
+            logger.error(chalk.hex(styles.critical)`DATABASE-ERROR: " + ${result[0]}`);
+            return {statusCode: 500, data: result[1]};
+        default:
+            logger.error(chalk.hex(styles.critical)`ERROR: " + ${result[0]}`);
+            return {statusCode: 500};
+    }
+}
+export async function addMemberToBoard(sessionId, boardId, email) {
+    const myUserId = await getUserIdFromSessionId(sessionId);
+    //find user by email
+    const userId = await getUserIdByEmail(email);
 
     const result = await insertNewBoardMembers(userId, boardId);
     switch (result[1]) {

@@ -28,13 +28,16 @@ app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
-app.use(sessions);
-app.use(loginRoutes);
-app.use(ptpRoutes);
-app.use(taskRoutes);
-app.use(boardRoutes);
-app.use(listRoutes);
-app.use(userDataRoutes);
+const apiRouter = express.Router();
+
+apiRouter.use('/login', loginRoutes);
+apiRouter.use('/chat', ptpRoutes);
+apiRouter.use('/tasks', taskRoutes);
+apiRouter.use('/boards', boardRoutes);
+apiRouter.use('/lists', listRoutes);
+apiRouter.use('/user', userDataRoutes);
+
+app.use('/api', apiRouter);
 
 app.listen(port, async () => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
