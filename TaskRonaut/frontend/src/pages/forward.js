@@ -18,8 +18,8 @@ export function forwarding(event) {
     const responseText = xhr.responseText;
 
     const requestOrigin = new URL(xhr.responseURL).origin;
-    if (requestOrigin !== `${serverURL}`) {
-        console.error("Ungültige Anfrage von:", requestOrigin);
+    if (requestOrigin !== "http://taskronaut.at") {
+        console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at");
         return;
     }
 
@@ -83,7 +83,7 @@ export function forwarding(event) {
                     const data = JSON.parse(responseText);
 
                     const sessionCookie = data.data.session;
-                    const sessionId = data.data.sessionId;
+                    const sessionId = data.data.session.sessionId;
                     sessionStorage.setItem('sessionCookie', JSON.stringify(sessionCookie));
                     sessionStorage.setItem('sessionID', JSON.stringify(sessionId));
                 } catch (error) {
@@ -96,21 +96,21 @@ export function forwarding(event) {
             }
             break;
 
-            case HTTP_STATUS.CONFLICT:
-                let emailErrorMessage = responseText || "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
-                try {
-                    const errorData = JSON.parse(responseText);
-                    if (window.location.pathname === "/register") {
-                        emailErrorMessage = "Diese E-Mail-Adresse ist bereits registriert.<br>Bitte melden Sie sich an oder verwenden Sie eine andere E-Mail-Adresse.";
-                    }
-                } catch (error) {
-                    console.error("Fehler beim Parsen der JSON-Antwort:", error);
+        case HTTP_STATUS.CONFLICT:
+            let emailErrorMessage = responseText || "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+            try {
+                const errorData = JSON.parse(responseText);
+                if (window.location.pathname === "/register") {
+                    emailErrorMessage = "Diese E-Mail-Adresse ist bereits registriert.<br>Bitte melden Sie sich an oder verwenden Sie eine andere E-Mail-Adresse.";
                 }
-                updateResponse('#c40000', emailErrorMessage);
-                console.error(`Fehler ${status}:`, emailErrorMessage);
-                break;
+            } catch (error) {
+                console.error("Fehler beim Parsen der JSON-Antwort:", error);
+            }
+            updateResponse('#c40000', emailErrorMessage);
+            console.error(`Fehler ${status}:`, emailErrorMessage);
+            break;
 
-                default:
+        default:
             console.log("Antwortstatus:", status);
             break;
     }
