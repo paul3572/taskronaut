@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import {defineConfig} from 'astro/config';
 import node from "@astrojs/node";
 
 export default defineConfig({
@@ -8,16 +8,15 @@ export default defineConfig({
         host: true,
         port: 4321,
         strictPort: true,
-    },
-    vite: {
+    }, vite: {
         server: {
-            hmr: {
-                host: 'taskronaut.at', // Domain, über die deine Seite erreichbar ist
-                port: 4321,            // Muss mit deinem Dev-Server-Port übereinstimmen
-                protocol: 'ws'         // Bei HTTPS ggf. auf 'wss' ändern
-            },
+            host: 'taskronaut.at', // Domain, über die deine Seite erreichbar ist
+            port: 4321,            // Muss mit deinem Dev-Server-Port übereinstimmen
             allowedHosts: ['taskronaut.at'],
-            // allowLocalhost ist in Vite nicht standardmäßig dokumentiert – eventuell unnötig
+            strictPort: true, // Verhindert Port-Wechsel
+            hmr: {
+                clientPort: 4321 // Wichtig bei Proxys/Port-Forwarding
+            }
         }
     }
 });
