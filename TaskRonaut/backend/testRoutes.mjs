@@ -5,7 +5,7 @@ import {serverResponse} from "./src/middleware/serverResponse.mjs";
 import {Router} from "express";
 
 const router = Router();
-router.get('/test', async (req, res) => {
+router.get('/api/test', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`TEST GET: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
