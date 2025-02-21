@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS TaskRonaut;
-CREATE DATABASE TaskRonaut;USE TaskRonaut;
+CREATE DATABASE TaskRonaut;
+USE TaskRonaut;
 
 -- Tabelle 'Users' erstellen
 DROP TABLE IF EXISTS Users;
@@ -40,11 +41,11 @@ CREATE TABLE Tasks
 (
     taskID           INT AUTO_INCREMENT PRIMARY KEY,
     taskCreatorID    INT,
-    taskCreationDate DATE DEFAULT CURRENT_TIMESTAMP,
-    dueDate          DATE DEFAULT CURRENT_TIMESTAMP,
+    taskCreationDate TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    dueDate          DATE         DEFAULT (CURRENT_DATE),
     taskDescription  VARCHAR(800) DEFAULT '',
     taskName         VARCHAR(255),
-    priorities       INT DEFAULT 1,
+    priorities       INT          DEFAULT 1,
     taskStatus       VARCHAR(255) DEFAULT 'todo',
     comments         VARCHAR(800) DEFAULT '',
     taskHistoryID    INT,
@@ -120,11 +121,11 @@ CREATE TABLE AuthorizedUsers
 DROP TABLE IF EXISTS Sessions;
 CREATE TABLE Sessions
 (
-    session_id varchar(128) NOT NULL,
+    session_id varchar(128)     NOT NULL,
     expires    int(11) unsigned NOT NULL,
     data       text,
     user_id    int(11),
     PRIMARY KEY (`session_id`),
     FOREIGN KEY (user_id) REFERENCES Users (id),
-    KEY        expires (`expires`)
+    KEY expires (`expires`)
 );
