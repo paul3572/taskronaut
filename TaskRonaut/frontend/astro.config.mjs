@@ -1,4 +1,4 @@
-import {defineConfig} from 'astro/config';
+import { defineConfig } from 'astro/config';
 import node from "@astrojs/node";
 
 export default defineConfig({
@@ -8,6 +8,10 @@ export default defineConfig({
         host: true,
         port: 4321,
         strictPort: true,
-        allowedHosts: ['taskronaut.at'],
     },
+    vite: {
+        server: {
+            allowedHosts: ['taskronaut.at'],
+        }
+    }
 });
