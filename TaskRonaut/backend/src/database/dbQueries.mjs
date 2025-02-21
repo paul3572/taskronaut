@@ -8,9 +8,9 @@ export const authenticationQueries = {
     setEmailActivationStatus: 'UPDATE Users SET activationToken = ? WHERE id = ?',
     getActivationTokenFromUser: 'SELECT activationToken FROM Users WHERE email = ?',
     getUserById: 'SELECT firstname, lastname, email FROM Users WHERE id = ?',
-    getSessionByUserId: 'SELECT session_id FROM sessions WHERE user_id = ?',
-    getSessionBySessionId: 'SELECT * FROM sessions WHERE session_id = ?',
-    getUserIdBySessionId: 'SELECT user_id FROM sessions WHERE session_id = ?',
+    getSessionByUserId: 'SELECT session_id FROM Sessions WHERE user_id = ?',
+    getSessionBySessionId: 'SELECT * FROM Sessions WHERE session_id = ?',
+    getUserIdBySessionId: 'SELECT user_id FROM Sessions WHERE session_id = ?',
     userIdEmailActivated: 'SELECT activated FROM Users WHERE id = ?',
 };
 export const boardQueries = {
@@ -55,7 +55,7 @@ export const messageQueries = {
     getMessageById: 'SELECT * FROM Messages WHERE id = ?'
 };
 export const sessionQueries = {
-    updateSessionUserId: 'UPDATE sessions SET user_id = ? WHERE session_id = ?',
-    getUserIdBySessionId: 'SELECT user_id FROM sessions WHERE session_id = ?',
-    getSessionIds: 'SELECT session_id FROM sessions',
+    updateSessionUserId: 'UPDATE Sessions SET user_id = ? WHERE session_id = ?',
+    getUserIdBySessionId: 'SELECT user_id FROM Sessions WHERE session_id = ?',
+    getSessionIds: 'SELECT session_id FROM Sessions',
 };

@@ -52,7 +52,10 @@ export async function userLogin(req, email, password) {
             }
             const hashedPassword = await sha256(password);
             const isPasswordValid = hashedPassword === user.password;
+            console.log("Hashed PW: "+hashedPassword);
+            console.log("User PW: "+user.password);
             const emailIsActivated = await getActivationStatusFromUserID(user.id);
+            console.log("Email activated: "+emailIsActivated);
 
 
             if (isPasswordValid && emailIsActivated === 1) {
