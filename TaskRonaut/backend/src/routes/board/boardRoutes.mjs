@@ -3,7 +3,6 @@ import {addBoard, boardRequest, removeBoard} from "../../controller/board/boardC
 import {serverResponse} from "../../middleware/serverResponse.mjs";
 import {
     addMemberToBoard,
-    addmemberToBoard,
     createNewBoardMember,
     getAllBoardMembers,
     removeBoardMember
