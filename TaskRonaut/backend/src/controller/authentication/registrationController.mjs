@@ -36,7 +36,7 @@ export async function userRegistration(email, password, firstName, lastName) {
                 await generateToken(email);
                 const activationToken = await getActivationTokenByUserEmail(email);
                 // TODO dynamische URL
-                const url = `http://localhost:4321/activateEmail?token=${activationToken}`;
+                const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
                 logger.info(chalk.hex(styles.info)`...token generated!`)
 
                 logger.info(chalk.hex(styles.info)`ACTIVATION TOKEN:  ${activationToken}`);
