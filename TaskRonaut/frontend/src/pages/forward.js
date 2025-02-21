@@ -1,5 +1,3 @@
-import {serverURL} from "./conf.js";
-
 const HTTP_STATUS = {
     BAD_REQUEST: 400, CREATED: 201, OK: 200, CONFLICT: 409, Internal_Server_Error: 500, Unauthorized: 401
 };
@@ -17,9 +15,9 @@ export function forwarding(event) {
     const status = xhr.status;
     const responseText = xhr.responseText;
 
-    const requestOrigin = new URL(xhr.responseURL).origin;
-    if (requestOrigin !== "http://taskronaut.at") {
-        console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at");
+    const requestOrigin = new URL(xhr.responseURL).origin + "/api";
+    if (requestOrigin !== "http://taskronaut.at/api") {
+        console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at/api");
         return;
     }
 

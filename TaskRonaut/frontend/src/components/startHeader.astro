@@ -4,7 +4,7 @@
     <div class="left">
         <h1><a href="/" style="color: whitesmoke; text-decoration: none "><i class="fa-brands fa-space-awesome"></i>
             TaskRonaut</a></h1>
-        <a href="/boards" style="color: whitesmoke; font-size: x-large; padding-left: 10px; text-decoration: none;"
+        <a id="boards-button" href="/boards" style="color: whitesmoke; font-size: x-large; padding-left: 10px; text-decoration: none; display: none"
            x-show="sessionId">Boards</a>
     </div>
     <div id="auth-buttons">
@@ -38,21 +38,22 @@
     </style>
 
     <script>
-        import {firstName, lastName, logout} from "../pages/user.js";
+        import {firstName, lastName} from "../pages/user.js";
         import {sessionId} from "../pages/user";
         import {serverURL} from "../pages/conf.js";
 
 
-        //document.addEventListener('DOMContentLoaded', () => {
         const authButtons = document.getElementById('auth-buttons');
         const profileButton = document.getElementById('profile-button');
         const usernameSpan = document.getElementById('username');
         const userDropdown = document.getElementById('user-dropdown');
         const logoutButton = document.getElementById('logout-button');
+        const boardsButton = document.getElementById('boards-button');
 
         if (sessionId) {
             usernameSpan.innerText = `${firstName} ${lastName}`;
             profileButton.style.display = 'block';
+            boardsButton.style.display = 'block';
             authButtons.style.display = 'none';
         } else {
             authButtons.style.display = 'block';
@@ -84,7 +85,6 @@
             sessionStorage.removeItem('userId');
             window.location.href = '/login';
         });
-        // });
     </script>
 
 </header>
