@@ -53,9 +53,9 @@ export async function addMemberToBoard(sessionId, boardId, email) {
     const myUserId = await getUserIdFromSessionId(sessionId);
     //find user by email
     const userId = await getUserIdByEmail(email);
-    console.log("UID: "userId);
+    console.log("UID: "+userId.id);
 
-    const result = await insertNewBoardMembers(userId, boardId);
+    const result = await insertNewBoardMembers(userId.id, boardId);
     switch (result[1]) {
         case true:
             logger.debug(chalk.hex(styles.debug)`User added to Board: ${result[0]}`);
