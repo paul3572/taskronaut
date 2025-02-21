@@ -26,5 +26,8 @@
   },
   "_moduleAliases": {
     "@": "src"
+  },
+  "devDependencies": {
+    "uuid": "^11.1.0"
   }
 }

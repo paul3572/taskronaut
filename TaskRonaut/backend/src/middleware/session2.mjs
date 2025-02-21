@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function startSession(req, res, userId) {
     const sessionId = uuidv4();
-    await dbConnection.execute(
+    await dbConnection.query(
         "INSERT INTO Sessions (sessionId, userId, expires) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 1 DAY))",
         [sessionId, userId]
     );
@@ -36,7 +36,7 @@ export async function isAuthenticated(req, res, next) {
 export async function destroySession(req, res) {
     const sessionId = req.cookies.sessionId;
     if (sessionId) {
-        await dbConnection.execute("DELETE FROM Sessions WHERE sessionId = ?", [sessionId]);
+        await dbConnection.query("DELETE FROM Sessions WHERE sessionId = ?", [sessionId]);
         res.clearCookie('sessionId');
     }
     res.send("Erfolgreich ausgeloggt");
