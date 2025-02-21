@@ -19,7 +19,7 @@ export async function getActivationTokenByUserEmail(email) {
 export async function getUserIdBySessionId(sessionId) {
     try {
         const [rows] = await dbConnection.query(authenticationQueries.getUserIdBySessionId, [sessionId]);
-        return rows[0]?.user_id;
+        return rows[0]?.userId;
     }
     catch (error) {
         console.error("Error getting user id by session id:", error);

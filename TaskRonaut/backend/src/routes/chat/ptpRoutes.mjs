@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {isAuthenticated} from '../../middleware/session.mjs';
+import {isAuthenticated} from '../../middleware/session2.mjs';
 import dbConnection from '../../database/dbCon.mjs';
 import {messageQueries} from "../../database/dbQueries.mjs";
 import chalk from "chalk";

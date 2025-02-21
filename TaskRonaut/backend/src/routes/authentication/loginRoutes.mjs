@@ -1,5 +1,5 @@
 import express, {Router} from 'express';
-import {destroySession} from "../../middleware/session.mjs";
+import {destroySession} from "../../middleware/session2.mjs";
 import {userLogin} from "../../controller/authentication/loginController.mjs";
 import {userRegistration} from "../../controller/authentication/registrationController.mjs";
 import {activateEmail, isEmailAuthenticated} from "../../controller/authentication/emailActivationController.mjs";

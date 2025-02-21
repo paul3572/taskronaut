@@ -1,5 +1,4 @@
 import {Router} from 'express';
-import {isAuthenticated} from '../../middleware/session.mjs';
 import dbConnection from '../../database/dbCon.mjs';
 import {taskQueries} from "../../database/dbQueries.mjs";
 import {

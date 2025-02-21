@@ -118,12 +118,8 @@ CREATE TABLE AuthorizedUsers
 DROP TABLE IF EXISTS Sessions;
 CREATE TABLE Sessions
 (
-    session_id varchar(128)     NOT NULL,
-    expires    int(11) unsigned NOT NULL,
-    data       text,
-    user_id    int(11),
-    PRIMARY KEY (`session_id`),
-    FOREIGN KEY (user_id) REFERENCES Users (id),
-    KEY expires (`expires`)
+    sessionId VARCHAR(255) PRIMARY KEY,
+    userId    INT NOT NULL,
+    expires   TIMESTAMP DEFAULT (NOW() + INTERVAL 1 DAY),
+    FOREIGN KEY (userId) REFERENCES Users (id) ON DELETE CASCADE
 );
-

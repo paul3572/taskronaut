@@ -2,7 +2,7 @@ import {sha256} from "../../middleware/sha256.mjs";
 import {authenticationRegex} from "../../database/regex.mjs";
 import {getActivationStatusFromUserID, getUserIdByEmail} from "../../database/preparedStatements/psAuthentication.mjs";
 import logger from "../../middleware/logger.mjs";
-import {startSession} from "../../middleware/session.mjs";
+import {startSession} from "../../middleware/session2.mjs";
 import {updateUserIdInSession} from "../../database/preparedStatements/psSession.mjs";
 
 /**

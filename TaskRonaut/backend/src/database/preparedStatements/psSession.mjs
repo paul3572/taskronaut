@@ -12,7 +12,7 @@ export async function selectSessionBySessionId(sessionId) {
 }
 
 export async function getUserIdFromSessionId(sessionId) {
-    const [rows] = await dbConnection.query(sessionQueries.getUserIdBySessionId, [sessionId]);
+    const [rows] = await dbConnection.query(<sessionQueries className="getUse"></sessionQueries>rIdBySessionId, [sessionId]);
     return rows[0];
 }
 
