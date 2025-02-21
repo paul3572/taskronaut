@@ -11,7 +11,7 @@ const MySQLSessionStore = MySQLStore(session);
 const sessionMiddleware = session({
     key: 'session_cookie_name',
     secret: 'password',
-    store: new MySQLSessionStore({}, dbConnection),
+    store: new MySQLSessionStore({tableName: 'Sessions'}, dbConnection),
     resave: false,
     saveUninitialized: false,
     cookie: {
