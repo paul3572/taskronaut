@@ -53,6 +53,7 @@ export async function addMemberToBoard(sessionId, boardId, email) {
     const myUserId = await getUserIdFromSessionId(sessionId);
     //find user by email
     const userId = await getUserIdByEmail(email);
+    console.log("UID: "userId);
 
     const result = await insertNewBoardMembers(userId, boardId);
     switch (result[1]) {
