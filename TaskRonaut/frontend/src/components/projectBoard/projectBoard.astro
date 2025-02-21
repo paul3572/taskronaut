@@ -9,7 +9,7 @@ let sessionId = Astro.cookies.get('sessionId').value;
 const response = await fetch(`${serverURL}/boards/boards/get`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
 });
 
 const {data: boards} = await response.json();

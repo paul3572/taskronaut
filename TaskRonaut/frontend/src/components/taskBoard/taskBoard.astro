@@ -12,7 +12,7 @@ const response = await fetch(`${serverURL}/chat/boards/get`, {
     headers: {
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ sessionId: sessionId })
+    body: JSON.stringify({ sessionId: sessionId, boardId: 1 })
 });
 
 const { data: boards } = await response.json();
