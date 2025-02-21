@@ -1,5 +1,5 @@
 const HTTP_STATUS = {
-    BAD_REQUEST: 400, CREATED: 201, OK: 200, CONFLICT: 409, Internal_Server_Error: 500, Unauthorized: 401
+    BAD_REQUEST: 400, CREATED: 201, OK: 200, CONFLICT: 409, Internal_Server_Error: 500, Unauthorized: 401, Bad_Gateway: 502
 };
 
 function updateResponse(color, message) {
@@ -92,6 +92,23 @@ export function forwarding(event) {
                     window.location.href = '/getCookies';
                 }, 100);
             }
+            break;
+
+        case HTTP_STATUS.Bad_Gateway:
+            let errorMessage = responseText || "Email oder Passwort ist falsch. Bitte versuche es erneut.";
+            try {
+                const errorData = JSON.parse(responseText);
+                if (window.location.pathname === "/register") {
+                    errorMessage = "Registrierung fehlgeschlagen.<br>Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.";
+                } else if (window.location.pathname === "/login") {
+                    errorMessage = "Falsches Passwort oder E-Mail-Adresse. Bitte versuchen Sie es erneut.";
+
+                }
+            } catch (error) {
+                console.error("Fehler beim Parsen der JSON-Antwort:", error);
+            }
+            updateResponse('#c40000', errorMessage);
+            console.error(`Fehler ${status}:`, errorMessage);
             break;
 
         case HTTP_STATUS.CONFLICT:

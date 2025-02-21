@@ -1,11 +1,9 @@
 ---
 import TaskBoard from "../components/projectBoard/projectBoard.astro";
-import Sidebar from "../components/boardSidebar.astro";
 import ProjectBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
-import {sessionCookie} from "./user";
-import {clientURL} from "./conf";
+
 ---
 
 <!DOCTYPE html>
@@ -25,7 +23,6 @@ import {clientURL} from "./conf";
 <body>
 <script>
     import {sessionId} from './user.js';
-    import {clientURL} from './conf.js';
 
     if (document.cookie.includes('sessionId') === null) {
         window.location.href = `/getCookies`;
@@ -39,11 +36,14 @@ import {clientURL} from "./conf";
 <main class="content" x-data="{ showProjectBoard: true }">
     <div class="main">
 
+        <p>1</p>
 
         <div class="board" x-show="!showProjectBoard">
             <ProjectBoard></ProjectBoard>
+            <p>2</p>
         </div>
         <div class="board" x-show="showProjectBoard">
+            <p>2</p>
             <TaskBoard></TaskBoard>
         </div>
     </div>
