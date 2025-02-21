@@ -10,7 +10,7 @@ export const authenticationQueries = {
     getUserById: 'SELECT firstname, lastname, email FROM Users WHERE id = ?',
     getSessionByUserId: 'SELECT session_id FROM sessions WHERE user_id = ?',
     getSessionBySessionId: 'SELECT * FROM sessions WHERE session_id = ?',
-    getUserIdBySessionId: 'SELECT user_id FROM Sessions WHERE session_id = ?',
+    getUserIdBySessionId: 'SELECT user_id FROM sessions WHERE session_id = ?',
     userIdEmailActivated: 'SELECT activated FROM Users WHERE id = ?',
 };
 export const boardQueries = {

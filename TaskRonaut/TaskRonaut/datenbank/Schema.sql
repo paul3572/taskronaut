@@ -86,10 +86,7 @@ CREATE TABLE Roles
     roleID   int AUTO_INCREMENT PRIMARY KEY,
     roleName varchar(255),
     reading  int,
-    writing  int,
-    execute  int,
-    deleting int,
-    creating int
+    writing  int
 );
 
 -- Zwischentabelle 'BoardMembers' erstellen
