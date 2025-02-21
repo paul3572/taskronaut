@@ -74,7 +74,7 @@ export function forwarding(event) {
 
         case HTTP_STATUS.OK:
             // Überprüfen, ob die aktuelle Seite die Login-Seite ist und die Antwort vom Login-Endpunkt kommt
-            if (window.location.pathname === "/login" && xhr.responseURL.includes("/api/login")) {
+            if (window.location.pathname === "/login" && xhr.responseURL.includes("/api/authentication/login")) {
                 updateResponse('#009900', "Erfolgreich eingeloggt!");
                 console.log("Login erfolgreich!");
 
