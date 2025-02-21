@@ -4,6 +4,7 @@ import TaskBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
 import BoardHeader from "../components/boardHeader.astro";
+import BoardSidebar from "../components/boardSidebar.astro";
 
 ---
 
@@ -43,7 +44,6 @@ import BoardHeader from "../components/boardHeader.astro";
 
 <main class="content" x-data="{ showProjectBoard: true }">
     <div class="main">
-        <BoardHeader></BoardHeader>
         <p>1</p>
         <div class="board" x-show="!showProjectBoard">
             <TaskBoard></TaskBoard>
