@@ -64,7 +64,7 @@ const {data: users} = await boardMembers.json();
                             },
                             body: JSON.stringify({ 
                                 boardId: this.taskData.boardId,
-                                userEmail: this.taskData.userEmail 
+                                email: this.taskData.userEmail 
                             })
                         }).then(() => {
                             // window.location.reload();
