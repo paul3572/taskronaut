@@ -1,6 +1,6 @@
 export const authenticationQueries = {
-    getUserByEmail: 'SELECT * FROM users WHERE email = ?',
-    insertUser: 'INSERT INTO users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)',
+    getUserByEmail: 'SELECT * FROM Users WHERE email = ?',
+    insertUser: 'INSERT INTO Users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)',
     getUserActivationStatus: 'SELECT activated FROM Users WHERE id = ?',
     updateUserActivationStatus: 'UPDATE Users SET activated = ? WHERE id = ?',
     getUserByActivationToken: 'SELECT id FROM Users WHERE activationtoken = ?',
