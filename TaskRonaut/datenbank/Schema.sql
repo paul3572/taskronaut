@@ -115,8 +115,8 @@ CREATE TABLE AuthorizedUsers
 
 
 -- Tabelle 'Sessions' erstellen
-DROP TABLE IF EXISTS sessions;
-CREATE TABLE sessions
+DROP TABLE IF EXISTS Sessions;
+CREATE TABLE Sessions
 (
     session_id varchar(128)     NOT NULL,
     expires    int(11) unsigned NOT NULL,
