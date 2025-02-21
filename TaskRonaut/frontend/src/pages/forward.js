@@ -95,7 +95,6 @@ export function forwarding(event) {
             break;
 
         case HTTP_STATUS.Bad_Gateway:
-            let errorMessage = responseText || "Email oder Passwort ist falsch. Bitte versuche es erneut.";
             try {
                 const errorData = JSON.parse(responseText);
                 if (window.location.pathname === "/register") {
