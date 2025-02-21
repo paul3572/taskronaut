@@ -9,7 +9,7 @@ let sessionId = Astro.cookies.get('sessionId').value;
 const response = await fetch(`${serverURL}/boards/boards/get`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
+    }, body: JSON.stringify({sessionId: sessionId})
 });
 
 const {data: boards} = await response.json();
@@ -40,9 +40,9 @@ const selectedBoard = allBoards.find(board => board.boardID === selectedBoardId)
 const boardName = selectedBoard?.boardName || 'Default Board Name';
 
 ---
-<p>3</p>
+
 <BoardHeader {boards}></BoardHeader>
-<p>4</p>
+
 
 <div class="board-content">
     <div class="board-list-view">
@@ -52,12 +52,6 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
                     <button
                             :class="{ 'toggle-button': true, 'active': showProjectBoard }"
                             @click="showProjectBoard = true"
-                    >
-                        Show Project Board
-                    </button>
-                    <button
-                            :class="{ 'toggle-button': true, 'active': !showProjectBoard }"
-                            @click="showProjectBoard = false"
                     >
                         Show Task Board
                     </button>

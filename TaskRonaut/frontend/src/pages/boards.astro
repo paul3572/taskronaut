@@ -1,11 +1,12 @@
 ---
-import ProjectBoard from "../components/projectBoard/projectBoard.astro";
-import TaskBoard from "../components/taskBoard/taskBoard.astro";
+import TaskBoard from "../components/projectBoard/projectBoard.astro";
+import Header from "../components/boardHeader.astro";
+import Sidebar from "../components/boardSidebar.astro";
+import ProjectBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
-import BoardHeader from "../components/boardHeader.astro";
-import BoardSidebar from "../components/boardSidebar.astro";
-
+import {sessionCookie} from "./user";
+import {clientURL} from "./conf";
 ---
 
 <!DOCTYPE html>
@@ -18,20 +19,18 @@ import BoardSidebar from "../components/boardSidebar.astro";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
 </head>
 
 <body>
 <script>
-
     import 'htmx.org';
     import Alpine from 'alpinejs';
-
-    document.addEventListener('alpine:init', () => {
-        Alpine.start();
-    });
-
+    Alpine.start();
 
     import {sessionId} from './user.js';
+    import {clientURL} from './conf.js';
 
     if (document.cookie.includes('sessionId') === null) {
         window.location.href = `/getCookies`;
@@ -42,16 +41,14 @@ import BoardSidebar from "../components/boardSidebar.astro";
     }
 </script>
 
-<main class="content" x-data="{ showProjectBoard: true }">
+<main class="content" x-data="{ showProjectBoard: false }">
     <div class="main">
-        <p>1</p>
-        <div class="board" x-show="!showProjectBoard">
-            <TaskBoard></TaskBoard>
-            <p>2 tas</p>
-        </div>
-        <div class="board" x-show="showProjectBoard">
-            <p>2 proj</p>
+
+        <div x-show="showProjectBoard" class="board scrollable">
             <ProjectBoard></ProjectBoard>
+        </div>
+        <div x-show="!showProjectBoard" class="board scrollable">
+            <TaskBoard></TaskBoard>
         </div>
     </div>
 </main>
