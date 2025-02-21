@@ -16,12 +16,19 @@ import '../styles/global.css'
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-
 </head>
 
 <body>
 <script>
+
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.start();
+    });
+
+
     import {sessionId} from './user.js';
 
     if (document.cookie.includes('sessionId') === null) {
@@ -35,9 +42,7 @@ import '../styles/global.css'
 
 <main class="content" x-data="{ showProjectBoard: true }">
     <div class="main">
-
         <p>1</p>
-
         <div class="board" x-show="!showProjectBoard">
             <ProjectBoard></ProjectBoard>
             <p>2</p>
@@ -50,9 +55,3 @@ import '../styles/global.css'
 </main>
 </body>
 </html>
-<script>
-    import 'htmx.org';
-    import Alpine from 'alpinejs';
-
-    Alpine.start();
-</script>
