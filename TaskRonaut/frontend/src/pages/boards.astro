@@ -1,6 +1,6 @@
 ---
-import TaskBoard from "../components/projectBoard/projectBoard.astro";
-import ProjectBoard from "../components/taskBoard/taskBoard.astro";
+import ProjectBoard from "../components/projectBoard/projectBoard.astro";
+import TaskBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
 
@@ -44,12 +44,12 @@ import '../styles/global.css'
     <div class="main">
         <p>1</p>
         <div class="board" x-show="!showProjectBoard">
-            <ProjectBoard></ProjectBoard>
-            <p>2</p>
+            <TaskBoard></TaskBoard>
+            <p>2 tas</p>
         </div>
         <div class="board" x-show="showProjectBoard">
-            <p>2</p>
-            <TaskBoard></TaskBoard>
+            <p>2 proj</p>
+            <ProjectBoard></ProjectBoard>
         </div>
     </div>
 </main>
