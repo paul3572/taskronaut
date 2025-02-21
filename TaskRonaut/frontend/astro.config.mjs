@@ -11,9 +11,13 @@ export default defineConfig({
     },
     vite: {
         server: {
-            hmr: false,
+            hmr: {
+                host: 'taskronaut.at', // Domain, über die deine Seite erreichbar ist
+                port: 4321,            // Muss mit deinem Dev-Server-Port übereinstimmen
+                protocol: 'ws'         // Bei HTTPS ggf. auf 'wss' ändern
+            },
             allowedHosts: ['taskronaut.at'],
-            allowLocalhost: true,
+            // allowLocalhost ist in Vite nicht standardmäßig dokumentiert – eventuell unnötig
         }
     }
 });
