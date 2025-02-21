@@ -73,13 +73,13 @@ export function forwarding(event) {
             break;
 
         case HTTP_STATUS.OK:
-            if (window.location.pathname === "/login") {
+            // Überprüfen, ob die aktuelle Seite die Login-Seite ist und die Antwort vom Login-Endpunkt kommt
+            if (window.location.pathname === "/login" && xhr.responseURL.includes("/api/login")) {
                 updateResponse('#009900', "Erfolgreich eingeloggt!");
                 console.log("Login erfolgreich!");
 
                 try {
                     const data = JSON.parse(responseText);
-
                     const sessionCookie = data.data.session;
                     const sessionId = data.data.session.sessionId;
                     sessionStorage.setItem('sessionCookie', JSON.stringify(sessionCookie));
@@ -89,8 +89,7 @@ export function forwarding(event) {
                 }
 
                 setTimeout(() => {
-                    //window.location.href = '/getCookies';
-                    console.log("Redirecting to /getCookies");
+                    window.location.href = '/getCookies';
                 }, 100);
             }
             break;
