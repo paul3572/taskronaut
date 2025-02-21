@@ -28,10 +28,10 @@ export const boardMemberQueries = {
 };
 export const listQueries = {
     getLists: 'SELECT * FROM Lists',
-    createList: 'INSERT INTO lists (listName, boardID) VALUES (?, ?)',
-    updateList: 'UPDATE lists SET listName = ? WHERE listID = ?',
-    deleteListById: 'DELETE FROM lists WHERE listID = ?',
-    deleteListByBoardId: 'DELETE FROM lists WHERE boardID = ?',
+    createList: 'INSERT INTO Lists (listName, boardID) VALUES (?, ?)',
+    updateList: 'UPDATE Lists SET listName = ? WHERE listID = ?',
+    deleteListById: 'DELETE FROM Lists WHERE listID = ?',
+    deleteListByBoardId: 'DELETE FROM Lists WHERE boardID = ?',
     readListsFromBoard: 'SELECT * FROM Lists WHERE boardID = ?',
 };
 export const taskQueries = {
@@ -43,8 +43,8 @@ export const taskQueries = {
     deleteTaskById: 'DELETE FROM Tasks WHERE taskID = ?',
     updateTaskListId: 'UPDATE Tasks SET listID = ? WHERE taskID = ?',
     getListIdFromTaskById: 'SELECT listID FROM Tasks WHERE taskID = ?',
-    deleteTasksByListId: 'DELETE FROM tasks WHERE listID = ?',
-    deleteTasksByBoardId: 'DELETE FROM tasks WHERE boardID = ?',
+    deleteTasksByListId: 'DELETE FROM Tasks WHERE listID = ?',
+    deleteTasksByBoardId: 'DELETE FROM Tasks WHERE boardID = ?',
     deleteTaskbyBoardList: 'DELETE FROM Tasks WHERE listID IN (SELECT listID FROM Lists WHERE boardID = ?)',
     getTasksByUserId: 'SELECT  taskID, isResponsible FROM AuthorizedUsers WHERE isAuthorized = 1 AND userID = ?',
     addDeafaultTask: 'INSERT INTO Tasks (taskCreatorID, taskName, boardID, listID) VALUES (?, ?, ?, ?)',
@@ -55,7 +55,7 @@ export const messageQueries = {
     getMessageById: 'SELECT * FROM Messages WHERE id = ?'
 };
 export const sessionQueries = {
-    updateSessionUserId: 'UPDATE sessions SET user_id = ? WHERE session_id = ?',
-    getUserIdBySessionId: 'SELECT user_id FROM sessions WHERE session_id = ?',
-    getSessionIds: 'SELECT session_id FROM sessions',
+    updateSessionUserId: 'UPDATE Sessions SET user_id = ? WHERE session_id = ?',
+    getUserIdBySessionId: 'SELECT user_id FROM Sessions WHERE session_id = ?',
+    getSessionIds: 'SELECT session_id FROM Sessions',
 };
