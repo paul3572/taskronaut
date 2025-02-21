@@ -70,8 +70,8 @@ CREATE TABLE Messages
 );
 
 -- Tabelle 'Groups' erstellen
-DROP TABLE IF EXISTS Groups;
-CREATE TABLE Groups
+DROP TABLE IF EXISTS UserGroups;
+CREATE TABLE UserGroups
 (
     groupID   INT AUTO_INCREMENT PRIMARY KEY,
     memberID  INT,
