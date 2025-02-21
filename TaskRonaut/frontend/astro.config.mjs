@@ -11,7 +11,9 @@ export default defineConfig({
     },
     vite: {
         server: {
+            hmr: false,
             allowedHosts: ['taskronaut.at'],
+            allowLocalhost: true,
         }
     }
 });
