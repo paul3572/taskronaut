@@ -21,7 +21,7 @@ import sessionMiddleware from './src/middleware/session.mjs';
 
 const app = express();
 
-app.use(sessionMiddleware);
+
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(express.json());
