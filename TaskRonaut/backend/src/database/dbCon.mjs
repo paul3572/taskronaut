@@ -6,10 +6,10 @@ import mysql from 'mysql2/promise';
  */
 const dbOptions = {
     //host: 'localhost',
-    host: 'taskronaut-datenbank-1',
+    host: 'datenbank',
     user: 'root',
     password: '',
-    database: 'taskronaut',
+    database: 'TaskRonaut',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
