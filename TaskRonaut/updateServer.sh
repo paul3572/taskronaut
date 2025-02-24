@@ -4,5 +4,5 @@ sh saveDatabase.sh
 docker compose down
 git pull
 docker compose up --build -d
-#sleep 30
+sleep 15
 sh loadDatabase.sh
