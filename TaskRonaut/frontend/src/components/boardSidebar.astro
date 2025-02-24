@@ -49,18 +49,58 @@ const {data: users} = await boardMembers.json();
         </ul>
         <ul>
             <li>Add user</li>
-            <div x-data="{ userEmail: '' }">
-                <input type="text" placeholder="Enter user email" x-model="userEmail" />
-                <button
-                    @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
-                    hx-post=`${serverURL}/boards/board-member-to-board`
-                    hx-headers='{"Content-Type": "application/json"}'
-                    hx-trigger="click"
-                    hx-include="[x-model]"
-                    hx-swap="outerHTML"
-                >
-                    Add
+            <div class="add-board-member" x-data=`{
+                showInput: false,
+                taskData: { userEmail: "", boardId: "" },
+                toggleInput() {
+                    this.showInput = !this.showInput;
+                },
+                saveMember() {
+                    if (this.taskData.userEmail.trim() !== "" && this.taskData.boardId.trim() !== "") {
+                        fetch("${serverURL}/boards/board-member-to-board", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ 
+                                boardId: this.taskData.boardId,
+                                email: this.taskData.userEmail 
+                            })
+                        }).then(() => {
+                            // window.location.reload();
+                        });
+                    }
+                },
+                cancelMember() {
+                    this.showInput = false;
+                    this.taskData.userName = "";
+                    this.taskData.boardId = "";
+                }
+            }`>
+                <button @click="toggleInput" class="add-member-btn">
+                    + Add Board Member
                 </button>
+
+                <div x-show="showInput" class="member-input-container">
+                    <input type="text"
+                           x-model="taskData.userName"
+                           placeholder="Enter username"
+                           class="member-input">
+
+                    <input type="text"
+                           x-model="taskData.boardId"
+                           placeholder="Enter Board ID"
+                           class="member-input">
+
+                    <div class="member-action-btns">
+                        <button @click="saveMember" class="save-member-btn">
+                            Add Member
+                        </button>
+                        <button @click="cancelMember" class="cancel-member-btn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
         </ul>
 
