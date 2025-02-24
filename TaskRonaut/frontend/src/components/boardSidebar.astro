@@ -5,7 +5,6 @@ import Ptp from "./ptp.astro";
 import {serverURL} from "../pages/conf";
 
 let sessionId = Astro.cookies.get('sessionId').value;
-console.log('List Session ID:', sessionId);
 
 const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
     method: 'POST', headers: {
@@ -13,7 +12,6 @@ const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
     }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
 });
 
-console.log(sessionId)
 
 const {data: users} = await boardMembers.json();
 ---
