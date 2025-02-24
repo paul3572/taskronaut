@@ -9,5 +9,5 @@ backup_file="backup.sql"
 
 # Wiederherstellung der Datenbank
 echo "Wiederherstellung der Datenbank wird gestartet..."
-docker exec -i $db_container_name mysql -u $db_user --password $db_name < $backup_file
+docker exec -i $db_container_name mysql -u $db_user $db_name < $backup_file
 echo "Datenbank wurde erfolgreich wiederhergestellt."

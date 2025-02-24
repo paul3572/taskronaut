@@ -7,7 +7,7 @@ db_name="TaskRonaut"
 backup_file="backup.sql"
 
 # Backup durchführen
-docker exec -i $db_container_name mysqldump -u $db_user --password --databases $db_name > $backup_file
+docker exec -i $db_container_name mysqldump -u $db_user --databases $db_name > $backup_file
 
 # Erfolgsmeldung
 echo "Backup gespeichert als $backup_file"
