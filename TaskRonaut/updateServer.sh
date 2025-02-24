@@ -3,6 +3,6 @@
 sh saveDatabase.sh
 docker compose down
 git pull
-docker compose up --build
+docker compose up --build -d
 #sleep 30
 sh loadDatabase.sh
