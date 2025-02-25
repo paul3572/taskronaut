@@ -39,10 +39,10 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
             <li><h1>{boardName}</h1></li>
             <div class="toggle-container">
                 <button
-                        :class="{ 'toggle-button': true, 'active': showProjectBoard }"
+                        class="toggle-button"
                         @click="showProjectBoard = false"
                 >
-                    Show Project Board
+                    Projekt Board anzeigen
                 </button>
             </div>
         </ul>

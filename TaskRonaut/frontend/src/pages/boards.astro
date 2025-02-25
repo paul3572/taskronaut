@@ -8,17 +8,25 @@ import '../styles/global.css'
 import {sessionCookie} from "./user";
 import {serverURL} from "./conf";
 
-
-
 let sessionId = Astro.cookies.get('sessionId').value;
 
 const response = await fetch(`${serverURL}/boards/boards/get`, {
-    method: 'POST', headers: {
-        'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId})
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId: sessionId })
 });
 
 const { data: boards } = await response.json();
+
+// Get current URL and check for boardId parameter
+const url = new URL(Astro.request.url);
+const boardIdParam = url.searchParams.get('boardId');
+
+// Redirect to first board if no boardId is present and boards exist
+if (!boardIdParam && boards?.length > 0) {
+    const firstBoardId = boards[0][0].boardID;
+    return Astro.redirect(`boards?boardId=${firstBoardId}`);
+}
 
 if (boards === null || boards === undefined) {
     console.log('Boards data is null or undefined');
@@ -31,9 +39,6 @@ if (boards === null || boards === undefined) {
     }
     console.log("boards: ", boards);
 }
-
-
-
 ---
 
 <!DOCTYPE html>
@@ -46,8 +51,6 @@ if (boards === null || boards === undefined) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-
 </head>
 
 <body>
@@ -96,17 +99,24 @@ if (boards === null || boards === undefined) {
     }
 </script>
 
-{boards || boards.length > 0 ?   (
+{boards || boards.length > 0 ? (
         <main class="content" x-data="{ showProjectBoard: false }">
             <div class="main">
-                <div x-show="showProjectBoard" class="board scrollable">
-                    <ProjectBoard></ProjectBoard>
+                <!-- Render TaskBoard immediately with x-show -->
+                <div class="board scrollable" x-show="!showProjectBoard">
+                    <TaskBoard client:visible />
                 </div>
-                <div x-show="!showProjectBoard" class="board scrollable">
-                    <TaskBoard></TaskBoard>
-                </div>
+
+                <!-- Render ProjectBoard on demand -->
+                <template x-if="showProjectBoard">
+                    <div class="board scrollable">
+                        <ProjectBoard client:visible />
+                    </div>
+                </template>
             </div>
         </main>
+
+
 ) : (
         <div class="no-boards" x-data="boardCreation">
             <div class="empty-state">

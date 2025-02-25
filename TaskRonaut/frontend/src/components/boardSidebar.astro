@@ -15,53 +15,55 @@ const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
 
 const {data: users} = await boardMembers.json();
 ---
+
 <aside class="sidebar">
     <nav class="sidebar-content">
         <hr/>
-        <h1> Mitglieder</h1>
+        <h1>Mitglieder</h1>
         <ul class="sidebar-users">
             {users.map(user => (
                     <li class="user-item">
-                        <div x-data="{ showComponent: false }">
-                            <button class="profileIcon" @click="showComponent = !showComponent">
-                                <span x-show="!showComponent"><i class="fa-solid fa-user"></i></span>
-                                <span x-show="showComponent"><i class="fa-solid fa-user"></i></span>
+                        <!-- Profile Section -->
+                        <div x-data="{ showProfile: false }">
+                            <button class="profileIcon" @click="showProfile = !showProfile">
+                                <i class="fa-solid fa-user"></i>
                             </button>
-                            <div x-show="showComponent">
-                            </div>
+                            <template x-if="showProfile">
+                                <!-- Add profile content component here when needed -->
+                            </template>
                         </div>
+
                         <p>{user?.firstName} {user?.lastName}</p>
-                        <div x-data="{ showComponent: false }">
-                            <button class="chatCheckBox" @click="showComponent = !showComponent"
+
+                        <!-- Chat Section -->
+                        <div x-data="{ showChat: false }">
+                            <button class="chatCheckBox" @click="showChat = !showChat"
                                     style="cursor: pointer">
-                                <span x-show="!showComponent"><i class="fa-regular fa-comment"></i></span>
-                                <span x-show="showComponent"><i class="fa-regular fa-comment"></i></span>
+                                <i class="fa-regular fa-comment"></i>
                             </button>
-                            <div x-show="showComponent">
-                                <Ptp/>
-                            </div>
-                            <div x-show="showComponent">
-                            </div>
+                            <template x-if="showChat">
+                                <Ptp client:visible />  <!-- Add client directive for hydration -->
+                            </template>
                         </div>
-                    </li>))}
+                    </li>
+            ))}
         </ul>
+
+        <!-- Add User Section -->
         <ul>
             <li>Add user</li>
             <div x-data="{ userEmail: '' }">
                 <input type="text" placeholder="Enter user email" x-model="userEmail"/>
-                <button
-                        @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
+                <button @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
                         hx-post=`${serverURL}/boards/board-member-to-board`
                         hx-headers='{"Content-Type": "application/json"}'
                         hx-trigger="click"
                         hx-include="[x-model]"
-                        hx-swap="outerHTML"
-                >
+                        hx-swap="outerHTML">
                     Add
                 </button>
             </div>
         </ul>
-
         <hr/>
     </nav>
     <div class="sidebar-footer">

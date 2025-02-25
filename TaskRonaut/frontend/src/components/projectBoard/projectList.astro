@@ -134,7 +134,7 @@ const {data: lists} = await responseLists.json();
         }
     }`>
 
-        <!-- Button zum Erstellen der Liste, wird ausgeblendet, wenn showInput true ist -->
+        <!-- Button for creating a list -->
         <button
                 x-show="!showInput"
                 @click="toggleInput"
@@ -142,30 +142,22 @@ const {data: lists} = await responseLists.json();
             + Liste Erstellen
         </button>
 
-        <!-- Eingabefeld für den Listennamen, wird angezeigt, wenn showInput true ist -->
-        <div x-show="showInput" x-transition>
+        <!-- Input field and buttons for list creation -->
+        <div x-show="showInput" x-cloak x-transition>
             <input
                     type="text"
                     placeholder="Name der Liste"
                     x-model="taskData.listName"
                     class="list-name-input"
             />
-
             <div class="save-list-space">
-                <button
-                        @click="saveList"
-                        class="submit-list-button">
+                <button @click="saveList" class="submit-list-button">
                     Liste Speichern
                 </button>
-                <!-- Cancel Button (X) -->
-                <button
-                        @click="cancelList"
-                        class="cancel-list-button">
+                <button @click="cancelList" class="cancel-list-button">
                     &#10006
                 </button>
             </div>
         </div>
     </div>
-
 </div>
-

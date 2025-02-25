@@ -45,44 +45,49 @@ const listTasks = tasks.filter(task => task.listID === listID);
     x-show="!showInput"
     @click="showInput = true"
     class="add-task-button">
-    + Create Task
+    + Aufgabe hinzufügen
     </button>
 
     <div x-show="showInput" x-transition class="task-input">
         <input
         type="text"
         x-model="taskData.taskName"
-        placeholder="Task Name"
+        placeholder="Aufgabenname"
         class="task-name-input"
-        required
+        x-cloak
+        x-transition
         />
     <br>
-    <button
-        @click=`
-            if (taskData.taskName.trim()) {
-                fetch("${serverURL}/tasks/tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                        body: JSON.stringify(taskData)
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                        showInput = false;
-                    } else {
-                    alert("Please enter a name for the task");
-            }
-            `
-        class="submit-task-button">
-        Create Task
-    </button>
+        <button
+            x-cloak
+            x-transition
+            @click=`
+                if (taskData.taskName.trim()) {
+                    fetch("${serverURL}/tasks/tasks", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                            body: JSON.stringify(taskData)
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                            showInput = false;
+                        } else {
+                        alert("Please enter a name for the task");
+                }
+                `
+            class="submit-task-button">
+            Aufgabe erstellen
+        </button>
+
         <button
             @click="showInput = false;
             taskData.taskName = ''"
             class="cancel-task-button"
-        >
-            X
+            x-cloak
+            x-transition
+        >X
         </button>
         </div>
     </div>
