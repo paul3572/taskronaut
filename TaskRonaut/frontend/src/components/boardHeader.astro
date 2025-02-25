@@ -1,8 +1,7 @@
 ---
-const { boards } = Astro.props;
+const {boards} = Astro.props;
 
-import { serverURL } from '../pages/conf.js';
-
+import {serverURL} from '../pages/conf.js';
 ---
 
 <header class="header">
@@ -19,21 +18,49 @@ import { serverURL } from '../pages/conf.js';
                 Boards <i class="fa-solid fa-caret-down"></i>
             </button>
             <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
-                <ul >
-                    {boards?.flat().map(board => (
-                            <a href={`?boardId=${board.boardID}`}>
+                <ul>
+                    {boards?.flat().map(board => (<a href={`?boardId=${board.boardID}`}>
                                 <li>{board.boardName}</li>
-                            </a>
-                    ))}
+                            </a>))}
                 </ul>
             </div>
         </div>
 
         <!-- TODO board wird erstellt aber bekommt keine rechte dazu -->
-        <div x-data="{ showForm: false, boardName: '' }" >
-            <button class="board-header-buttons" @click="showForm = !showForm">Erstellen +</button>
+        <div
+            x-data="{
+                showForm: false,
+                boardName: '',
+                showButton: true,
+                init() {
+                  // Watch for changes to showForm. When it closes, delay re-showing the button.
+                  this.$watch('showForm', value => {
+                    if (value) {
+                      this.showButton = false;
+                    } else {
+                      // Delay showing the button until the transition is complete (e.g. 300ms)
+                      setTimeout(() => { this.showButton = true; }, 80);
+                    }
+                  });
+                }
+            }">
+            <!-- The Create Board Button is shown only when showButton is true -->
+            <button
+                    class="board-header-buttons"
+                    @click="showForm = true"
+                    x-show="showButton"
+                    >
+                Erstellen +
+            </button>
 
-            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards/boards`} hx-swap="none" x-cloak>
+            <!-- The Board Creation Form -->
+            <form
+                    x-show="showForm"
+                    x-transition
+                    hx-post={`${serverURL}/boards/boards`}
+                    hx-swap="none"
+                    x-cloak>
+                <input type="hidden" name="sessionId" :value="window.sessionStorage.getItem('sessionID')" x-cloak/>
                 <input
                         type="text"
                         name="boardName"
@@ -41,14 +68,23 @@ import { serverURL } from '../pages/conf.js';
                         x-model="boardName"
                         class="board-name-input"
                 />
-                <button class="submit-board-button" type="submit" @click="showForm = false">
+                <button
+                        class="submit-board-button"
+                        type="submit"
+                        @click="showForm = false"
+                        x-cloak>
                     Create Board
                 </button>
-                <button class="cancel-board-button" type="button" @click="showForm = false">
-                    &#10006
+                <button
+                        class="cancel-board-button"
+                        type="button"
+                        @click="showForm = false"
+                        x-cloak>
+                    &#10006;
                 </button>
             </form>
         </div>
+
 
     </div>
 

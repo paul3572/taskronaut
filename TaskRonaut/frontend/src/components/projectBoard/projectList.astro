@@ -131,19 +131,30 @@ const {data: lists} = await responseLists.json();
         cancelList() {
             this.showInput = false;
             this.taskData.listName = "";
+        },
+        showForm: false,
+        showButton: true,
+        init() {
+          this.$watch('showForm', value => {
+            if (value) {
+              this.showButton = false;
+            } else {
+              setTimeout(() => { this.showButton = true; }, 90);
+            }
+          });
         }
     }`>
 
         <!-- Button for creating a list -->
         <button
-                x-show="!showInput"
-                @click="toggleInput"
+                @click="showForm = true"
+                x-show="showButton"
                 class="add-list-button">
             + Liste Erstellen
         </button>
 
         <!-- Input field and buttons for list creation -->
-        <div x-show="showInput" x-cloak x-transition>
+        <div x-show="showForm" x-cloak x-transition>
             <input
                     type="text"
                     placeholder="Name der Liste"
@@ -154,7 +165,8 @@ const {data: lists} = await responseLists.json();
                 <button @click="saveList" class="submit-list-button">
                     Liste Speichern
                 </button>
-                <button @click="cancelList" class="cancel-list-button">
+                <button @click="showForm = false"
+                        class="cancel-list-button">
                     &#10006
                 </button>
             </div>

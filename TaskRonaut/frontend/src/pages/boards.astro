@@ -1,11 +1,8 @@
 ---
 import TaskBoard from "../components/projectBoard/projectBoard.astro";
-import Header from "../components/boardHeader.astro";
-import Sidebar from "../components/boardSidebar.astro";
 import ProjectBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
-import {sessionCookie} from "./user";
 import {serverURL} from "./conf";
 
 let sessionId = Astro.cookies.get('sessionId').value;
@@ -104,13 +101,13 @@ if (boards === null || boards === undefined) {
             <div class="main">
                 <!-- Render TaskBoard immediately with x-show -->
                 <div class="board scrollable" x-show="!showProjectBoard">
-                    <TaskBoard client:visible />
+                    <TaskBoard/>
                 </div>
 
                 <!-- Render ProjectBoard on demand -->
                 <template x-if="showProjectBoard">
                     <div class="board scrollable">
-                        <ProjectBoard client:visible />
+                        <ProjectBoard/>
                     </div>
                 </template>
             </div>

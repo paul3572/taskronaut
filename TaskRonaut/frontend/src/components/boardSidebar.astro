@@ -42,7 +42,7 @@ const {data: users} = await boardMembers.json();
                                 <i class="fa-regular fa-comment"></i>
                             </button>
                             <template x-if="showChat">
-                                <Ptp client:visible />  <!-- Add client directive for hydration -->
+                                <Ptp/>  <!-- Add client directive for hydration -->
                             </template>
                         </div>
                     </li>

@@ -3,92 +3,99 @@ import {serverURL} from "../../pages/conf.js";
 import TaskDetails from "../taskBoard/taskDetails.astro";
 const {listID, tasks} = Astro.props;
 
-// Filter the tasks that match the current listID
+// Filter tasks matching the current listID
 const listTasks = tasks.filter(task => task.listID === listID);
 ---
+
 <div x-data="{
     sessionId: sessionStorage.getItem('sessionID').slice(1, -1),
-    userId: sessionStorage.getItem('userId')}">
+    userId: sessionStorage.getItem('userId')
+}">
     {listTasks.length === 0 ? (
             <></>) : (
             <>
                 {listTasks.map(task => (
-                        <div
-                                class="task"
-                                x-data="{ open: false }"
-                        >
+                        <div class="task" x-data="{ open: false }">
                             <div @click="open = !open" style="flex-direction: column">
                                 <div class={`task-status status-${task.taskStatus}`}
-                                     style="float: left; height: 60px; width: 2%;">
-                                </div>
+                                     style="float: left; height: 60px; width: 2%;"/>
                                 <div style="width: 95%; float: right;">
                                     <h3>{task.taskName}</h3>
-                                    <p>{task.dueDate && (<p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                                    {task.dueDate && <p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
                                 </div>
                             </div>
-                            <div x-show="open" @click.away="open = true" class="dropdown">
-                                <TaskDetails task={task}></TaskDetails>
+                            <div x-show="open" @click.away="open = false" class="dropdown">
+                                <TaskDetails task={task}/>
                             </div>
                         </div>))}
-                    </>)}
+            </>)}
 
-                <div x-data=`{
-    taskData: {
-        sessionId: sessionId,
-        taskName: '',
-        listID: ${listID},
-        boardID: 1,
-    },
-    showInput: false
-}`>
-    <button
-    x-show="!showInput"
-    @click="showInput = true"
-    class="add-task-button">
-    + Aufgabe hinzufügen
-    </button>
+    <div x-data="{
+        taskData: {
+            sessionId: sessionId,
+            taskName: '',
+            listID: '${listID}',
+            boardID: 1
+        },
 
-    <div x-show="showInput" x-transition class="task-input">
-        <input
-        type="text"
-        x-model="taskData.taskName"
-        placeholder="Aufgabenname"
-        class="task-name-input"
-        x-cloak
-        x-transition
-        />
-    <br>
+        showForm: false,
+        boardName: '',
+        showButton: true,
+        init() {
+        // Watch for changes to showForm. When it closes, delay re-showing the button.
+                  this.$watch('showForm', value => {
+        if (value) {
+            this.showButton = false;
+            } else {
+            // Delay showing the button until the transition is complete (e.g. 300ms)
+                  setTimeout(() => { this.showButton = true; }, 100);
+            }
+        });
+        }
+
+    }">
         <button
-            x-cloak
-            x-transition
-            @click=`
+                x-show="showButton"
+                @click="showForm = true"
+                class="add-task-button">
+            + Aufgabe hinzufügen
+        </button>
+
+        <div x-show="showForm" x-transition class="task-input">
+            <label>
+                Aufgabenname
+                <input type="text"
+                       x-model="taskData.taskName"
+                       placeholder="Aufgabenname"
+                       class="task-name-input"
+                       x-cloak
+                       x-transition
+                />
+            </label>
+            <button
+                    x-cloak
+                    x-transition
+                    @click="
                 if (taskData.taskName.trim()) {
-                    fetch("${serverURL}/tasks/tasks", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                            body: JSON.stringify(taskData)
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                            showInput = false;
-                        } else {
-                        alert("Please enter a name for the task");
+                    fetch(`${serverURL}/tasks/tasks`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(taskData)
+                    }).then(() => window.location.reload());
+                    showForm = false;
+                } else {
+                    alert('Bitte geben Sie einen Namen für die Aufgabe ein');
                 }
-                `
-            class="submit-task-button">
-            Aufgabe erstellen
-        </button>
-
-        <button
-            @click="showInput = false;
-            taskData.taskName = ''"
-            class="cancel-task-button"
-            x-cloak
-            x-transition
-        >X
-        </button>
+            "
+                    class="submit-task-button">
+                + Aufgabe erstellen
+            </button>
+            <button @click="showForm = false; taskData.taskName = ''"
+                    class="cancel-task-button"
+                    x-cloak
+                    x-transition>
+                &#10006;
+            </button>
         </div>
     </div>
 </div>
