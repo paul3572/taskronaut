@@ -16,7 +16,7 @@ import userDataRoutes from "./src/routes/authentication/userDataRoutes.mjs";
 import {styles} from "./src/database/loggingStyle.mjs";
 import logger from "./src/middleware/logger.mjs";
 import {domainName, port} from "./src/config/serverOptions.mjs";
-import sessionMiddleware from './src/middleware/session.mjs';
+
 
 
 const app = express();

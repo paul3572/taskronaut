@@ -24,6 +24,7 @@ export async function selectAllUserBoards(userId) {
 export async function insertNewBoard(boardName) {
     try {
         const [result] = await dbConnection.query(boardQueries.insertBoard, [boardName]);
+        console.log("BOARD-ID:"+JSON.stringify(result));
         if (result !== null) {
             return [result, 0];
         }

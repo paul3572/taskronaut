@@ -3,6 +3,7 @@ import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
+import {insertNewBoardMembers} from "../../database/preparedStatements/psBoardMember.mjs";
 
 
 
@@ -22,11 +23,16 @@ export async function boardRequest(sessionId) {
     }
 }
 
-export async function addBoard(boardName) {
+export async function addBoard(boardName, sessionId) {
+    const userId = await findUserBySessionId(sessionId);
+
+    // TODO: Add authorisation to Boardcreator
     const result = await insertNewBoard(boardName);
     switch (result[1]) {
         case 0:
-            logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
+            logger.info(chalk.hex(styles.success)('Boards successfully added'));
+            console.log("result[0].insertId: " + result[0].insertId);
+            await insertNewBoardMembers(userId, result[0].insertId);
             return {statusCode: 200, data: result[0]};
         case 1:
             logger.error(chalk.hex(styles.critical)`ERROR?: ${result[0]}`);

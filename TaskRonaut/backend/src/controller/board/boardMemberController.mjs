@@ -1,8 +1,4 @@
-import {
-    deleteBoardMembers,
-    insertNewBoardMembers,
-    selectAllBoardMembersId
-} from "../../database/preparedStatements/psBoardMember.mjs";
+import {deleteBoardMembers, insertNewBoardMembers, selectAllBoardMembersId} from "../../database/preparedStatements/psBoardMember.mjs";
 import {getUserById, getUserIdByEmail} from "../../database/preparedStatements/psAuthentication.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";

@@ -28,9 +28,9 @@ router.post('/boards', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`NEW BOARD: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {boardName} = req.body;
+    const {boardName, sessionId} = req.body;
     logger.debug(boardName);
-    await serverResponse(res, await addBoard(boardName));
+    await serverResponse(res, await addBoard(boardName, sessionId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -39,8 +39,9 @@ router.delete('/boards/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`DELETE BOARD: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    logger.info(`REMOVE BOARD WITH ID: ${boardId}`);
-    await serverResponse(res, await removeBoard(boardId));
+    const {id}=req.params;
+    logger.info(`REMOVE BOARD WITH ID: ${id}`);
+    await serverResponse(res, await removeBoard(id));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

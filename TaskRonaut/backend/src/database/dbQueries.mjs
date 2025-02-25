@@ -15,7 +15,7 @@ export const authenticationQueries = {
 };
 export const boardQueries = {
     getAllUserBoards: 'SELECT * FROM Boards WHERE boardID = ?',
-    insertBoard: 'INSERT INTO Boards (boardName) VALUES (?)',
+    insertBoard: 'INSERT INTO Boards (boardName) VALUES (?) RETURNING boardID',
     deleteBoardById: 'DELETE FROM Boards WHERE boardID = ?',
     getBoardById: 'SELECT * FROM Boards WHERE boardID = ?',
 };
