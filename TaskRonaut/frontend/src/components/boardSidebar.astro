@@ -5,6 +5,7 @@ import Ptp from "./ptp.astro";
 import {serverURL} from "../pages/conf";
 
 let sessionId = Astro.cookies.get('sessionId').value;
+console.log('List Session ID:', sessionId);
 
 const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
     method: 'POST', headers: {
@@ -12,10 +13,10 @@ const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
     }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
 });
 
+console.log(sessionId)
 
 const {data: users} = await boardMembers.json();
 ---
-
 <aside class="sidebar">
     <nav class="sidebar-content">
         <hr/>
@@ -52,16 +53,58 @@ const {data: users} = await boardMembers.json();
         <!-- Add User Section -->
         <ul>
             <li>Add user</li>
-            <div x-data="{ userEmail: '' }">
-                <input type="text" placeholder="Enter user email" x-model="userEmail"/>
-                <button @click="if (!userEmail.trim()) { alert('Please enter a valid email'); return false; }"
-                        hx-post=`${serverURL}/boards/board-member-to-board`
-                        hx-headers='{"Content-Type": "application/json"}'
-                        hx-trigger="click"
-                        hx-include="[x-model]"
-                        hx-swap="outerHTML">
-                    Add
+            <div class="add-board-member" x-data=`{
+                showInput: false,
+                userData: { email: "", boardId: "" },
+                toggleInput() {
+                    this.showInput = !this.showInput;
+                },
+                saveMember() {
+                    if (this.userData.email.trim() !== "" && this.userData.boardId.trim() !== "") {
+                        fetch("${serverURL}/boards/board-member-to-board", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ 
+                                boardId: this.userData.boardId,
+                                email: this.userData.email 
+                            })
+                        }).then(() => {
+                             window.location.reload();
+                        });
+                    }
+                },
+                cancelMember() {
+                    this.showInput = false;
+                    this.userData.email = "";
+                    this.userData.boardId = "";
+                }
+            }`>
+                <button @click="toggleInput" class="add-member-btn">
+                    + Add Board Member
                 </button>
+
+                <div x-show="showInput" class="member-input-container">
+                    <input type="text"
+                           x-model="userData.userName"
+                           placeholder="Enter username"
+                           class="member-input">
+
+                    <input type="text"
+                           x-model="userData.boardId"
+                           placeholder="Enter Board ID"
+                           class="member-input">
+
+                    <div class="member-action-btns">
+                        <button @click="saveMember" class="save-member-btn">
+                            Add Member
+                        </button>
+                        <button @click="cancelMember" class="cancel-member-btn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
         </ul>
         <hr/>

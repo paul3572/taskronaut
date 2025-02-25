@@ -19,6 +19,9 @@ import {serverURL} from '../pages/conf.js';
             </button>
             <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
                 <ul>
+                    <a href="/boards">Boards</a>
+                </ul>
+                <ul>
                     {boards?.flat().map(board => (<a href={`?boardId=${board.boardID}`}>
                                 <li>{board.boardName}</li>
                             </a>))}
