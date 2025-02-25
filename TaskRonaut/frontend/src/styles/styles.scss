@@ -154,7 +154,7 @@ body {
   .board-header-buttons {
     background-color: var(--background);
     color: var(--copy);
-    border: none;
+    border: var(--foreground) solid 1px;
     margin-left: 15px;
     font-size: x-large;
     cursor: pointer;

@@ -18,8 +18,8 @@ import { serverURL } from '../pages/conf.js';
             <button class="board-header-buttons" @click="open = !open">
                 Boards <i class="fa-solid fa-caret-down"></i>
             </button>
-            <div x-show="open" @click.away="open = false" class="dropdown">
-                <ul>
+            <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
+                <ul >
                     {boards?.flat().map(board => (
                             <a href={`?boardId=${board.boardID}`}>
                                 <li>{board.boardName}</li>
@@ -30,10 +30,10 @@ import { serverURL } from '../pages/conf.js';
         </div>
 
         <!-- TODO board wird erstellt aber bekommt keine rechte dazu -->
-        <div x-data="{ showForm: false, boardName: '' }">
+        <div x-data="{ showForm: false, boardName: '' }" >
             <button class="board-header-buttons" @click="showForm = !showForm">Erstellen +</button>
 
-            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards/boards`} hx-swap="none">
+            <form x-show="showForm" x-transition hx-post={`${serverURL}/boards/boards`} hx-swap="none" x-cloak>
                 <input
                         type="text"
                         name="boardName"

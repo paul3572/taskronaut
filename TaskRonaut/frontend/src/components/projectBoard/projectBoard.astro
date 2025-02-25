@@ -20,7 +20,7 @@ for (let task of boards) {
         boardList.push(key);
     }
 }
-console.log(boardList);
+console.log("boardLists: " + boardList);
 
 const url = Astro.url;
 const boardIdParam = url.searchParams.get('boardId');
@@ -34,7 +34,7 @@ if (boardIdParam) {
     const parsedId = parseInt(boardIdParam);
     const exists = allBoards.some(board => board.boardID === parsedId);
     selectedBoardId = exists ? parsedId : selectedBoardId;
-    }
+}
 
 const selectedBoard = allBoards.find(board => board.boardID === selectedBoardId);
 const boardName = selectedBoard?.boardName || 'Default Board Name';
@@ -50,10 +50,10 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
             <li><h1>{boardName}</h1></li>
                 <div class="toggle-container">
                     <button
-                            :class="{ 'toggle-button': true, 'active': showProjectBoard }"
+                            class="toggle-button"
                             @click="showProjectBoard = true"
                     >
-                        Show Task Board
+                        TODO Board anzeigen
                     </button>
                 </div>
         </div>
