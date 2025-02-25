@@ -11,5 +11,4 @@ backup_file="backup.sql"
 echo "Wiederherstellung der Datenbank wird gestartet..."
 docker exec -i $db_container_name mysql -u $db_user $db_name < $backup_file
 echo "Datenbank wurde erfolgreich wiederhergestellt."
-rm $backup_file
-echo "Backup-Datei wurde gelöscht."
+
