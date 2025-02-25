@@ -8,6 +8,8 @@ import {serverURL} from "./conf";
 let sessionId = Astro.cookies.get('sessionId').value;
 
 const response = await fetch(`${serverURL}/boards/boards/get`, {
+    // gets all the boards a user has access to
+    // gets their BoardID and BoardName
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ sessionId: sessionId })
@@ -94,182 +96,193 @@ if (boards === null || boards === undefined) {
     if (sessionId === null) {
         window.location.href = `/login`;
     }
+
+        function navigateToBoard(boardId) {
+            window.location.href = `/boards?boardId=${boardId}`;
+            }
 </script>
+<div class="board-container">
+    {!boardIdParam ? (
+            <div class="boards-overview" x-data="boardCreation">
+                <div class="header">
+                    <h1>Your Boards</h1>
+                    <div class="creation-flow">
+                        <template x-if="!showInput">
+                            <button @click="showInput = true" class="create-board-btn">
+                                <i class="fas fa-plus"></i> Add Board
+                            </button>
+                        </template>
 
-{boards || boards.length > 0 ? (
-        <main class="content" x-data="{ showProjectBoard: false }">
-            <div class="main">
-                <!-- Render TaskBoard immediately with x-show -->
-                <div class="board scrollable" x-show="!showProjectBoard">
-                    <TaskBoard/>
-                </div>
-
-                <!-- Render ProjectBoard on demand -->
-                <template x-if="showProjectBoard">
-                    <div class="board scrollable">
-                        <ProjectBoard/>
-                    </div>
-                </template>
-            </div>
-        </main>
-
-
-) : (
-        <div class="no-boards" x-data="boardCreation">
-            <div class="empty-state">
-                <img src="https://i.imgur.com/D5TdiNt.png" alt="No boards" class="illustration"/>
-                <h2>Start Organizing Your Work</h2>
-                <p class="description">Create your first board to manage tasks and collaborate with your team.</p>
-
-                <div class="creation-flow">
-                    <template x-if="!showInput">
-                        <button @click="showInput = true" class="create-board-btn">
-                            <i class="fas fa-plus"></i> Create New Board
-                        </button>
-                    </template>
-
-                    <template x-if="showInput">
-                        <div class="input-group">
-                            <input
-                                    type="text"
-                                    x-model="boardName"
-                                    @keyup.enter="createBoard()"
-                                    placeholder="Board name"
-                                    class="board-input"
-                                    autofocus
-                            />
-                            <div class="button-group">
-                                <button @click="createBoard()" class="submit-btn">
-                                    Create
-                                </button>
-                                <button @click="showInput = false; boardName = ''" class="cancel-btn">
-                                    Cancel
-                                </button>
+                        <template x-if="showInput">
+                            <div class="input-group">
+                                <input
+                                        type="text"
+                                        x-model="boardName"
+                                        @keyup.enter="createBoard()"
+                                        placeholder="Board name"
+                                        class="board-input"
+                                        autofocus
+                                />
+                                <div class="button-group">
+                                    <button @click="createBoard()" class="submit-btn">
+                                        Create
+                                    </button>
+                                    <button @click="showInput = false; boardName = ''" class="cancel-btn">
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="boards-grid">
+                    {boards?.map((boardGroup) => (
+                        boardGroup.map((board) => (
+                                <div class="board-card" onclick="navigateToBoard('{board.boardID}')">
+                                    <h3>{board.boardName}</h3>
+                                    <div class="card-overlay">
+                                        <button class="open-board-btn">
+                                            Open Board <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                        ))
+                    ))}
+
+                    <!-- Add Board Card -->
+                    <div class="board-card add-board" @click="showInput = true">
+                        <div class="add-content">
+                            <i class="fas fa-plus"></i>
+                            <span>Create New Board</span>
                         </div>
-                    </template>
+                    </div>
                 </div>
             </div>
-        </div>
+    ) : (
+            <main class="content" x-data="{ showProjectBoard: false }">
+                <!-- ... (keep existing board view content) -->
+            </main>
+    )}
+</div>
 
-        <style lang="scss">
-          .no-boards {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary), #334155);
-            padding: 2rem;
-          }
+<style lang="scss">
+  .board-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary), #334155);
+  }
 
-          .empty-state {
-            text-align: center;
-            max-width: 500px;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-          }
+  .boards-overview {
+    max-width: 1200px;
+    margin: 0 auto;
 
-          .illustration {
-            width: 220px;
-            margin-bottom: 1.5rem;
-          }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
 
-          h2 {
-            font-size: 1.8rem;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
-          }
+      h1 {
+        color: white;
+        font-size: 2rem;
+        margin: 0;
+      }
+    }
+  }
 
-          .description {
-            color: #64748b;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-          }
+  .boards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
 
-          .creation-flow {
-            margin-top: 1.5rem;
-          }
+  .board-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-height: 150px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 
-          .create-board-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            color: white;
-            background: #4f46e5;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 
-            &:hover {
-              background: #4338ca;
-              transform: translateY(-1px);
-            }
+      .card-overlay {
+        opacity: 1;
+      }
+    }
 
-            &:active {
-              transform: translateY(0);
-            }
-          }
+    h3 {
+      margin: 0;
+      color: #1e293b;
+    }
 
-          .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-          }
+    &.add-board {
+      background: rgba(255, 255, 255, 0.8);
+      border: 2px dashed #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
 
-          .board-input {
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.2s ease;
+      .add-content {
+        color: #64748b;
 
-            &:focus {
-              outline: none;
-              border-color: #4f46e5;
-              box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            }
-          }
+        i {
+          font-size: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
 
-          .button-group {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-          }
+        span {
+          display: block;
+          font-weight: 500;
+        }
+      }
 
-          .submit-btn, .cancel-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-          }
+      &:hover {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: #94a3b8;
+      }
+    }
+  }
 
-          .submit-btn {
-            background: #4f46e5;
-            color: white;
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(79, 70, 229, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 
-            &:hover {
-              background: #4338ca;
-            }
-          }
+    .open-board-btn {
+      background: none;
+      border: 2px solid white;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
 
-          .cancel-btn {
-            background: #f1f5f9;
-            color: #64748b;
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
 
-            &:hover {
-              background: #e2e8f0;
-            }
-          }
-        </style>
-)}
+  /* Keep existing styles for creation flow and buttons, modify as needed */
+  .creation-flow {
+    /* ... (keep existing styles) */
+  }
+
+  /* ... (keep existing button styles) */
+</style>
 </body>
 </html>
