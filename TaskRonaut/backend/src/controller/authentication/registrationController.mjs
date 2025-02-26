@@ -33,12 +33,14 @@ export async function userRegistration(email, password, firstName, lastName) {
                 logger.info(chalk.hex(styles.info)`User added successfully to database!`);
                 logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
 
+                /*
+                // Create Default Board for new User
                 const userId = await getUserIdByEmail(email);
                 const boardName = "Default Board";
                 const returnValue = [userId?.id, true]
                 await addBoard(boardName, returnValue);
                 logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
-
+                 */
 
                 await generateToken(email);
                 const activationToken = await getActivationTokenByUserEmail(email);
