@@ -5,7 +5,6 @@ import swaggerUi from 'swagger-ui-express';
 import chalk from 'chalk';
 import swaggerDocument from './src/config/swaggerAll.json' assert {type: 'json'};
 
-import sessions from './src/middleware/session.mjs'
 import testRoutes from './testRoutes.mjs';
 import ptpRoutes from './src/routes/chat/ptpRoutes.mjs';
 import loginRoutes from './src/routes/authentication/loginRoutes.mjs';

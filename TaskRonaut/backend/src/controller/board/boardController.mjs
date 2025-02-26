@@ -28,11 +28,12 @@ export async function addBoard(boardName, sessionId) {
 
     // TODO: Add authorisation to Boardcreator
     const result = await insertNewBoard(boardName);
+    const boardId = result[0].insertId;
     switch (result[1]) {
         case 0:
             logger.info(chalk.hex(styles.success)('Boards successfully added'));
-            console.log("result[0].insertId: " + result[0].insertId);
-            await insertNewBoardMembers(userId, result[0].insertId);
+            console.log("result[0].insertId: " + boardId);
+            await insertNewBoardMembers(userId, boardId);
             return {statusCode: 200, data: result[0]};
         case 1:
             logger.error(chalk.hex(styles.critical)`ERROR?: ${result[0]}`);
