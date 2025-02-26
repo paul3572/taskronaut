@@ -175,6 +175,13 @@ body {
     background-color: var(--primary-dark);
   }
 
+  .specific-boards-button{
+    background-color: var(--background);
+  }
+  .specific-boards-button:hover{
+    background-color: var(--foreground);
+  }
+
   .login-register-button {
     background-color: var(--background);
     color: var(--copy);

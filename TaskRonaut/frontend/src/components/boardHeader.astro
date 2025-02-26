@@ -28,7 +28,7 @@ import {serverURL} from '../pages/conf.js';
                 <ul>
                     {boards?.flat().map(board => (
                         <a href={`?boardId=${board.boardID}`}>
-                            <li>{board.boardName}</li>
+                            <li class="specific-boards-button">{board.boardName}</li>
                         </a>
                     ))}
                 </ul>
