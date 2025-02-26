@@ -35,7 +35,7 @@ export async function userRegistration(email, password, firstName, lastName) {
 
                 const userId = await getUserIdByEmail(email);
                 const boardName = "Default Board";
-                const returnValue = [userId, true]
+                const returnValue = [userId?.id, true]
                 await addBoard(boardName, returnValue);
                 logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
 
