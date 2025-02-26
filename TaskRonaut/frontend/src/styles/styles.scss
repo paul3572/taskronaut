@@ -151,6 +151,8 @@ body {
     margin: 0;
   }
 
+
+
   .board-header-buttons {
     background-color: var(--background);
     color: var(--copy);
@@ -164,6 +166,13 @@ body {
 
   .board-header-buttons:hover {
     background-color: var(--border);
+  }
+
+  .all-boards-button{
+    background-color: var(--primary);
+  }
+  .all-boards-button:hover{
+    background-color: var(--primary-dark);
   }
 
   .login-register-button {
@@ -223,10 +232,7 @@ body {
     cursor: pointer;
   }
 
-  .dropdown li:hover {
-    background-color: var(--foreground);
-    color: var(--copy);
-  }
+
 
   .dropdown a {
     text-decoration: none;

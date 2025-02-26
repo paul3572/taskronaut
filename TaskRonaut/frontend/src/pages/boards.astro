@@ -21,12 +21,12 @@ const { data: boards } = await response.json();
 const url = new URL(Astro.request.url);
 const boardIdParam = url.searchParams.get('boardId');
 
-// Redirect to first board if no boardId is present and boards exist
+/* Redirect to first board if no boardId is present and boards exist
 if (!boardIdParam && boards?.length > 0) {
     const firstBoardId = boards[0][0].boardID;
     return Astro.redirect(`boards?boardId=${firstBoardId}`);
 }
-
+*/
 if (boards === null || boards === undefined) {
     console.log('Boards data is null or undefined');
 } else {
@@ -98,9 +98,9 @@ if (boards === null || boards === undefined) {
         window.location.href = `/login`;
     }
 
-        function navigateToBoard(boardId) {
-            window.location.href = `/boards?boardId=${boardId}`;
-            }
+    function navigateToBoard(boardId) {
+        window.location.href = `/boards?boardId=${boardId}`;
+    }
 </script>
 <div class="board-container">
     {!boardIdParam ? (
@@ -142,11 +142,18 @@ if (boards === null || boards === undefined) {
                 <div class="boards-grid">
                     {boards?.map((boardGroup) => (
                         boardGroup.map((board) => (
-                            <!-- ... (keep existing board cards the same) -->
+                            <div class="your-boards-card">
+                                <p>
+                                    {board.boardName}
+                                </p>
+                                <a href=`/boards?boardId=${board.boardID}`>
+                                    GO TO BOARD
+                                </a>
+                            </div>
                         ))
                     ))}
 
-                    <!-- Card Input -->
+                    <!--     Card Input -->
                     <template x-if="!showCardInput">
                         <div class="board-card add-board" @click="showCardInput = true">
                             <div class="add-content">
@@ -201,13 +208,52 @@ if (boards === null || boards === undefined) {
 </div>
 
 <style lang="scss">
+  .your-boards-card {
+    background: var(--foreground);
+    color: var(--copy);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-height: 150px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+      margin: 0;
+      color: var(--copy);
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+      align-self: flex-end;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+
   .board-container {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--primary), #334155);
   }
 
   .boards-overview {
-    max-width: 1200px;
     margin: 0 auto;
 
     .header {
@@ -215,6 +261,11 @@ if (boards === null || boards === undefined) {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
+      width: 100%;
+
+      .creation-flow{
+        transform: translateX(-20px);
+      }
 
       h1 {
         color: white;
@@ -228,6 +279,7 @@ if (boards === null || boards === undefined) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
+    padding: 0 5%;
   }
 
   .board-card {
