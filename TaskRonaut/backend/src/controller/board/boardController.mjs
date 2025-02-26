@@ -24,10 +24,11 @@ export async function boardRequest(sessionId) {
 
 export async function addBoard(boardName, sessionId) {
     let userId;
+    if (sessionId[1] === true) {
+        userId = sessionId[0];
+    } else {
         userId = await findUserBySessionId(sessionId);
-        if (sessionId[1] === true) {
-            userId = sessionId[0];
-        }
+    }
 
     const result = await insertNewBoard(boardName);
     const boardId = result[0].insertId;
