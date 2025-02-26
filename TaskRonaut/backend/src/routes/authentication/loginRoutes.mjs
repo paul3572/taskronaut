@@ -17,7 +17,6 @@ router.post('/registration', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {email, password, firstName, lastName} = req.body;
-    // TODO: table ausgabe logger
     logger.debug([{Email: email, Password: password, FirstName: firstName, LastName: lastName}]);
     await serverResponse(res, await userRegistration(email, password, firstName, lastName))
     logger.info(chalk.hex(styles.dialogEnd)`Registration Process finished!`);

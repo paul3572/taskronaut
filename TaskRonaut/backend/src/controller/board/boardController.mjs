@@ -6,7 +6,6 @@ import {findUserBySessionId} from "../../middleware/session.mjs";
 import {insertNewBoardMembers} from "../../database/preparedStatements/psBoardMember.mjs";
 
 
-
 export async function boardRequest(sessionId) {
     const userId = await findUserBySessionId(sessionId);
     const result = await selectAllUserBoards(userId);
@@ -24,9 +23,13 @@ export async function boardRequest(sessionId) {
 }
 
 export async function addBoard(boardName, sessionId) {
-    const userId = await findUserBySessionId(sessionId);
+    let userId
+    if (sessionId instanceof Number) {
+        userId = sessionId;
+    } else {
+        userId = await findUserBySessionId(sessionId);
+    }
 
-    // TODO: Add authorisation to Boardcreator
     const result = await insertNewBoard(boardName);
     const boardId = result[0].insertId;
     switch (result[1]) {

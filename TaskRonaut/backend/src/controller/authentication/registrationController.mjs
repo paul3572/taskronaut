@@ -4,10 +4,11 @@ import {authenticationQueries} from "../../database/dbQueries.mjs";
 import {sha256} from "../../middleware/sha256.mjs";
 import {generateToken} from "../../middleware/token.mjs";
 import {sendEmail} from "../../middleware/email.mjs";
-import {getActivationTokenByUserEmail} from "../../database/preparedStatements/psAuthentication.mjs";
+import {getActivationTokenByUserEmail, getUserIdByEmail} from "../../database/preparedStatements/psAuthentication.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
+import {addBoard} from "../board/boardController.mjs";
 
 /**
  * Checking if the user Input (email, password) has a valid syntax
@@ -32,10 +33,16 @@ export async function userRegistration(email, password, firstName, lastName) {
                 logger.info(chalk.hex(styles.info)`User added successfully to database!`);
                 logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
 
-                logger.info(chalk.hex(styles.info)`...generating validdtion token...`);
+                const userId = await getUserIdByEmail(email);
+                const boardName = "Default Board";
+                await addBoard(boardName, userId);
+                logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${userId}`);
+
+
                 await generateToken(email);
                 const activationToken = await getActivationTokenByUserEmail(email);
-                // TODO dynamische URL
+                logger.info(chalk.hex(styles.info)`...generating validdtion token...`);
+
                 const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
                 logger.info(chalk.hex(styles.info)`...token generated!`)
 
