@@ -4,97 +4,71 @@ const {boards} = Astro.props;
 import {serverURL} from '../pages/conf.js';
 ---
 
-<header class="header">
-    <div class="left">
-        <h1>
-            <a href="/" style="color: whitesmoke; text-decoration: none ">
-                <i class="fa-brands fa-space-awesome"></i>
-                TaskRonaut
-            </a>
-        </h1>
+<div class="header">
 
-        <div x-data="{ open: false }">
-            <button class="board-header-buttons" @click="open = !open">
-                Boards <i class="fa-solid fa-caret-down"></i>
-            </button>
-            <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
-                <ul>
-                    <a href="/boards">
-                        <li class="all-boards-button">
-                            Alle Boards
-                        </li>
-                    </a>
-                </ul>
-                <ul>
-                    {boards?.flat().map(board => (
-                        <a href={`?boardId=${board.boardID}`}>
-                            <li class="specific-boards-button">{board.boardName}</li>
+    <div class="boards-overview" x-data="boardCreation">
+
+
+        <div class="left">
+
+
+            <h1>
+                <a href="/" style="color: whitesmoke; text-decoration: none ">
+                    <i class="fa-brands fa-space-awesome"></i>
+                    TaskRonaut
+                </a>
+            </h1>
+
+
+            <div x-data="{ open: false }">
+                <button class="board-header-buttons" @click="open = !open">
+                    Boards <i class="fa-solid fa-caret-down"></i>
+                </button>
+                <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
+                    <ul>
+                        <a href="/boards">
+                            <li class="all-boards-button">
+                                Alle Boards
+                            </li>
                         </a>
-                    ))}
-                </ul>
+                    </ul>
+                    <ul>
+                        {boards?.flat().map(board => (<a href={`?boardId=${board.boardID}`}>
+                            <li class="specific-boards-button">{board.boardName}</li>
+                        </a>))}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="creation-flow">
+                <!-- Header Input -->
+                <template x-if="!showHeaderInput">
+                    <button @click="showHeaderInput = true" class=" board-header-buttons">
+                        <i class="fas fa-plus"></i> Board erstellen
+                    </button>
+                </template>
+
+                <template x-if="showHeaderInput">
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                x-model="boardName"
+                                @keyup.enter="createBoard()"
+                                placeholder="Board name"
+                                class="board-input"
+                                autofocus
+                        />
+                        <button @click="createBoard()" class="submit-board-button">
+                            Create
+                        </button>
+                        <button @click="showHeaderInput = false; boardName = ''"
+                                class="cancel-btn">
+                            Cancel
+                        </button>
+                    </div>
+                </template>
             </div>
         </div>
-
-        <!-- TODO board wird erstellt aber bekommt keine rechte dazu -->
-        <div
-            x-data="{
-                showForm: false,
-                boardName: '',
-                showButton: true,
-                init() {
-                  // Watch for changes to showForm. When it closes, delay re-showing the button.
-                  this.$watch('showForm', value => {
-                    if (value) {
-                      this.showButton = false;
-                    } else {
-                      // Delay showing the button until the transition is complete (e.g. 300ms)
-                      setTimeout(() => { this.showButton = true; }, 80);
-                    }
-                  });
-                }
-            }">
-            <!-- The Create Board Button is shown only when showButton is true -->
-            <button
-                    class="board-header-buttons"
-                    @click="showForm = true"
-                    x-show="showButton"
-                    >
-                Erstellen +
-            </button>
-
-            <!-- The Board Creation Form -->
-            <form
-                    x-show="showForm"
-                    x-transition
-                    hx-post={`${serverURL}/boards/boards`}
-                    hx-swap="none"
-                    x-cloak>
-                <input type="hidden" name="sessionId" :value="window.sessionStorage.getItem('sessionID')" x-cloak/>
-                <input
-                        type="text"
-                        name="boardName"
-                        placeholder="Board Name"
-                        x-model="boardName"
-                        class="board-name-input"
-                />
-                <button
-                        class="submit-board-button"
-                        type="submit"
-                        @click="showForm = false"
-                        x-cloak>
-                    Create Board
-                </button>
-                <button
-                        class="cancel-board-button"
-                        type="button"
-                        @click="showForm = false"
-                        x-cloak>
-                    &#10006;
-                </button>
-            </form>
-        </div>
-
-
     </div>
-
-</header>
+</div>

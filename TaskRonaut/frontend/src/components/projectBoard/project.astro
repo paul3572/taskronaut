@@ -1,10 +1,10 @@
 ---
 import {serverURL} from "../../pages/conf.js";
 import TaskDetails from "../taskBoard/taskDetails.astro";
-const {listID, tasks} = Astro.props;
+const {boardID ,listID, tasks} = Astro.props;
 
 // Filter tasks matching the current listID
-const listTasks = tasks.filter(task => task.listID === listID);
+const listTasks = tasks.filter(task => task.listID === listID, boardID);
 ---
 
 <div x-data="{
@@ -15,8 +15,8 @@ const listTasks = tasks.filter(task => task.listID === listID);
             <></>) : (
             <>
                 {listTasks.map(task => (
-                        <div class="task" x-data="{ open: false }">
-                            <div @click="open = !open" style="flex-direction: column">
+                        <div class="task" x-data="{ openDetails: false }">
+                            <div @click="openDetails = !openDetails" style="flex-direction: column">
                                 <div class={`task-status status-${task.taskStatus}`}
                                      style="float: left; height: 60px; width: 2%;"/>
                                 <div style="width: 95%; float: right;">
@@ -24,18 +24,18 @@ const listTasks = tasks.filter(task => task.listID === listID);
                                     {task.dueDate && <p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
                                 </div>
                             </div>
-                            <div x-show="open" @click.away="open = false" class="dropdown">
+                            <div x-show="openDetails" @click.away="openDetails = false" class="dropdown">
                                 <TaskDetails task={task}/>
                             </div>
                         </div>))}
             </>)}
 
-    <div x-data="{
+    <div x-data=`{
         taskData: {
             sessionId: sessionId,
             taskName: '',
             listID: '${listID}',
-            boardID: 1
+            boardID: '${boardID}'
         },
 
         showForm: false,
@@ -53,7 +53,7 @@ const listTasks = tasks.filter(task => task.listID === listID);
         });
         }
 
-    }">
+    }`>
         <button
                 x-show="showButton"
                 @click="showForm = true"
@@ -75,18 +75,20 @@ const listTasks = tasks.filter(task => task.listID === listID);
             <button
                     x-cloak
                     x-transition
-                    @click="
-                if (taskData.taskName.trim()) {
-                    fetch(`${serverURL}/tasks/tasks`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(taskData)
-                    }).then(() => window.location.reload());
-                    showForm = false;
-                } else {
-                    alert('Bitte geben Sie einen Namen für die Aufgabe ein');
-                }
-            "
+                    @click=`
+                        if (taskData.taskName.trim()) {
+                            fetch("${serverURL}/tasks/tasks", {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(taskData)
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                            showForm = false;
+                        } else {
+                            alert('Bitte geben Sie einen Namen für die Aufgabe ein');
+                        }
+                    `
                     class="submit-task-button">
                 + Aufgabe erstellen
             </button>

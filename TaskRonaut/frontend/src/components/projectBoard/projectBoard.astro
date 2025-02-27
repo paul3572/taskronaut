@@ -39,6 +39,8 @@ if (boardIdParam) {
 const selectedBoard = allBoards.find(board => board.boardID === selectedBoardId);
 const boardName = selectedBoard?.boardName || 'Default Board Name';
 
+console.log("selectedBoardId: " + selectedBoardId);
+
 ---
 
 <BoardHeader {boards}></BoardHeader>
@@ -59,9 +61,9 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
         </div>
 
         <div>
-            <List boardId={selectedBoardId}></List>
+            <List boardID={selectedBoardId}></List>
         </div>
 
     </div>
-    <Sidebar></Sidebar>
+    <Sidebar boardID={selectedBoardId}></Sidebar>
 </div>

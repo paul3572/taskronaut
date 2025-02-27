@@ -7,18 +7,19 @@ import Sidebar from "../boardSidebar.astro";
 const url = Astro.url;
 let sessionId = Astro.cookies.get('sessionId').value;
 
+const boardIdParam = url.searchParams.get('boardId');
+
 const response = await fetch(`${serverURL}/boards/boards/get`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ sessionId: sessionId, boardId: 1 })
+    body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
 });
 
 const { data: boards } = await response.json();
 
 // Get board ID from URL parameter
-const boardIdParam = url.searchParams.get('boardId');
 const allBoards = boards.flat();
 
 // Find selected board

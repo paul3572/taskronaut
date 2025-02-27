@@ -1,26 +1,31 @@
 ---
-import TaskBoard from "../components/projectBoard/projectBoard.astro";
-import ProjectBoard from "../components/taskBoard/taskBoard.astro";
+import ProjectBoard from "../components/projectBoard/projectBoard.astro";
+import TaskBoard from "../components/taskBoard/taskBoard.astro";
 
 import '../styles/global.css'
 import {serverURL} from "./conf";
+import BoardHeader from "../components/boardHeader.astro";
 
-let sessionId = Astro.cookies.get('sessionId').value;
+const sessionCookie = Astro.cookies.get('sessionId');
+if (!sessionCookie) {
+    // Handle the missing cookie case (e.g., redirect to login or show an error)
+    return Astro.redirect('/getCookies');
+}
+let sessionId = sessionCookie.value;
 
 const response = await fetch(`${serverURL}/boards/boards/get`, {
     // gets all the boards a user has access to
     // gets their BoardID and BoardName
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sessionId: sessionId })
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sessionId: sessionId})
 });
 
-const { data: boards } = await response.json();
+const {data: boards} = await response.json();
 
 // Get current URL and check for boardId parameter
 const url = new URL(Astro.request.url);
 const boardIdParam = url.searchParams.get('boardId');
 
+console.log('Board ID Param:', boardIdParam);
 /* Redirect to first board if no boardId is present and boards exist
 if (!boardIdParam && boards?.length > 0) {
     const firstBoardId = boards[0][0].boardID;
@@ -59,18 +64,12 @@ if (boards === null || boards === undefined) {
     import {serverURL} from "./conf";
 
     Alpine.data('boardCreation', () => ({
-        showHeaderInput: false,
-        showCardInput: false,
-        boardName: '',
-        async createBoard() {
+        showHeaderInput: false, showCardInput: false, boardName: '', async createBoard() {
             if (!this.boardName.trim()) return;
             try {
                 const response = await fetch(`${serverURL}/boards/boards/`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        sessionId: sessionId,
-                        boardName: this.boardName
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
+                        sessionId: sessionId, boardName: this.boardName
                     })
                 });
 
@@ -98,60 +97,23 @@ if (boards === null || boards === undefined) {
         window.location.href = `/login`;
     }
 
-    function navigateToBoard(boardId) {
-        window.location.href = `/boards?boardId=${boardId}`;
-    }
 </script>
 <div class="board-container">
     {!boardIdParam ? (
             <div class="boards-overview" x-data="boardCreation">
-                <div class="header">
-                    <h1>Your Boards</h1>
-                    <div class="creation-flow">
-                        <!-- Header Input -->
-                        <template x-if="!showHeaderInput">
-                            <button @click="showHeaderInput = true" class="create-board-btn">
-                                <i class="fas fa-plus"></i> Add Board
-                            </button>
-                        </template>
-
-                        <template x-if="showHeaderInput">
-                            <div class="input-group">
-                                <input
-                                        type="text"
-                                        x-model="boardName"
-                                        @keyup.enter="createBoard()"
-                                        placeholder="Board name"
-                                        class="board-input"
-                                        autofocus
-                                />
-                                <div class="button-group">
-                                    <button @click="createBoard()" class="submit-btn">
-                                        Create
-                                    </button>
-                                    <button @click="showHeaderInput = false; boardName = ''"
-                                            class="cancel-btn">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
+                <div style="padding-bottom: 20px">
+                    <BoardHeader {boards}></BoardHeader>
                 </div>
-
                 <div class="boards-grid">
-                    {boards?.map((boardGroup) => (
-                        boardGroup.map((board) => (
-                            <div class="your-boards-card">
-                                <p>
-                                    {board.boardName}
-                                </p>
-                                <a href=`/boards?boardId=${board.boardID}`>
-                                    GO TO BOARD
-                                </a>
-                            </div>
-                        ))
-                    ))}
+                    {boards?.map((boardGroup) => (boardGroup.map((board) => (
+                                    <div class="your-boards-card">
+                                        <p>
+                                            {board.boardName}
+                                        </p>
+                                        <a href=`/boards?boardId=${board.boardID}`>
+                                            GO TO BOARD
+                                        </a>
+                                    </div>))))}
 
                     <!--     Card Input -->
                     <template x-if="!showCardInput">
@@ -187,24 +149,22 @@ if (boards === null || boards === undefined) {
                         </div>
                     </template>
                 </div>
-            </div>
-    ) : (
+            </div>) : (
             <main class="content" x-data="{ showProjectBoard: false }">
                 <div class="main">
                     <!-- Render TaskBoard immediately with x-show -->
                     <div class="board scrollable" x-show="!showProjectBoard">
-                        <TaskBoard/>
+                        <ProjectBoard boardID={boardIdParam}/>
                     </div>
 
                     <!-- Render ProjectBoard on demand -->
                     <template x-if="showProjectBoard">
                         <div class="board scrollable">
-                            <ProjectBoard/>
+                            <TaskBoard boardID={boardIdParam}/>
                         </div>
                     </template>
                 </div>
-            </main>
-    )}
+            </main>)}
 </div>
 
 <style lang="scss">
@@ -263,7 +223,7 @@ if (boards === null || boards === undefined) {
       margin-bottom: 2rem;
       width: 100%;
 
-      .creation-flow{
+      .creation-flow {
         transform: translateX(-20px);
       }
 

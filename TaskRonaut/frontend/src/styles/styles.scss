@@ -51,6 +51,7 @@
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
   }
 
   .user-icon {
@@ -89,7 +90,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.164);
   cursor: pointer;
   transition-duration: 0.3s;
   overflow: hidden;
@@ -221,10 +222,10 @@ body {
     border-radius: 5px;
     z-index: 1000;
     width: 200px;
-    max-height: 300px;
     overflow-y: auto;
     top: 59px;
     left: 245px;
+    max-height: 80vh;
 
   }
 
@@ -519,8 +520,10 @@ body {
     width: 250px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     height: auto;
-    max-height: 80%;
+    max-height: 80vh;
     overflow-y: auto;
+    scrollbar-width: thin;
+
 
 
     .list-header {
@@ -627,7 +630,6 @@ body {
       background-color: var(--foreground);
       border-radius: 5px;
       border: none;
-      text-align: left;
       width: 170px;
       text-align: center;
 
@@ -798,7 +800,7 @@ body {
         width: 81%;
         flex-direction: column;
         padding: 1rem;
-        margin: 0.5rem 0 0.0;
+        margin: 0.5rem 0 0 0;
         border: 2px solid var(--border);
         border-radius: 8px;
         background: var(--background-light);

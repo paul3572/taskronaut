@@ -3,8 +3,10 @@ const { task } = Astro.props;
 import { serverURL } from '../../pages/conf.js';
 ---
 
-<div class="task-details-screen"
-     x-data=`{
+<div
+    x-cloak
+    class="task-details-screen"
+    x-data=`{
          sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1].replace(/"/g, ''),
          userId: sessionStorage.getItem('userId')
      }`>
@@ -14,7 +16,6 @@ import { serverURL } from '../../pages/conf.js';
              sessionID: sessionId,
              taskID: Number('${task.taskID}'),
              taskName: '${task.taskName}',
-             //taskCreator: Number('${task.taskCreator}'),
              taskCreator: userId,
              taskCreationDate: '${task.taskCreationDate}',
              dueDate: '${task.dueDate}',
@@ -29,7 +30,7 @@ import { serverURL } from '../../pages/conf.js';
          showInput: false,
        }`>
 
-        <p class="closeButton" @click="open = !open">&#10006</p>
+        <p class="closeButton" @click="openDetails = !openDetails">&#10006</p>
 
         <div class="task-details-content">
 
@@ -49,8 +50,11 @@ import { serverURL } from '../../pages/conf.js';
             </div>
 
             <div class="right-side">
+
+                <!--
                 <label for="taskCreator">Erstellt von:</label>
                 <input type="text" id="taskCreator" name="taskCreator" x-model="taskData.taskCreator">
+                -->
 
                 <label for="taskCreationDate">Erstellt am:</label>
                 <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskData.taskCreationDate).toISOString().slice(0, 16)">
@@ -92,7 +96,7 @@ import { serverURL } from '../../pages/conf.js';
                         },
                         body: JSON.stringify(taskData)
                       }).then(() => {
-                         window.location.reload();
+                         // window.location.reload();
                       });
                     `>
                         <svg viewBox="0 0 448 512" class="svgIcon">

@@ -5,7 +5,7 @@
         <h1><a href="/" style="color: whitesmoke; text-decoration: none "><i class="fa-brands fa-space-awesome"></i>
             TaskRonaut</a></h1>
         <a id="boards-button" href="/boards" style="color: whitesmoke; font-size: x-large; padding-left: 10px; text-decoration: none; display: none"
-           x-show="sessionId">Boards</a>
+           x-show="sessionId" class="board-header-buttons">Zu deinen Boards</a>
     </div>
     <div id="auth-buttons">
         <button hx-push-url="login" hx-get="/login" hx-target="#login-register-container" hx-swap="beforeend"

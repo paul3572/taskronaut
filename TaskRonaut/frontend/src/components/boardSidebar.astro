@@ -16,6 +16,9 @@ const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
 console.log(sessionId)
 
 const {data: users} = await boardMembers.json();
+
+const {boardID} = Astro.props;
+
 ---
 <aside class="sidebar">
     <nav class="sidebar-content">
@@ -54,46 +57,42 @@ const {data: users} = await boardMembers.json();
         <ul>
             <li>Add user</li>
             <div class="add-board-member" x-data=`{
-                showInput: false,
-                userData: { email: "", boardId: "" },
-                toggleInput() {
-                    this.showInput = !this.showInput;
-                },
-                saveMember() {
-                    if (this.userData.email.trim() !== "" && this.userData.boardId.trim() !== "") {
-                        fetch("${serverURL}/boards/board-member-to-board", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({ 
-                                boardId: this.userData.boardId,
-                                email: this.userData.email 
-                            })
-                        }).then(() => {
-                             window.location.reload();
-                        });
-                    }
-                },
-                cancelMember() {
-                    this.showInput = false;
-                    this.userData.email = "";
-                    this.userData.boardId = "";
-                }
-            }`>
+        showInput: false,
+        userData: { email: "", boardId: ${boardID} },
+        sessionId: "${sessionId}",
+        toggleInput() {
+            this.showInput = !this.showInput;
+        },
+        saveMember() {
+            if (this.userData.email.trim() !== "") {
+                fetch("${serverURL}/boards/board-member-to-board", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        boardId: this.userData.boardId,
+                        email: this.userData.email,
+                        sessionId: this.sessionId
+                    })
+                }).then(response => {
+                    // if (response.ok) window.location.reload();
+                });
+            }
+        },
+        cancelMember() {
+            this.showInput = false;
+            this.userData.email = "";
+        }
+    }`>
                 <button @click="toggleInput" class="add-member-btn">
                     + Add Board Member
                 </button>
 
                 <div x-show="showInput" class="member-input-container">
-                    <input type="text"
-                           x-model="userData.userName"
-                           placeholder="Enter username"
-                           class="member-input">
-
-                    <input type="text"
-                           x-model="userData.boardId"
-                           placeholder="Enter Board ID"
+                    <input type="email"
+                           x-model="userData.email"
+                           placeholder="Enter email"
                            class="member-input">
 
                     <div class="member-action-btns">

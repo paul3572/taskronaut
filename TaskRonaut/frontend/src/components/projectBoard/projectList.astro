@@ -23,12 +23,12 @@ for (let task of tasks) {
     }
 }
 
-const {boardId} = Astro.props;
+const {boardID} = Astro.props;
 
 const responseLists = await fetch(`${serverURL}/lists/lists/board/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: boardId})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardID})
 });
 
 
@@ -37,8 +37,8 @@ const {data: lists} = await responseLists.json();
 
 <div class="dragAndDrop"
      x-data="{
-     sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1],
-      userId: sessionStorage.getItem('userId')
+        sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1],
+        userId: sessionStorage.getItem('userId')
       }">
     {lists && lists.length === 0 ? (
     <hr style="width: 0; margin: 0">) : (
@@ -96,7 +96,7 @@ const {data: lists} = await responseLists.json();
                         </div>
 
 
-                        <Task listID={list.listID} tasks={taskList}></Task>
+                        <Task listID={list.listID} tasks={taskList} boardID={boardID}></Task>
                     </div>
 
             ))}
@@ -120,7 +120,7 @@ const {data: lists} = await responseLists.json();
                 },
                 body: JSON.stringify({ 
                     sessionId: sessionId.replace(/"/g, ''), 
-                    boardId: ${boardId},
+                    boardId: ${boardID},
                     listName: this.taskData.listName 
                 })
                 }).then(() => {
