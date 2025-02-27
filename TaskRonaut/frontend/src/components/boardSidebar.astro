@@ -3,6 +3,7 @@ import Alpine from 'alpinejs';
 import Ptp from "./ptp.astro";
 
 import {serverURL} from "../pages/conf";
+const {boardID} = Astro.props;
 
 let sessionId = Astro.cookies.get('sessionId').value;
 console.log('List Session ID:', sessionId);
@@ -10,14 +11,14 @@ console.log('List Session ID:', sessionId);
 const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: 1})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardID})
 });
 
 console.log(sessionId)
 
 const {data: users} = await boardMembers.json();
+console.log('Users:', users);
 
-const {boardID} = Astro.props;
 
 ---
 <aside class="sidebar">
@@ -76,7 +77,7 @@ const {boardID} = Astro.props;
                         sessionId: this.sessionId
                     })
                 }).then(response => {
-                    // if (response.ok) window.location.reload();
+                    if (response.ok) window.location.reload();
                 });
             }
         },

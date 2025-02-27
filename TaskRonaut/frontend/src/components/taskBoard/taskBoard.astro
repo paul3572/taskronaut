@@ -8,6 +8,7 @@ const url = Astro.url;
 let sessionId = Astro.cookies.get('sessionId').value;
 
 const boardIdParam = url.searchParams.get('boardId');
+// const response = await fetch(`${serverURL}/tasks/tasks/user/`, {
 
 const response = await fetch(`${serverURL}/boards/boards/get`, {
     method: 'POST',
@@ -15,6 +16,8 @@ const response = await fetch(`${serverURL}/boards/boards/get`, {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
+    // body: JSON.stringify({ sessionId: sessionId, borardId: boardIdParam })
+
 });
 
 const { data: boards } = await response.json();
