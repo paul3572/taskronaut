@@ -3,6 +3,7 @@ import {joins, taskQueries} from "../dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../loggingStyle.mjs";
+import {findUserBySessionId} from "../../middleware/session.mjs";
 
 class PsTask {
     async selectAllTasks() {
@@ -21,8 +22,9 @@ class PsTask {
     }
 
     async patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
-        logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]}`);
-        const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]);
+        const taskCreator2 = findUserBySessionId(taskCreator);
+        logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreator2, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]}`);
+        const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreator2, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]);
         if (result.affectedRows === 0) {
             throw new Error("Task not found");
         } else {
