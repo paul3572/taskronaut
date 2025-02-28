@@ -1,48 +1,108 @@
 ---
 import {serverURL} from "../pages/conf.js";
 ---
-
 <div class="ptp" style="display: block">
     <button class="close" style="right: 0; top: 0" @click="showChat = false">X</button>
     <div id="messages"
-    hx-trigger="load" class="ptp-messages"></div>
-    <form hx-post=`${serverURL}/chat/add-messages` hx-target="#messages" hx-swap="innerHTML" hx-ext="json-enc"
-          class="ptp-input">
-        <input type="text" name="message" placeholder="Schreibe eine Nachricht...">
-        <button type="submit">Senden</button>
-    </form>
+         hx-trigger="load"
+         class="ptp-messages">
+        <div class="message message-own">
+            <div class="message-sender">You</div>
+            <div class="message-content">Hello everyone!</div>
+        </div>
 
-</div>
-
-<!--
-
----
-import {serverURL} from "../pages/conf.js";
----
-
-<div class="ptp" style="display: block">
-    <button class="close" style="right: 0; top: 0" @click="showComponent = false">X</button>
-    <div id="messages" class="ptp-messages"></div>
-    <form hx-post=`${serverURL}/chat/add-messages` hx-target="#messages" hx-swap="innerHTML" hx-ext="json-enc"
+        <div class="message message-other">
+            <div class="message-sender">John Doe</div>
+            <div class="message-content">Hi there!</div>
+        </div>
+    </div>
+    <form hx-post=`${serverURL}/chat/add-messages`
+          hx-target="#messages"
+          hx-swap="innerHTML"
+          hx-ext="json-enc"
           class="ptp-input">
         <input type="text" name="message" placeholder="Schreibe eine Nachricht...">
         <button type="submit">Senden</button>
     </form>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const sessionId = document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1];
-        const response = await fetch(`${serverURL}/chat/get-messages/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ sessionId: sessionId })
-        });
-        const messages = await response.text();
-        document.getElementById('messages').innerHTML = messages;
-    });
-</script>
+<style>
+    .ptp {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        height: 90vh;
+        width: 30vw;
+        min-width: 300px;
+        z-index: 100;
+        top: 20px;
+        right: 5px;
+        background-color: var(--foreground);
+        padding: 15px;
+        border: var(--border);
+        border-style: solid;
+        border-radius: 15px;
+    }
 
--->
+    .ptp-messages-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .ptp-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: min-content;
+    }
+
+    .message {
+        max-width: 75%;
+        padding: 8px 12px;
+        border-radius: 15px;
+    }
+
+    .message-own {
+        align-self: flex-end;
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .message-other {
+        align-self: flex-start;
+        background-color: var(--background);
+        color: var(--copy);
+        border: 1px solid var(--border);
+    }
+
+    .message-sender {
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: var(--copy-light);
+    }
+
+    .ptp-input {
+        flex-shrink: 0;
+        display: flex;
+        gap: 10px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border);
+    }
+
+    /* Scrollbar styling */
+    .ptp-messages-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .ptp-messages-container::-webkit-scrollbar-track {
+        background: var(--border);
+    }
+
+    .ptp-messages-container::-webkit-scrollbar-thumb {
+        background-color: var(--primary);
+        border-radius: 4px;
+    }
+</style>

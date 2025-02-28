@@ -13,11 +13,12 @@ const {tasks} = Astro.props;
             >
                 <div @click="open = !open" style="flex-direction: column">
                     <div class={`task-status status-${task.taskStatus}`}
-                         style="float: left; height: 60px; width: 2%;">
+                         style="float: left; height: 70px; width: 2%;">
                     </div>
                     <div style="width: 95%; float: right;">
                         <h3>{task.taskName}</h3>
-                        {task.dueDate && (<p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                        {task.dueDate && (<p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                        <p>Priorität: {task.priorities}/5</p>
                     </div>
                 </div>
                 <div x-show="open" @click.away="open = false" class="dropdown">
