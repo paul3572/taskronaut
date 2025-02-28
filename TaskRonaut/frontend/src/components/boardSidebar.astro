@@ -50,6 +50,27 @@ console.log('Users:', users);
                                 <Ptp/>  <!-- Add client directive for hydration -->
                             </template>
                         </div>
+
+                        <button
+                                x-cloak
+                                x-transition
+                                @click=`
+                                fetch("${serverURL}/boards/board-members/delete", {
+                                    method: 'DELETE',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        sessionId: '${sessionId}',
+                                        boardId: ${boardID},
+                                        email: '${user.email}'
+                                    })
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                                `
+                                class="submit-task-button"
+                        >
+                            delete
+                        </button>
                     </li>
             ))}
         </ul>
@@ -58,34 +79,34 @@ console.log('Users:', users);
         <ul>
             <li>Add user</li>
             <div class="add-board-member" x-data=`{
-        showInput: false,
-        userData: { email: "", boardId: ${boardID} },
-        sessionId: "${sessionId}",
-        toggleInput() {
-            this.showInput = !this.showInput;
-        },
-        saveMember() {
-            if (this.userData.email.trim() !== "") {
-                fetch("${serverURL}/boards/board-member-to-board", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
+                    showInput: false,
+                    userData: { email: "", boardId: ${boardID} },
+                    sessionId: "${sessionId}",
+                    toggleInput() {
+                        this.showInput = !this.showInput;
                     },
-                    body: JSON.stringify({ 
-                        sessionId: this.sessionId,
-                        boardId: this.userData.boardId,
-                        email: this.userData.email
-                    })
-                }).then(response => {
-                    if (response.ok) window.location.reload();
-                });
-            }
-        },
-        cancelMember() {
-            this.showInput = false;
-            this.userData.email = "";
-        }
-    }`>
+                    saveMember() {
+                        if (this.userData.email.trim() !== "") {
+                            fetch("${serverURL}/boards/board-member-to-board", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({ 
+                                    sessionId: this.sessionId,
+                                    boardId: this.userData.boardId,
+                                    email: this.userData.email
+                                })
+                            }).then(response => {
+                                if (response.ok) window.location.reload();
+                            });
+                        }
+                    },
+                    cancelMember() {
+                        this.showInput = false;
+                        this.userData.email = "";
+                    }
+                }`>
                 <button @click="toggleInput" class="add-member-btn">
                     + Add Board Member
                 </button>

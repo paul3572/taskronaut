@@ -109,8 +109,7 @@ if (boards === null || boards === undefined) {
                     <div class="your-boards-card"
                          x-data='{ isDropdownOpen: false }'
                          style="position: relative;">
-                        <p>{board.boardName}</p>
-
+                        <h1 style="margin: 0">{board.boardName}</h1>
                         <!-- Dropdown trigger -->
                         <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
                             <i class="fas fa-ellipsis-v"></i>
@@ -317,12 +316,10 @@ if (boards === null || boards === undefined) {
 
     &:hover {
       background: #4338ca;
-      transform: translateY(-1px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     &:active {
-      transform: translateY(0);
       box-shadow: none;
     }
 
@@ -422,7 +419,6 @@ if (boards === null || boards === undefined) {
       }
 
       &:hover {
-        transform: translateY(-3px) scale(1.02);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         border-color: #4f46e5;
 
@@ -444,7 +440,6 @@ if (boards === null || boards === undefined) {
       }
 
       &:active {
-        transform: translateY(0) scale(0.98);
       }
     }
   }
@@ -490,7 +485,6 @@ if (boards === null || boards === undefined) {
     justify-content: space-between;
 
     &:hover {
-      transform: translateY(-5px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
 
@@ -531,7 +525,6 @@ if (boards === null || boards === undefined) {
       width: 100%;
 
       .creation-flow {
-        transform: translateX(-20px);
       }
 
       h1 {
@@ -560,7 +553,6 @@ if (boards === null || boards === undefined) {
     overflow: hidden;
 
     &:hover {
-      transform: translateY(-5px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 
       .card-overlay {
