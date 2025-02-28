@@ -22,6 +22,8 @@ class PsTask {
     }
 
     async patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
+        console.log("BOARDID im untersten: "+boardID);
+        console.log("LISTID: im untersten "+listID);
 
         logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, dueDate, taskDescription, priorities, taskStatus, comments , boardID, listID, taskId]}`);
         const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]);
