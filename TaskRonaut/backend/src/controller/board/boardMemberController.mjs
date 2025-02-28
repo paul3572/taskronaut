@@ -62,7 +62,7 @@ class BoardMemberController {
             const userToAdd = await psAuthentication.getUserIdByEmail(email);
             console.log("UserToAdd: " + JSON.stringify(userToAdd));
             const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
-            if (userToAddEntry === null || userToAddEntry === undefined) {
+            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
                 const result = await psBoardMember.insertNewBoardMembers(userToAdd.id, boardId);
                 logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
                 return {statusCode: 201, data: result};
