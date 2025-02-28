@@ -84,7 +84,7 @@ class TaskController {
         try {
             const userid = await findUserBySessionId(sessionId);
             // TODO: where boardId = ....
-            const result = await psTask.selectUserTasks(userid);
+            const result = await psTask.selectUserTasks(boardId);
             logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
             return {statusCode: 200, data: result};
 
