@@ -66,10 +66,11 @@ class TaskController {
         }
     }
 
-    async getUserSpecificTasks(sessionId) {
+    async getUserSpecificTasks(sessionId, boardId) {
         try {
             const userid = await findUserBySessionId(sessionId);
-            const result = await psTask.selectUserTasks(userid);
+            // TODO: Check if user is allwoed to board
+            const result = await psTask.selectUserTasks(boardId);
 
             logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
             return {statusCode: 200, data: result};
