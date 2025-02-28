@@ -57,6 +57,7 @@ class PsAuthentication {
     }
 
     async getActivationStatusFromUserID(id) {
+        console.log("ID: " + id);
         const [rows] = await dbConnection.query(authenticationQueries.userIdEmailActivated, [id]);
         console.log(rows[0]?.activated);
         console.log(JSON.stringify(rows));
