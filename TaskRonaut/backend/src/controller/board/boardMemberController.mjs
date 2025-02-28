@@ -55,7 +55,7 @@ class BoardMemberController {
             console.log("MyUserId: " + JSON.stringify(myUserId.userId));
             const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
             console.log("IssuerBoardEntry: " + JSON.stringify(issuerBoardEntry));
-            if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
+            if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
                 throw new Error("Issuing User is not allowed to board");
             }
             // TODO: Check if userToAdd is already in board
