@@ -40,7 +40,7 @@ class PsBoard {
             if (!board || board.length === 0) {
                 throw new BoardNotFoundError(boardId.boardID);
             }
-            boards.push(board[0]);
+            boards.push(board);
             logger.info(chalk.hex(styles.success)('Boards: ' + JSON.stringify(boards)));
         }
         return boards;
