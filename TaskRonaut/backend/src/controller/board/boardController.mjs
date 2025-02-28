@@ -13,7 +13,7 @@ class BoardController {
             const userId = await findUserBySessionId(sessionId);
             const result = await psBoard.selectAllUserBoards(userId);
             logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
-            return {statusCode: 200, data: result[0]};
+            return {statusCode: 200, data: result};
         } catch (error) {
             return await errorHandler(error);
             /*
