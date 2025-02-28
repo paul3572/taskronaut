@@ -36,8 +36,8 @@ router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`TASKS BY BOARD USER : `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    let {sessionId, borardId} = req.body;
-    await serverResponse(res, await taskController.getSpecificTasks(sessionId, borardId));
+    let {sessionId, boardId} = req.body;
+    await serverResponse(res, await taskController.getSpecificTasks(sessionId, boardId));
 });
 
 router.put('/tasks/:id', async (req, res) => {
@@ -127,8 +127,8 @@ router.post('/tasks/user/', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`GET USER-SPECIFIC TASKS: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {sessionId} = req.body;
-    await serverResponse(res, await taskController.getUserSpecificTasks(sessionId));
+    const {sessionId, boardId} = req.body;
+    await serverResponse(res, await taskController.getUserSpecificTasks(sessionId, boardId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

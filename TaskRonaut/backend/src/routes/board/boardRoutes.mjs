@@ -8,7 +8,7 @@ import logger from "../../middleware/logger.mjs";
 
 const router = Router();
 
-router.post('/boards/get', async (req, res) => {
+router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`BOARDS REQUESTED: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));

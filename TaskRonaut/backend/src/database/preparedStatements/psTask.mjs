@@ -1,6 +1,8 @@
 import dbConnection from "../dbCon.mjs";
-import {taskQueries} from "../dbQueries.mjs";
+import {joins, taskQueries} from "../dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
+import chalk from "chalk";
+import {styles} from "../loggingStyle.mjs";
 
 class PsTask {
     async selectAllTasks() {
@@ -51,16 +53,10 @@ class PsTask {
     }
 
 
-    async selectUserTasks(userId) {
-        const [taskIds] = await dbConnection.query(taskQueries.getTasksByUserId, [userId]);
-        console.log(JSON.stringify(taskIds));
-        let tasks = [];
-
-        for (let taskId of taskIds) {
-            console.log(JSON.stringify(taskId?.taskID));
-            const [task] = await dbConnection.query(taskQueries.getTaskById, [taskId.taskID]);
-            tasks.push(task);
-        }
+    async selectUserTasks(userId, boardId) {
+        const [tasks] = await dbConnection.query(joins.getBoardTasks, [userId]);
+        console.log(JSON.stringify(tasks));
+        logger.debug(chalk.hex(styles.debug)(`Tasks: ${JSON.stringify(tasks)}`));
         return tasks;
     }
 

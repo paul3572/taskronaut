@@ -48,6 +48,7 @@ export const taskQueries = {
     deleteTaskbyBoardList: 'DELETE FROM Tasks WHERE listID IN (SELECT listID FROM Lists WHERE boardID = ?)',
     getTasksByUserId: 'SELECT  taskID, isResponsible FROM AuthorizedUsers WHERE isAuthorized = 1 AND userID = ?',
     addDeafaultTask: 'INSERT INTO Tasks (taskCreatorID, taskName, boardID, listID) VALUES (?, ?, ?, ?)',
+
 };
 export const messageQueries = {
     getAllMessages: 'SELECT * FROM Messages',
@@ -58,4 +59,7 @@ export const sessionQueries = {
     updateSessionUserId: 'UPDATE Sessions SET userId = ? WHERE sessionId = ?',
     getUserIdBySessionId: 'SELECT userId FROM Sessions WHERE sessionId = ?',
     getSessionIds: 'SELECT sessionId FROM Sessions',
+};
+export const joins = {
+    getBoardTasks: 'SELECT * FROM Tasks  WHERE boardID = ?',
 };
