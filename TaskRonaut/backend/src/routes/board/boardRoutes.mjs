@@ -29,14 +29,14 @@ router.post('/boards', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.delete('/boards/:id', async (req, res) => {
+router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DELETE BOARD: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {id}=req.params;
-    logger.info(`REMOVE BOARD WITH ID: ${id}`);
-    await serverResponse(res, await boardController.removeBoard(id));
+    const {sessionId, boardId} = req.body;
+    logger.info(`REMOVE BOARD WITH ID: ${boardId}`);
+    await serverResponse(res, await boardController.removeBoard(sessionId, boardId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -80,5 +80,6 @@ router.post('/board-member-to-board', async (req, res) => {
     await serverResponse(res, await boardMemberController.addMemberToBoard(sessionId, boardId, email));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
+
 
 export default router;

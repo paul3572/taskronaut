@@ -14,7 +14,7 @@ class PsBoard {
     async selectAllUserBoards(userId) {
         let boardIds;
         try {
-             [boardIds] = await dbConnection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
+            [boardIds] = await dbConnection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
             logger.info(chalk.hex(styles.success)('Board-Ids: ' + JSON.stringify(boardIds)));
         } catch (queryError) {
             throw new QueryExecutionError(boardMemberQueries.getBoardMemberByUserId, [userId], queryError);
@@ -63,36 +63,32 @@ class PsBoard {
     }
 
     async deleteBoard(boardId) {
-        try {
-            logger.info("Deleting tasks...");
-            const [tasksResult] = await dbConnection.query(taskQueries.deleteTasksByBoardId, [boardId]);
-            console.log(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
+        logger.info("Deleting tasks...");
+        const [tasksResult] = await dbConnection.query(taskQueries.deleteTasksByBoardId, [boardId]);
+        console.log(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
 
-            logger.info("Deleting board members...");
-            const [membersResult] = await dbConnection.query(boardMemberQueries.deleteBoardMemberByBoardId, [boardId]);
-            logger.info(`Deleted ${membersResult.affectedRows} member(s) related to the board`);
+        logger.info("Deleting board members...");
+        const [membersResult] = await dbConnection.query(boardMemberQueries.deleteBoardMemberByBoardId, [boardId]);
+        logger.info(`Deleted ${membersResult.affectedRows} member(s) related to the board`);
 
-            logger.info("...deleting lists...");
-            const [taskboardlists] = await dbConnection.query(taskQueries.deleteTaskbyBoardList, [boardId]);
-            logger.info(`Deleted ${taskboardlists.affectedRows} list(s) related to the list`);
+        logger.info("...deleting lists...");
+        const [taskboardlists] = await dbConnection.query(taskQueries.deleteTaskbyBoardList, [boardId]);
+        logger.info(`Deleted ${taskboardlists.affectedRows} list(s) related to the list`);
 
-            logger.info("...deleting lists...");
-            const [listResult] = await dbConnection.query(listQueries.deleteListByBoardId, [boardId]);
-            logger.info(`Deleted ${listResult.affectedRows} list(s) related to the list`);
+        logger.info("...deleting lists...");
+        const [listResult] = await dbConnection.query(listQueries.deleteListByBoardId, [boardId]);
+        logger.info(`Deleted ${listResult.affectedRows} list(s) related to the list`);
 
-            logger.info("...deleting boards");
-            const [boardResult] = await dbConnection.query(boardQueries.deleteBoardById, [boardId]);
-            logger.info(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
-            if (boardResult.affectedRows === 0) {
-                logger.info('BoardId not found');
-                return [null, 1];
-            } else {
-                return [boardResult, 0]
-            }
-        } catch (error) {
-            logger.error("DATENBANKFEHLER: " + error.message);
-            return [error, 2];
+        logger.info("...deleting boards");
+        const [boardResult] = await dbConnection.query(boardQueries.deleteBoardById, [boardId]);
+        logger.info(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
+        if (boardResult.affectedRows === 0) {
+            logger.info('BoardId not found');
+            throw new BoardNotFoundError(boardId);
+        } else {
+            return boardResult
         }
+
     }
 }
 

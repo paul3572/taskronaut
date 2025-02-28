@@ -40,8 +40,9 @@ class BoardController {
         }
     }
 
-    async removeBoard(boardId) {
+    async removeBoard(sessionId, boardId) {
         try {
+            const myUserId = await findUserBySessionId(sessionId);
             const result = await psBoard.deleteBoard(boardId);
             logger.info(chalk.hex(styles.success)`Board mit ID ${boardId} erfolgreich entfernt`);
             return {statusCode: 200};

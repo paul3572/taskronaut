@@ -65,13 +65,13 @@ router.patch('/tasks/update', async (req, res) => {
         boardID,
         listID
     } = req.body;
-    console.log("BOARDID im obersten: "+boardID);
-    console.log("LISTID: im obersten "+listID);
+    console.log("BOARDID im obersten: " + boardID);
+    console.log("LISTID: im obersten " + listID);
     await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DELETE TASK: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));

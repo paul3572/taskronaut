@@ -37,8 +37,8 @@ class TaskController {
 
     async updateTask(sessionId, taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
         try {
-            console.log("BOARDID im mittleren: "+boardID);
-            console.log("LISTID: im mittleren "+listID);
+            console.log("BOARDID im mittleren: " + boardID);
+            console.log("LISTID: im mittleren " + listID);
             const result = await psTask.patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID);
             logger.info(chalk.hex(styles.success)`Task successfully updated`);
             return {statusCode: 200};
@@ -50,7 +50,7 @@ class TaskController {
     async removeTask(sessionId, taskId) {
         try {
             console.log("TaskID: " + taskId);
-            const myUserId = findUserBySessionId(sessionId);
+            const myUserId = await findUserBySessionId(sessionId);
             const result = await psTask.deleteTask(taskId);
             console.log(JSON.stringify(result));
 
