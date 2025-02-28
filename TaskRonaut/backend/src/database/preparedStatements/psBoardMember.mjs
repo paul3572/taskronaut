@@ -46,7 +46,8 @@ class PsBoardMember {
     }
     async getBoardUserEntries(userId, boardId) {
         const [rows] = await connection.query(boardMemberQueries.selectBoardUserEntries, [userId, boardId]);
-        return null;
+        console.log(JSON.stringify(rows));
+        return rows;
     }
 }
 
