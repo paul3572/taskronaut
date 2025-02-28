@@ -21,10 +21,10 @@ class PsTask {
         return true;
     }
 
-    async patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
-        const taskCreator2 = findUserBySessionId(taskCreator);
-        logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreator2, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]}`);
-        const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreator2, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]);
+    async patchTask(taskId, taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
+
+        logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments , boardID, listID, taskId]}`);
+        const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]);
         if (result.affectedRows === 0) {
             throw new Error("Task not found");
         } else {
