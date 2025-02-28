@@ -5,7 +5,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {UserIsAlreadyMemberError} from "../../middleware/errors.mjs";
+import {UserIsAlreadyMemberError, UserNotFoundError} from "../../middleware/errors.mjs";
 
 
 class BoardMemberController {
@@ -74,11 +74,23 @@ class BoardMemberController {
         }
     }
 
-    async removeBoardMember(userId) {
+    async removeBoardMember(sessionId, boardId, email) {
         try {
-            const result = await psBoardMember.deleteBoardMembers(userId);
-            logger.info(chalk.hex(styles.success)`User with id ${userId} deleted successfully`);
-            return {statusCode: 200, message: `User with id ${userId} deleted successfully`};
+            const myUserId = await psSession.getUserIdFromSessionId(sessionId);
+            const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
+            if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
+                throw new Error("Issuing User is not allowed to board");
+            }
+
+            const userToAdd = await psAuthentication.getUserIdByEmail(email);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
+            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+                throw new UserNotFoundError(`User with email ${email} is not a member of board with id ${boardId}`);
+            } else {
+                const result = await psBoardMember.deleteBoardMembers(userToAdd.id);
+                logger.info(chalk.hex(styles.success)`User with email ${email} deleted successfully`);
+                return {statusCode: 200, message: `User with email ${email} deleted successfully`};
+            }
         } catch (error) {
             return await errorHandler(error);
         }

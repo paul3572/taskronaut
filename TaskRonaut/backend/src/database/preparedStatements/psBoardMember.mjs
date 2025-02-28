@@ -44,6 +44,7 @@ class PsBoardMember {
         await connection.query(boardMemberQueries.deleteBoardMemberById, [userId]);
         return null;
     }
+
     async getBoardUserEntries(userId, boardId) {
         const [rows] = await connection.query(boardMemberQueries.selectBoardUserEntries, [userId, boardId]);
         console.log(JSON.stringify(rows));

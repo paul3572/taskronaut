@@ -36,7 +36,7 @@ router.patch('/update', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
 
-    const {sessionId, boardId, boardName} =  req.body;
+    const {sessionId, boardId, boardName} = req.body;
     await serverResponse(res, await boardController.updateBoard(sessionId, boardId, boardName));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
@@ -72,14 +72,13 @@ router.post('/board-members/hilfe', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.delete('/board-members/:id', async (req, res) => {
+router.delete('/board-members/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`REMOVE BOARD-MEMBER: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const userId = req.params.id;
-    logger.info(`REMOVE BOARD MEMBER WITH ID: ${userId}`);
-    await serverResponse(res, await boardMemberController.removeBoardMember(userId));
+    const {sessionId, boardId, email} = req.body;
+    await serverResponse(res, await boardMemberController.removeBoardMember(sessionId, boardId, email));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
