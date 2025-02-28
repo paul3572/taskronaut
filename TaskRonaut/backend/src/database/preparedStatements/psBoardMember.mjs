@@ -17,9 +17,10 @@ class PsBoardMember {
     async isUserAllowedToBoard(userId, boardId) {
         const boardLists = await this.selectAllBoardMembersId(boardId);
         for (let boardList of boardLists) {
-            console.log(boardList);
+            console.log("Objekt: "+boardList);
+            console.log("UserID: "+userId+ " BoardID: "+boardId);
+            console.log("istrueAll:"+boardList.userID === userId && boardList.boardID === boardId);
             if (boardList.userID === userId && boardList.boardID === boardId) {
-
                 logger.info(chalk.hex(styles.success)(`User ${userId} is allowed to board ${boardId}`));
                 return true;
             }
