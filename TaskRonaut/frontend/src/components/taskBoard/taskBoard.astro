@@ -1,26 +1,28 @@
 ---
 import List from "./taskList.astro";
+import {serverURL} from "../../pages/conf";
 import BoardHeader from "../boardHeader.astro";
-import { serverURL } from "../../pages/conf";
 import Sidebar from "../boardSidebar.astro";
 
-const url = Astro.url;
 let sessionId = Astro.cookies.get('sessionId').value;
-
+const url = Astro.url;
 const boardIdParam = url.searchParams.get('boardId');
-const response = await fetch(`${serverURL}/tasks/get/byBoard`, {
 
-//const response = await fetch(`${serverURL}/boards/get`, {
-    method: 'POST',
-    headers: {
+const response = await fetch(`${serverURL}/boards/get`, {
+    method: 'POST', headers: {
         'Content-Type': 'application/json'
-    },
-    // body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
-    body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
-
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardIdParam})
 });
 
-const { data: boards } = await response.json();
+const {data: boards} = await response.json();
+
+let boardList = [];
+for (let task of boards) {
+    for (let key of task) {
+        boardList.push(key);
+    }
+}
+console.log("boardLists: " + boardList);
 
 // Flatten the boards array
 const allBoards = boards.flat();
@@ -33,8 +35,12 @@ if (boardIdParam) {
     selectedBoardId = exists ? parsedId : selectedBoardId;
 }
 
+
 const selectedBoard = allBoards.find(board => board.boardID === selectedBoardId);
 const boardName = selectedBoard?.boardName || 'Default Board Name';
+
+
+console.log("atslad sa" + selectedBoard)
 ---
 <BoardHeader {boards}></BoardHeader>
 <div class="board-content">
@@ -54,5 +60,5 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
             <List boardId={selectedBoardId}></List>
         </div>
     </div>
-    <Sidebar></Sidebar>
+    <Sidebar boardID={selectedBoardId}></Sidebar>
 </div>
