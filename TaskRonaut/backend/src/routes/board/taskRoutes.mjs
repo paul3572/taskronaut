@@ -71,13 +71,13 @@ router.patch('/tasks/update', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DELETE TASK: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {id} = req.params;
-    await serverResponse(res, await removeTask(id))
+    const {sessionId, taskId} = req.body;
+    await serverResponse(res, await taskController.removeTask(sessionId, taskId))
     logger.info(chalk.hex(styles.dialogEnd)`Task deletion finished!`);
 });
 

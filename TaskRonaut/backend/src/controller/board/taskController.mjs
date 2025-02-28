@@ -47,8 +47,9 @@ class TaskController {
         }
     }
 
-    async removeTask(taskId) {
+    async removeTask(sessionId, taskId) {
         try {
+            const myUserId = findUserBySessionId(sessionId);
             const result = await psTask.deleteTask(taskId);
 
             logger.info(chalk.hex(styles.success)`Task with ID ${taskId} successfully removed`);
