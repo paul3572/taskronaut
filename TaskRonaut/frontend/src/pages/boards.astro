@@ -38,8 +38,6 @@ if (boards === null || boards === undefined) {
     }
     console.log("boards: ", boards);
 }
-
-
 ---
 
 <!DOCTYPE html>
@@ -625,7 +623,7 @@ if (boards === null || boards === undefined) {
 
     Alpine.start();
 
-    const sessionId = "{sessionId}";
+    let sessionId = Astro.cookies.get('sessionID').value;
 
     if (document.cookie.includes('sessionId') === null) {
         window.location.href = `/getCookies`;
