@@ -39,8 +39,8 @@ class PsList {
         if (boardId.length === 0) {
             throw new Error('ListId not found');
         } else {
-            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId));
-            return boardId;
+            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId?.boardID));
+            return boardId?.boardID;
         }
     }
 }
