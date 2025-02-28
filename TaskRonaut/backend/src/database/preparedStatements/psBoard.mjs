@@ -24,7 +24,7 @@ class PsBoard {
             //throw new UserNotFoundError(userId);
         }
         if (boardIds.length === 0) {
-            //throw new NoBoardsFoundError(userId);
+            throw new NoBoardsFoundError(userId);
         }
         let boards = [];
         for (let boardId of boardIds) {

@@ -1,7 +1,6 @@
 import psList from "../../database/preparedStatements/psList.mjs";
 import psAuthentication from "../../database/preparedStatements/psAuthentication.mjs";
 import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
-import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 import {PermissionDeniedError, UserNotFoundError} from "../../middleware/errors.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";

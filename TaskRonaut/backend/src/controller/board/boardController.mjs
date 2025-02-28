@@ -5,7 +5,6 @@ import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import psList from "../../database/preparedStatements/psList.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {

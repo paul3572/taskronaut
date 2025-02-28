@@ -12,7 +12,7 @@ import {
     InvalidTokenError,
     NoBoardsFoundError,
     PermissionDeniedError,
-    QueryExecutionError,
+    QueryExecutionError, UserIsAlreadyMember,
     UserNotFoundError
 } from "./errors.mjs";
 
@@ -54,7 +54,12 @@ export async function errorHandler(error) {
     } else if (error instanceof EmailAlreadyInUseError) {
         logger.error(chalk.hex(styles.critical)`ERROR: ${error.message}`);
         return {statusCode: 409};
-    } else if (error instanceof ActivationTokenNotFoundError) {
+    }
+    else if (error instanceof UserIsAlreadyMemberError) {
+        logger.error(chalk.hex(styles.critical)`ERROR: ${error.message}`);
+        return {statusCode: 401};
+    }
+    else if (error instanceof ActivationTokenNotFoundError) {
         logger.error(chalk.hex(styles.critical)`ERROR: ${error.message}`);
         return {statusCode: 404};
     } else if (error instanceof DatabaseConnectionError) {

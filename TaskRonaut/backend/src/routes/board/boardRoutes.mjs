@@ -5,7 +5,7 @@ import boardMemberController from "../../controller/board/boardMemberController.
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-import listController from "../../controller/board/listController.mjs";
+
 
 const router = Router();
 
@@ -62,7 +62,7 @@ router.post('/board-members', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/board-members', async (req, res) => {
+router.post('/board-members/hilfe', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`NEW BOARD-MEMBERS: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));

@@ -4,6 +4,7 @@ import connection from "../dbCon.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
+import {UserNotFoundError} from "../../middleware/errors.mjs";
 
 
 class PsBoardMember {
@@ -38,9 +39,13 @@ class PsBoardMember {
     async deleteBoardMembers(userId) {
         const [rows] = await connection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
         if (rows.affectedRows === 0) {
-            return [`No board members found for user with ID ${userId}`, 1];
+            throw new UserNotFoundError(`No board members found for user with ID ${userId}`);
         }
         await connection.query(boardMemberQueries.deleteBoardMemberById, [userId]);
+        return null;
+    }
+    async getBoardUserEntries(userId, boardId) {
+        const [rows] = await connection.query(boardMemberQueries.selectBoardUserEntries, [userId, boardId]);
         return null;
     }
 }

@@ -26,6 +26,7 @@ export const boardMemberQueries = {
     insertBoardMember: 'INSERT INTO BoardMembers (userID, boardID) VALUES (?, ?)',
     deleteBoardMemberById: 'DELETE FROM BoardMembers WHERE userID = ?',
     deleteBoardMemberByBoardId: 'DELETE FROM BoardMembers WHERE boardID = ?',
+    selectBoardUserEntries: 'SELECT * FROM BoardMembers WHERE userID = ? AND boardID = ?',
 };
 export const listQueries = {
     getLists: 'SELECT * FROM Lists',

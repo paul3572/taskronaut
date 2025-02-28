@@ -5,6 +5,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
+import {UserIsAlreadyMemberError} from "../../middleware/errors.mjs";
 
 
 class BoardMemberController {
@@ -51,13 +52,21 @@ class BoardMemberController {
     async addMemberToBoard(sessionId, boardId, email) {
         try {
             const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-            const userId = await psAuthentication.getUserIdByEmail(email);
-            console.log("UID: " + userId.id);
-
-            const result = await psBoardMember.insertNewBoardMembers(userId.id, boardId);
-            logger.debug(chalk.hex(styles.debug)`User added to Board: ${result[0]}`);
-            logger.info(chalk.hex(styles.success)`User added to Board successfully!`);
-            return {statusCode: 201, data: result[0]};
+            // TODO: Check if user is allowed to board
+            const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
+                throw new Error("Issuing User is not allowed to board");
+            }
+            // TODO: Check if userToAdd is already in board
+            const userToAdd = await psAuthentication.getUserIdByEmail(email);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
+            if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
+                const result = await psBoardMember.insertNewBoardMembers(userToAdd.id, boardId);
+                logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
+                return {statusCode: 201, data: result};
+            } else {
+                throw new UserIsAlreadyMemberError();
+            }
         } catch (error) {
             return await errorHandler(error);
         }
