@@ -38,7 +38,6 @@ class ListController {
     async createList(sessionId, boardId, listName) {
         try {
             const userId = await psAuthentication.getUserIdBySessionId(sessionId);
-            console.log(userId);
             if (userId == null) {
                 throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
             }

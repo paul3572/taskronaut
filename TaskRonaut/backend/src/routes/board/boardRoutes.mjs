@@ -92,5 +92,4 @@ router.post('/board-member-to-board', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-
 export default router;
