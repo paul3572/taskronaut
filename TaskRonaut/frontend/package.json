@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@alpinejs/persist": "^3.14.0",
+    "@astrojs/alpinejs": "^0.4.3",
     "@astrojs/node": "^9.0.2",
     "@jest/globals": "^29.7.0",
     "alpinejs": "^3.14.1",

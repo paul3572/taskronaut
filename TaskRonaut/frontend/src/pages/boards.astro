@@ -26,12 +26,7 @@ const url = new URL(Astro.request.url);
 const boardIdParam = url.searchParams.get('boardId');
 
 console.log('Board ID Param:', boardIdParam);
-/* Redirect to first board if no boardId is present and boards exist
-if (!boardIdParam && boards?.length > 0) {
-    const firstBoardId = boards[0][0].boardID;
-    return Astro.redirect(`boards?boardId=${firstBoardId}`);
-}
-*/
+
 if (boards === null || boards === undefined) {
     console.log('Boards data is null or undefined');
 } else {
@@ -58,46 +53,6 @@ if (boards === null || boards === undefined) {
 </head>
 
 <body>
-<script>
-    import 'htmx.org';
-    import Alpine from 'alpinejs';
-    import {serverURL} from "./conf";
-
-    Alpine.data('boardCreation', () => ({
-        showHeaderInput: false, showCardInput: false, boardName: '', async createBoard() {
-            if (!this.boardName.trim()) return;
-            try {
-                const response = await fetch(`${serverURL}/boards/boards/`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
-                        sessionId: sessionId, boardName: this.boardName
-                    })
-                });
-
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    console.error('Board creation failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-    }));
-
-    Alpine.start();
-
-    import {sessionId} from './user.js';
-    import {clientURL} from './conf.js';
-
-    if (document.cookie.includes('sessionId') === null) {
-        window.location.href = `/getCookies`;
-    }
-
-    if (sessionId === null) {
-        window.location.href = `/login`;
-    }
-
-</script>
 <div class="board-container">
 {!boardIdParam ? (
     <div class="boards-overview" x-data="boardCreation">
@@ -638,5 +593,46 @@ if (boards === null || boards === undefined) {
   }
 
 </style>
+
+<script>
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+    import {serverURL} from "./conf";
+
+
+    Alpine.data('boardCreation', () => ({
+        showHeaderInput: false, showCardInput: false, boardName: '', async createBoard() {
+            if (!this.boardName.trim()) return;
+            try {
+                const response = await fetch(`${serverURL}/boards/boards/`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
+                        sessionId: sessionId, boardName: this.boardName
+                    })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Board creation failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }));
+
+    Alpine.start();
+
+    let sessionId = Astro.cookies.get('sessionID').value;
+
+    if (document.cookie.includes('sessionId') === null) {
+        window.location.href = `/getCookies`;
+    }
+
+    if (sessionId === null) {
+        window.location.href = `/login`;
+    }
+
+</script>
 </body>
 </html>
