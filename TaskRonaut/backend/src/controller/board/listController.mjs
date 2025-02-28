@@ -29,7 +29,7 @@ class ListController {
                 throw new PermissionDeniedError("Benutzer hat keine Berechtigung für diesen Board.");
             }
             const result = await psList.readListsFromBoard(boardId);
-            return {statusCode: 200, data: result[0]};
+            return {statusCode: 200, data: result};
         } catch (exception) {
             return await errorHandler(exception);
         }
