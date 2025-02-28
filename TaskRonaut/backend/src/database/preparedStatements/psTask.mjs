@@ -61,7 +61,7 @@ class PsTask {
             logger.info('not found');
             throw new Error("Task not found");
         }
-        return boardId[0];
+        return boardId[0].boardID;
     }
 
 
