@@ -1,13 +1,7 @@
 import {Router} from 'express';
 import dbConnection from '../../database/dbCon.mjs';
 import {taskQueries} from "../../database/dbQueries.mjs";
-import {
-    addNewDefaultTask,
-    getAllTask,
-    getListIdFromTaskId,
-    getUserSpecificTasks,
-    removeTask, updateTask
-} from "../../controller/board/taskController.mjs";
+import taskController from "../../controller/board/taskController.mjs";
 import {serverResponse} from "../../middleware/serverResponse.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
@@ -21,7 +15,7 @@ router.post('/tasks/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId}=req.body;
-    await serverResponse(res, await getAllTask(sessionId));
+    await serverResponse(res, await taskController.getAllTask(sessionId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -34,19 +28,16 @@ router.post('/tasks', async (req, res) => {
 
 
 
-    await serverResponse(res, await addNewDefaultTask(sessionId, taskName, boardID, listID));
+    await serverResponse(res, await taskController.addNewDefaultTask(sessionId, taskName, boardID, listID));
 });
 
-router.post('/tasks/byBoardUser', async (req, res) => {
+router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`NEW TASK : `);
+    logger.info(chalk.hex(styles.dialogStart)`TASKS BY BOARD USER : `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, borardId} = req.body;
-
-
-
-    await serverResponse(res, await getSpecificTasks(sessionId, borardId));
+    await serverResponse(res, await taskController.getSpecificTasks(sessionId, borardId));
 });
 
 router.put('/tasks/:id', async (req, res) => {
@@ -77,7 +68,7 @@ router.patch('/tasks/update', async (req, res) => {    logger.info(chalk.hex(sty
         boardID,
         listID
     } = req.body;
-    await serverResponse(res, await updateTask(sessionID, taskID, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID));    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
+    await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID));    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
 router.delete('/tasks/:id', async (req, res) => {
@@ -127,7 +118,7 @@ router.get('/getListIdFromTaskId/:id', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const taskId = req.params.id;
-    await serverResponse(res, await getListIdFromTaskId(taskId));
+    await serverResponse(res, await taskController.getListIdFromTaskId(taskId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -137,7 +128,7 @@ router.post('/tasks/user/', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId} = req.body;
-    await serverResponse(res, await getUserSpecificTasks(sessionId));
+    await serverResponse(res, await taskController.getUserSpecificTasks(sessionId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

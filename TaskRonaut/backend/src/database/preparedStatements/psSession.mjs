@@ -1,28 +1,44 @@
 import dbConnection from "../dbCon.mjs";
 import {authenticationQueries, sessionQueries} from "../dbQueries.mjs";
 
-export async function selectSessionByUserId(userId) {
-    const [rows] = await dbConnection.query(authenticationQueries.getSessionByUserId, [userId]);
-    return rows[0];
+class PsSession {
+    async selectSessionByUserId(userId) {
+        const [rows] = await dbConnection.query(authenticationQueries.getSessionByUserId, [userId]);
+        return rows[0];
+    }
+
+    async selectSessionBySessionId(sessionId) {
+        const [rows] = await dbConnection.query(authenticationQueries.getSessionBySessionId, [sessionId]);
+        return rows[0];
+    }
+
+    async getUserIdFromSessionId(sessionId) {
+            const [rows] = await dbConnection.query(sessionQueries.getUserIdBySessionId, [sessionId]);
+            const myUserId = rows[0];
+        if (myUserId !== null || undefined) {
+            return myUserId;
+        } else {
+            throw new InvalidSessionError("Invalid Session");
+        }
+    }
+
+    async updateUserIdInSession(userId, sessionId) {
+        const [rows] = await dbConnection.query(sessionQueries.updateSessionUserId, [userId, sessionId]);
+        if (rows instanceof Error){
+            throw new QueryExecutionError;
+        }
+        console.log(rows);
+        console.log(await this.getUserIdFromSessionId(sessionId));
+        return rows[0];
+    }
+
+    async getAllSessionIds() {
+        const [rows] = await dbConnection.query(sessionQueries.getSessionIds);
+        if (rows instanceof Error){
+            throw new QueryExecutionError;
+        }
+        return rows;
+    }
 }
 
-export async function selectSessionBySessionId(sessionId) {
-    const [rows] = await dbConnection.query(authenticationQueries.getSessionBySessionId, [sessionId]);
-    return rows[0];
-}
-
-export async function getUserIdFromSessionId(sessionId) {
-    const [rows] = await dbConnection.query(sessionQueries.getUserIdBySessionId, [sessionId]);
-    return rows[0];
-}
-
-export async function updateUserIdInSession(userId, sessionId) {
-    const [rows] = await dbConnection.query(sessionQueries.updateSessionUserId, [userId, sessionId]);
-    console.log(rows);
-    console.log(await getUserIdFromSessionId(sessionId));
-    return rows[0];
-}
-export async function getAllSessionIds() {
-    const [rows] = await dbConnection.query(sessionQueries.getSessionIds);
-    return rows;
-}
+export default new PsSession();

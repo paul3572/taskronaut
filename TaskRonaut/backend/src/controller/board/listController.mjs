@@ -1,82 +1,76 @@
-import {
-    deleteList,
-    insertList,
-    readListsFromBoard,
-    selectAllLists,
-} from "../../database/preparedStatements/psList.mjs";
-import {getUserIdBySessionId} from "../../database/preparedStatements/psAuthentication.mjs";
-import {isUserAllowedToBoard} from "../../database/preparedStatements/psBoardMember.mjs";
+import psList from "../../database/preparedStatements/psList.mjs";
+import psAuthentication from "../../database/preparedStatements/psAuthentication.mjs";
+import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
+import psSession from "../../database/preparedStatements/psSession.mjs";
+import {errorHandler} from "../../middleware/errorHandler.js";
+import {PermissionDeniedError, UserNotFoundError} from "../../middleware/errors.mjs";
 
-export async function listRequest() {
-    const result = await selectAllLists();
-    switch (result[1]) {
-        case true:
+class ListController {
+    async listRequest() {
+        try {
+            const result = await psList.selectAllLists();
             return {statusCode: 200, data: result[0]};
-        case false:
-            return {statusCode: 500};
-        default:
-            return {statusCode: 500};
+        } catch (exception) {
+            return await errorHandler(exception);
+        }
+
     }
-}
 
 
-export async function listsForBoard(sessionId, boardId) {
-    const userId = await getUserIdBySessionId(sessionId);
-    console.log("userid"+userId);
-    if (userId === null|| undefined) {
-        return {statusCode: 404};
-    }
-    const isAllowed = await isUserAllowedToBoard(userId, boardId);
-    if (!isAllowed) {
-        return {statusCode: 403};
-    }
-    const result = await readListsFromBoard(boardId);
-    switch (result[1]) {
-        case true:
+    async listsForBoard(sessionId, boardId) {
+        try {
+            const userId = await psAuthentication.getUserIdBySessionId(sessionId);
+            console.log("userId: " + userId);
+            if (userId === null || undefined) {
+                throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
+            }
+            const isAllowed = await psBoardMember.isUserAllowedToBoard(userId, boardId);
+            if (!isAllowed) {
+                throw new PermissionDeniedError("Benutzer hat keine Berechtigung für diesen Board.");
+            }
+            const result = await psList.readListsFromBoard(boardId);
             return {statusCode: 200, data: result[0]};
-        case false:
-            return {statusCode: 500};
-        default:
-            return {statusCode: 500};
+        } catch (exception) {
+            return await errorHandler(exception);
+        }
     }
-}
 
-export async function createList(sessionId, boardId, listName) {
-    const userId = await getUserIdBySessionId(sessionId);
-    console.log(userId);
-    if (userId == null) {
-        return {statusCode: 404};
-    }
-    const isAllowed = await isUserAllowedToBoard(userId, boardId);
-    console.log(isAllowed);
-    if (!isAllowed) {
-        return {statusCode: 403};
-    }
-    const result = await insertList(listName, boardId);
-    console.log(sessionId)
-    switch (result[1]) {
-        case true:
+    async createList(sessionId, boardId, listName) {
+        try {
+            const userId = await psAuthentication.getUserIdBySessionId(sessionId);
+            console.log(userId);
+            if (userId == null) {
+                throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
+            }
+            const isAllowed = await psBoardMember.isUserAllowedToBoard(userId, boardId);
+            console.log(isAllowed);
+            if (!isAllowed) {
+                throw new PermissionDeniedError("Benutzer hat keine Berechtigung für diesen Board.");
+            }
+            const result = await psList.insertList(listName, boardId);
+            console.log("SessionId: " + sessionId);
             return {statusCode: 201};
-        case false:
-            return {statusCode: 500};
-        default:
-            return {statusCode: 500};
+        } catch (exception) {
+            return await errorHandler(exception);
+        }
     }
-}
 
-export async function updateList(listId, listName) {
-}
+    async updateList(listId, listName) {
+        try {
+            console.log("hallo");
+        } catch (exception) {
+            return await errorHandler(exception);
+        }
+    }
 
-export async function removeList(listId) {
-    const result = await deleteList(listId);
-    switch (result[1]) {
-        case 0:
+    async removeList(listId) {
+        try {
+            const result = await psList.deleteList(listId);
             return {statusCode: 200};
-        case 1:
-            return {statusCode: 404};
-        case 2:
-            return {statusCode: 500};
-        default:
-            return {statusCode: 500};
+        } catch (exception) {
+            return await errorHandler(exception);
+        }
     }
 }
+
+export default new ListController();

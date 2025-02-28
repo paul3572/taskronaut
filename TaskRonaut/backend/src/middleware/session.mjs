@@ -4,7 +4,8 @@ import dbConnection from '../database/dbCon.mjs';
 import logger from "./logger.mjs";
 import chalk from "chalk";
 import {styles} from "../database/loggingStyle.mjs";
-import {getUserIdBySessionId} from "../database/preparedStatements/psAuthentication.mjs";
+import psAuthentication from "../database/preparedStatements/psAuthentication.mjs";
+import {InvalidSessionError} from "./errors.mjs";
 
 const MySQLSessionStore = MySQLStore(session);
 
@@ -73,10 +74,12 @@ export async function destroySession(req, res) {
 
 export async function findUserBySessionId(sessionId) {
     if (await isCookieValid(sessionId)) {
-        const userFromSessionX = await getUserIdBySessionId(sessionId);
+        const userFromSessionX = await psAuthentication.getUserIdBySessionId(sessionId);
         //logger.debug(chalk.hex(styles.debug)`HIER DIE AUS DEM FRONTEND: ${JSON.stringify(sessionId)}`);
         //logger.debug(chalk.hex(styles.debug)`HIER DIE AUS DER DB: ${JSON.stringify(userFromSessionX)}`);
         return userFromSessionX;
+    } else {
+        throw new InvalidSessionError("Invalid cookie");
     }
 }
 

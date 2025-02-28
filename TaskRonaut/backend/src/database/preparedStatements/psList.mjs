@@ -2,52 +2,36 @@ import dbConnection from "../dbCon.mjs";
 import {listQueries, taskQueries} from "../dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 
-export async function selectAllLists() {
-    try {
+class PsList {
+    async selectAllLists() {
         const [lists] = await dbConnection.query(listQueries.getLists);
-        return [lists, true];
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error.message);
-        return [error, false];
+        return lists;
     }
-}
 
-export async function readListsFromBoard(boardId) {
-    try {
+    async readListsFromBoard(boardId) {
         //TODO: Check if boardId exists
         const [lists] = await dbConnection.query(listQueries.readListsFromBoard, [boardId]);
-        return [lists, true];
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error);
-        return [error, false];
+        return lists;
     }
-}
 
-export async function insertList(listName, boardId) {
-    try {
+    async insertList(listName, boardId) {
         const [result] = await dbConnection.query(listQueries.createList, [listName, boardId]);
-        return [result, true];
-    } catch (error) {
-        logger.info("DATENBANKFEHLER: " + error.message);
-        return [error, false];
+        return result;
     }
-}
 
-export async function updateList(listId, listName) {
-}
+    async updateList(listId, listName) {
+    }
 
-export async function deleteList(listId) {
-    try {
+    async deleteList(listId) {
         const [tasksResult] = await dbConnection.query(taskQueries.deleteTasksByListId, [listId]);
         logger.info(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
         const [result] = await dbConnection.query(listQueries.deleteListById, [listId]);
         if (result.affectedRows === 0) {
-            return [result, 1];
+            throw new Error('ListId not found');
         } else {
-            return [result, 0];
+            return result;
         }
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error.message);
-        return [error, 2];
     }
 }
+
+export default new PsList();

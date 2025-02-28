@@ -1,20 +1,14 @@
 import dbConnection from "../dbCon.mjs";
 import {taskQueries} from "../dbQueries.mjs";
-import {getListIdFromTaskId} from "../../controller/board/taskController.mjs";
 import logger from "../../middleware/logger.mjs";
 
-export async function selectAllTasks() {
-    try {
+class PsTask {
+    async selectAllTasks() {
         const [tasks] = await dbConnection.query(taskQueries.getAllTasks);
-        return [tasks, true];
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error.message);
-        return [error, false];
+        return tasks;
     }
-}
 
-export async function createDefaultTask(taskCreatorID, taskName, boardID, listID) {
-    try {
+    async createDefaultTask(taskCreatorID, taskName, boardID, listID) {
         const isAuthorized = 1;
         const isResponsible = 0;
         const [result] = await dbConnection.query(taskQueries.addDeafaultTask, [taskCreatorID, taskName, boardID, listID]);
@@ -22,55 +16,42 @@ export async function createDefaultTask(taskCreatorID, taskName, boardID, listID
         console.log(taskID[0].taskID);
         const [result3] = await dbConnection.query(taskQueries.authorizeUser, [taskCreatorID, taskID[0].taskID, isAuthorized, isResponsible]);
         return true;
-    } catch (error) {
-        return false;
     }
-}
 
-export async function patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
-    try {
+    async patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
         logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]}`);
         const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID, taskId]);
         if (result.affectedRows === 0) {
-            return [result, 1];
+            throw new Error("Task not found");
         } else {
-            return [result, 0];
+            return result;
         }
-    } catch (error) {
-        return [error, 2];
     }
-}
 
-export async function deleteTask(id) {
-    try {
+    async deleteTask(id) {
+
         const [result] = await dbConnection.query(taskQueries.deleteTaskById, [id]);
         if (result.affectedRows === 0) {
-            return [result, 1];
+            throw new Error("Task not found");
         } else {
-            return [result, 0];
+            return result;
         }
-    } catch (error) {
-        return [error, 2];
-    }
-}
 
-export async function selectListIdByTaskId(taskId) {
-    try {
+    }
+
+    async selectListIdByTaskId(taskId) {
+
         const [tasks] = await dbConnection.query(taskQueries.getListIdFromTaskById, [taskId]);
         console.log(tasks.length);
         if (tasks.length === 0) {
             logger.info('not found');
-            return [tasks, 1];
+            throw new Error("Task not found");
         }
-        return [tasks, 0];
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error.message);
-        return [error, 2];
+        return tasks;
     }
-}
 
-export async function selectUserTasks(userId) {
-    try {
+
+    async selectUserTasks(userId) {
         const [taskIds] = await dbConnection.query(taskQueries.getTasksByUserId, [userId]);
         console.log(JSON.stringify(taskIds));
         let tasks = [];
@@ -80,10 +61,9 @@ export async function selectUserTasks(userId) {
             const [task] = await dbConnection.query(taskQueries.getTaskById, [taskId.taskID]);
             tasks.push(task);
         }
-
-        return [tasks, true];
-    } catch (error) {
-        logger.error("DATENBANKFEHLER: " + error.message);
-        return [error, false];
+        return tasks;
     }
+
 }
+
+export default new PsTask();
