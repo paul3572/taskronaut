@@ -52,7 +52,7 @@ class BoardMemberController {
     async addMemberToBoard(sessionId, boardId, email) {
         try {
             const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-            console.log("MyUserId: " + myUserId);
+            console.log("MyUserId: " + JSON.stringify(myUserId));
             const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
             console.log("IssuerBoardEntry: " + JSON.stringify(issuerBoardEntry));
             if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
