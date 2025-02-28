@@ -55,7 +55,7 @@ console.log('Users:', users);
                                 x-cloak
                                 x-transition
                                 @click=`
-                                fetch("${serverURL}/boards/board-members/delete", {
+                                fetch("${serverURL}/boards/remove", {
                                     method: 'DELETE',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ 

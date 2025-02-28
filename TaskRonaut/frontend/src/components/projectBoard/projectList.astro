@@ -36,11 +36,22 @@ const responseLists = await fetch(`${serverURL}/lists/lists/board/`, {
 
 const {data: lists} = await responseLists.json();
 ---
-
 <div class="dragAndDrop"
      x-data="{
         sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1],
-        userId: sessionStorage.getItem('userId')
+        userId: sessionStorage.getItem('userId'),
+        showForm: false,
+        showButton: true,
+        listName: '',
+        init() {
+          this.$watch('showForm', value => {
+            if (value) {
+              this.showButton = false;
+            } else {
+              setTimeout(() => { this.showButton = true; }, 90);
+            }
+          });
+        }
       }">
     {lists && lists.length === 0 ? (
             <hr style="width: 0; margin: 0">) : (
@@ -48,15 +59,21 @@ const {data: lists} = await responseLists.json();
                 {lists && lists.map(list => (
                         <div
                                 class="list"
-                                id={`list-${list.listID}`}
+                                id=`list-${list.listID}`
                         >
-
                             <div class="list-header">
                                 <h2>{list.listName}</h2>
                                 <button class="animated-delete-button"
-                                        hx-delete={`${serverURL}/lists/lists/${list.listID}`}
-                                        hx-target={`#list-${list.listID}`}
-                                        hx-swap="delete">
+                                        hx-delete=`${serverURL}/lists/delete`
+                                        hx-headers='{"Content-Type": "application/json"}'
+                                        hx-vals=`js:{
+                                            sessionId: "${sessionId}",
+                                            listId: "${list.listID}"
+                                        }`
+                                        hx-trigger="click"
+                                        hx-target=`#list-${list.listID}`
+                                        hx-swap="delete"
+                                >
                                     <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
@@ -96,17 +113,11 @@ const {data: lists} = await responseLists.json();
                                     </svg>
                                 </button>
                             </div>
-
-
                             <Task listID={list.listID} tasks={taskList} boardID={boardID}></Task>
                         </div>
-
                 ))}
             </>)}
-    <script>
-        import {sessionId} from '../../pages/user.js';
 
-    </script>
     <div class="add-list" x-data=`{
         showInput: false,
         taskData: { listName: "", userId: userId },
