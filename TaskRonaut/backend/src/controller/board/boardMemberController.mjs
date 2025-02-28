@@ -52,8 +52,8 @@ class BoardMemberController {
     async addMemberToBoard(sessionId, boardId, email) {
         try {
             const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-            console.log("MyUserId: " + JSON.stringify(myUserId));
-            const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            console.log("MyUserId: " + JSON.stringify(myUserId.userId));
+            const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
             console.log("IssuerBoardEntry: " + JSON.stringify(issuerBoardEntry));
             if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
                 throw new Error("Issuing User is not allowed to board");
