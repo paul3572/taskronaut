@@ -45,6 +45,7 @@ export const taskQueries = {
     deleteTaskById: 'DELETE FROM Tasks WHERE taskID = ?',
     updateTaskListId: 'UPDATE Tasks SET listID = ? WHERE taskID = ?',
     getListIdFromTaskById: 'SELECT listID FROM Tasks WHERE taskID = ?',
+    getBoardIdFromTaskById: 'SELECT boardID FROM Tasks WHERE taskID = ?',
     deleteTasksByListId: 'DELETE FROM Tasks WHERE listID = ?',
     deleteTasksByBoardId: 'DELETE FROM Tasks WHERE boardID = ?',
     deleteTaskbyBoardList: 'DELETE FROM Tasks WHERE listID IN (SELECT listID FROM Lists WHERE boardID = ?)',

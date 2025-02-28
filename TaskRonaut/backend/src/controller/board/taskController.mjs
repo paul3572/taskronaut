@@ -4,7 +4,8 @@ import logger from "../../middleware/logger.mjs";
 import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {UserNotFoundError} from "../../middleware/errors.mjs";
+import {PermissionDeniedError, UserNotFoundError} from "../../middleware/errors.mjs";
+import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 
 class TaskController {
 
@@ -37,8 +38,6 @@ class TaskController {
 
     async updateTask(sessionId, taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
         try {
-            console.log("BOARDID im mittleren: " + boardID);
-            console.log("LISTID: im mittleren " + listID);
             const result = await psTask.patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID);
             logger.info(chalk.hex(styles.success)`Task successfully updated`);
             return {statusCode: 200};
@@ -51,11 +50,15 @@ class TaskController {
         try {
             console.log("TaskID: " + taskId);
             const myUserId = await findUserBySessionId(sessionId);
-            const result = await psTask.deleteTask(taskId);
-            console.log(JSON.stringify(result));
-
-            logger.info(chalk.hex(styles.success)`Task with ID ${taskId} successfully removed`);
-            return {statusCode: 200};
+            const boardId = await psTask.selectBoardIdByTask(taskId);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+                throw new PermissionDeniedError("User is not allowed to board");
+            } else {
+                const result = await psTask.deleteTask(taskId);
+                logger.info(chalk.hex(styles.success)`Task with ID ${taskId} successfully removed`);
+                return {statusCode: 200};
+            }
         } catch (error) {
             return await errorHandler(error);
         }

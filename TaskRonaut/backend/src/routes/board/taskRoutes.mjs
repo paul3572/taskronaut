@@ -56,8 +56,6 @@ router.patch('/tasks/update', async (req, res) => {
         boardID,
         listID
     } = req.body;
-    console.log("BOARDID im obersten: " + boardID);
-    console.log("LISTID: im obersten " + listID);
     await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });

@@ -22,9 +22,6 @@ class PsTask {
     }
 
     async patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
-        console.log("BOARDID im untersten: "+boardID);
-        console.log("LISTID: im untersten "+listID);
-
         logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, dueDate, taskDescription, priorities, taskStatus, comments , boardID, listID, taskId]}`);
         const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]);
         console.log(taskQueries.updateTask, [taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]);
@@ -55,6 +52,16 @@ class PsTask {
             throw new Error("Task not found");
         }
         return tasks;
+    }
+    async selectBoardIdByTask(taskId) {
+
+        const [boardId] = await dbConnection.query(taskQueries.getBoardIdFromTaskById, [taskId]);
+        console.log(tasks.length);
+        if (tasks.length === 0) {
+            logger.info('not found');
+            throw new Error("Task not found");
+        }
+        return boardId[0];
     }
 
 
