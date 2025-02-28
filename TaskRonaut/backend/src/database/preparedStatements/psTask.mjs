@@ -54,9 +54,9 @@ class PsTask {
         return tasks;
     }
     async selectBoardIdByTask(taskId) {
-
         const [boardId] = await dbConnection.query(taskQueries.getBoardIdFromTaskById, [taskId]);
-        console.log(tasks.length);
+        console.log("BOARD ID FROM TASK:"+JSON.stringify(boardId));
+        console.log("Länge: "+tasks.length);
         if (tasks.length === 0) {
             logger.info('not found');
             throw new Error("Task not found");
