@@ -122,7 +122,7 @@ router.get('/getListIdFromTaskId/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/tasks/user/', async (req, res) => {
+router.post('/get/byBoard', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`GET USER-SPECIFIC TASKS: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
