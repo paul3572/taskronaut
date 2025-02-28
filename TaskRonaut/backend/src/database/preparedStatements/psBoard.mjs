@@ -7,12 +7,15 @@ import {
     NoBoardsFoundError,
     QueryExecutionError
 } from "../../middleware/errors.mjs";
+import chalk from "chalk";
+import {styles} from "../loggingStyle.mjs";
 
 class PsBoard {
     async selectAllUserBoards(userId) {
         let boardIds;
         try {
-            [boardIds] = await dbConnection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
+             [boardIds] = await dbConnection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
+            logger.info(chalk.hex(styles.success)('Board-Ids: ' + JSON.stringify(boardIds)));
         } catch (queryError) {
             throw new QueryExecutionError(boardMemberQueries.getBoardMemberByUserId, [userId], queryError);
         }
@@ -38,6 +41,7 @@ class PsBoard {
                 throw new BoardNotFoundError(boardId.boardID);
             }
             boards.push(board[0]);
+            logger.info(chalk.hex(styles.success)('Boards: ' + JSON.stringify(boards)));
         }
         return boards;
     }

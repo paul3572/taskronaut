@@ -8,32 +8,14 @@ import {errorHandler} from "../../middleware/errorHandler.js";
 
 class BoardController {
     async boardRequest(sessionId) {
-
         try {
             const userId = await findUserBySessionId(sessionId);
+            logger.info(chalk.hex(styles.success)('User-ID: ' + userId));
             const result = await psBoard.selectAllUserBoards(userId);
             logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
             return {statusCode: 200, data: result};
         } catch (error) {
             return await errorHandler(error);
-            /*
-            if (error instanceof UserNotFoundError) {
-                console.error(error.message);
-            } else if (error instanceof NoBoardsFoundError) {
-                console.error(error.message);
-            } else if (error instanceof BoardNotFoundError) {
-                console.error(error.message);
-            } else if (error instanceof InvalidBoardMemberDataError) {
-                console.error(error.message);
-            } else if (error instanceof QueryExecutionError) {
-                logger.error(chalk.hex(styles.critical)`DATABASE ERROR: ${error.message}`);
-                return {statusCode: 500};
-            } else {
-                logger.error(chalk.hex(styles.critical)`ERROR`);
-                return {statusCode: 500};
-            }
-
-             */
         }
     }
 
