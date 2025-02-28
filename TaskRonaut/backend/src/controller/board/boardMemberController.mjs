@@ -52,15 +52,17 @@ class BoardMemberController {
     async addMemberToBoard(sessionId, boardId, email) {
         try {
             const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-            // TODO: Check if user is allowed to board
+            console.log("MyUserId: " + myUserId);
             const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            console.log("IssuerBoardEntry: " + JSON.stringify(issuerBoardEntry));
             if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
                 throw new Error("Issuing User is not allowed to board");
             }
             // TODO: Check if userToAdd is already in board
             const userToAdd = await psAuthentication.getUserIdByEmail(email);
+            console.log("UserToAdd: " + JSON.stringify(userToAdd));
             const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
-            if (issuerBoardEntry === null || issuerBoardEntry === undefined) {
+            if (userToAddEntry === null || userToAddEntry === undefined) {
                 const result = await psBoardMember.insertNewBoardMembers(userToAdd.id, boardId);
                 logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
                 return {statusCode: 201, data: result};
