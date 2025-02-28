@@ -21,7 +21,7 @@ class PsTask {
         return true;
     }
 
-    async patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
+    async patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
         console.log("BOARDID im untersten: "+boardID);
         console.log("LISTID: im untersten "+listID);
 
