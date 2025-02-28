@@ -106,10 +106,9 @@ if (boards === null || boards === undefined) {
         </div>
         <div class="boards-grid">
             {boards?.map((boardGroup) => (boardGroup.map((board) => (
-                    <div class="your-boards-card"
-                         x-data='{ isDropdownOpen: false }'
-                         style="position: relative;">
+                    <div id=`board-${board.boardID}` class="your-boards-card" x-data='{ isDropdownOpen: false }'>
                         <h1 style="margin: 0">{board.boardName}</h1>
+
                         <!-- Dropdown trigger -->
                         <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
                             <i class="fas fa-ellipsis-v"></i>
@@ -121,47 +120,49 @@ if (boards === null || boards === undefined) {
                              x-cloak
                              @click.away="isDropdownOpen = false"
                              style="position: absolute; right: 10px; top: 35px;">
+
                             <!-- Update Name button -->
                             <button class="dropdown-item" @click=`
-                                    const newName = prompt('Neuen Boardnamen eingeben:', '${board.boardName}');
-                                    if (newName) {
-                                        fetch('${serverURL}/boards/update', {
-                                            method: 'PATCH',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                                sessionId: '${sessionId}',
-                                                boardId: ${board.boardID},
-                                                boardName: newName
-                                            })
-                                        }).then(() => window.location.reload());
-                                    }
-                                `>
+                                const newName = prompt('Neuen Boardnamen eingeben:', '${board.boardName}');
+                                if (newName) {
+                                    fetch('${serverURL}/boards/update', {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            sessionId: '${sessionId}',
+                                            boardId: ${board.boardID},
+                                            boardName: newName
+                                        })
+                                    }).then(() => window.location.reload());
+                                }
+                            `>
                                 Umbenennen
                             </button>
 
-                            <!-- Delete button -->
-                            <button class="dropdown-item delete" @click=`
-                                    const accept = confirm('Möchten Sie das Board "${board.boardName}" wirklich löschen?');
-                                    if (accept === true){
-                                    fetch('${serverURL}/boards/delete', {
-                                        method: 'DELETE',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ 
-                                            sessionId: '${sessionId}', 
-                                            boardId: ${board.boardID}
-                                        })
-                                    }).then(() => window.location.reload());
-                                    }
-
-                                `>
+                            <!-- Delete button (HTMX) -->
+                            <button class="dropdown-item delete"
+                                    hx-delete=`${serverURL}/boards/delete`
+                                    hx-headers='{"Content-Type": "application/json"}'
+                                    hx-vals=`js:{
+                                        sessionId: "${sessionId}",
+                                        boardId: "${board.boardID}"
+                                    }`
+                                    hx-trigger="click"
+                                    hx-target=`#board-${board.boardID}`
+                                    hx-swap="delete"
+                            >
                                 Löschen
                             </button>
+
+
                         </div>
 
-                        <a href=`/boards?boardId=${board.boardID}`>
+                        <a href="/boards?boardId=${board.boardID}">
                             Zum Board
                         </a>
-                    </div>))))}
+                    </div>
+
+            ))))}
 
             <!--     Card Input -->
             <template x-if="!showCardInput">
@@ -475,7 +476,7 @@ if (boards === null || boards === undefined) {
     color: var(--copy);
     border-radius: 12px;
     padding: 1rem;
-    min-height: 150px;
+    min-height: 185px;
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
@@ -500,7 +501,7 @@ if (boards === null || boards === undefined) {
       text-decoration: none;
       font-weight: 600;
       margin-top: 1rem;
-      align-self: flex-end;
+      align-self: center;
 
       &:hover {
         text-decoration: underline;
@@ -511,6 +512,7 @@ if (boards === null || boards === undefined) {
 
   .board-container {
     min-height: 100vh;
+    height:100vh;
     background: linear-gradient(135deg, var(--primary), #334155);
   }
 
@@ -605,7 +607,7 @@ if (boards === null || boards === undefined) {
   .board-card .button-group {
     display: flex;
     gap: 0.5rem;
-    justify-content: flex-end;
+    justify-content: center;
   }
 
   .card-overlay {
