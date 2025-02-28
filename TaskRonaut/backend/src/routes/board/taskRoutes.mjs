@@ -57,7 +57,6 @@ router.patch('/tasks/update', async (req, res) => {
         sessionID,
         taskID,
         taskName,
-        taskCreationDate,
         dueDate,
         taskDescription,
         priorities,
@@ -66,7 +65,7 @@ router.patch('/tasks/update', async (req, res) => {
         boardID,
         listID
     } = req.body;
-    await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
+    await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
