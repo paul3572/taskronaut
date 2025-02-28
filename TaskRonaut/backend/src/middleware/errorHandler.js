@@ -12,7 +12,7 @@ import {
     InvalidTokenError,
     NoBoardsFoundError,
     PermissionDeniedError,
-    QueryExecutionError, UserIsAlreadyMemberError,
+    QueryExecutionError, UserIsAlreadyMemberError, UserNotActivatedError,
     UserNotFoundError
 } from "./errors.mjs";
 
@@ -61,6 +61,10 @@ export async function errorHandler(error) {
         logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
         return {statusCode: 400};
     } else if (error instanceof InvalidLoginDataError) {
+        logger.error(chalk.hex(styles.critical)`${errorMessage}`);
+        logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
+        return {statusCode: 401};
+    } else if (error instanceof UserNotActivatedError) {
         logger.error(chalk.hex(styles.critical)`${errorMessage}`);
         logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
         return {statusCode: 401};

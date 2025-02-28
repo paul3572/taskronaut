@@ -5,7 +5,12 @@ import logger from "../../middleware/logger.mjs";
 import {startSession} from "../../middleware/session2.mjs";
 import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {InvalidInputError, InvalidLoginDataError, UserNotFoundError} from "../../middleware/errors.mjs";
+import {
+    InvalidInputError,
+    InvalidLoginDataError,
+    UserNotActivatedError,
+    UserNotFoundError
+} from "../../middleware/errors.mjs";
 
 class LoginController {
 
@@ -60,6 +65,9 @@ class LoginController {
                 console.log("User PW: " + user.password);
                 const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
                 console.log("Email activated: " + emailIsActivated);
+                if (emailIsActivated === 0) {
+                    throw new UserNotActivatedError("User not activated.");
+                }
 
                 if (isPasswordValid && emailIsActivated === 1) {
                     logger.info("Passwort korrekt. Starte Session für Benutzer-ID:");

@@ -94,6 +94,13 @@ export class UserIsAlreadyMemberError extends Error {
     }
 }
 
+export class UserNotActivatedError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "UserNotActivatedError";
+    }
+}
+
 export class InvalidLoginDataError extends Error {
     constructor(message) {
         super(message);
