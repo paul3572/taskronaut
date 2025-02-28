@@ -49,8 +49,10 @@ class TaskController {
 
     async removeTask(sessionId, taskId) {
         try {
+            console.log("TaskID: " + taskId);
             const myUserId = findUserBySessionId(sessionId);
             const result = await psTask.deleteTask(taskId);
+            console.log(JSON.stringify(result));
 
             logger.info(chalk.hex(styles.success)`Task with ID ${taskId} successfully removed`);
             return {statusCode: 200};
