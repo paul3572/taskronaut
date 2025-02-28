@@ -8,7 +8,6 @@ import { serverURL } from '../../pages/conf.js';
     class="task-details-screen"
     x-data=`{
          sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1].replace(/"/g, ''),
-         userId: sessionStorage.getItem('userId')
      }`>
     <div class="task-details-block"
          x-data=`{
@@ -16,17 +15,15 @@ import { serverURL } from '../../pages/conf.js';
              sessionID: sessionId,
              taskID: Number('${task.taskID}'),
              taskName: '${task.taskName}',
-             taskCreator: userId,
-             taskCreationDate: '${task.taskCreationDate}',
              dueDate: '${task.dueDate}',
              taskDescription: '${task.taskDescription}',
              priorities: '${task.priorities}',
              taskStatus: '${task.taskStatus}',
              comments: '${task.comments}',
-             taskHistoryID: Number('${task.taskHistoryID}'),
              boardID: Number('${task.boardID}'),
              listID: Number('${task.listID}')
          },
+          taskCreationDate: '${task.taskCreationDate}',
          showInput: false,
        }`>
 
@@ -57,10 +54,14 @@ import { serverURL } from '../../pages/conf.js';
                 -->
 
                 <label for="taskCreationDate">Erstellt am:</label>
-                <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskData.taskCreationDate).toISOString().slice(0, 16)">
+                <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskCreationDate).toISOString().slice(0, 16)">
 
                 <label for="dueDate">Fällig am:</label>
-                <input type="datetime-local" id="dueDate" name="dueDate" :value="new Date(taskData.dueDate).toISOString().slice(0, 16)">
+                <input type="date"
+                       id="dueDate"
+                       name="dueDate"
+                       x-model="taskData.dueDate"
+                       :value="taskData.dueDate.split('T')[0]">
 
                 <label for="priorities">Priorität:</label>
                 <div class="slider-container">
@@ -83,22 +84,37 @@ import { serverURL } from '../../pages/conf.js';
 
                 <div class="buttons">
                     <button class="delete-button"
-                            hx-delete={`${serverURL}/tasks/tasks/${task.taskID}`}>
+                            @click=`
+                    fetch('${serverURL}/tasks/delete', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ sessionId: sessionId, taskId: taskData.taskID })
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                `
+
+                    >
                         <svg viewBox="0 0 448 512" class="svgIcon">
                             <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
                         </svg>
                     </button>
                     <button class="save-button" @click=`
-                      fetch('${serverURL}/tasks/tasks/update', {
+                    fetch('${serverURL}/tasks/tasks/update', {
                         method: 'PATCH',
                         headers: {
-                          'Content-Type': 'application/json'
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(taskData)
-                      }).then(() => {
-                         // window.location.reload();
-                      });
-                    `>
+                        body: JSON.stringify({
+                            ...taskData,
+                            dueDate: new Date(taskData.dueDate).toISOString().split('T')[0]
+                        })
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                `>
                         <svg viewBox="0 0 448 512" class="svgIcon">
                             <path d="M433.9 129.9L318.1 14.1C310.7 6.7 300.2 0 288 0H48C21.5 0 0 21.5 0 48V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V160c0-12.2-6.7-22.7-14.1-30.1zM224 416c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm96-208c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h224c8.8 0 16 7.2 16 16v128z"></path>
                         </svg>

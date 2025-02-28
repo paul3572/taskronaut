@@ -5,11 +5,13 @@ import BoardHeader from "../boardHeader.astro";
 import Sidebar from "../boardSidebar.astro";
 
 let sessionId = Astro.cookies.get('sessionId').value;
+const url = Astro.url;
+const boardIdParam = url.searchParams.get('boardId');
 
-const response = await fetch(`${serverURL}/boards/boards/get`, {
+const response = await fetch(`${serverURL}/boards/get`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardIdParam})
 });
 
 const {data: boards} = await response.json();
@@ -22,8 +24,7 @@ for (let task of boards) {
 }
 console.log("boardLists: " + boardList);
 
-const url = Astro.url;
-const boardIdParam = url.searchParams.get('boardId');
+
 
 // Flatten the boards array
 const allBoards = boards.flat();

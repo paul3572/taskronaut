@@ -13,7 +13,7 @@ if (!sessionCookie) {
 }
 let sessionId = sessionCookie.value;
 
-const response = await fetch(`${serverURL}/boards/boards/get`, {
+const response = await fetch(`${serverURL}/boards/get`, {
     // gets all the boards a user has access to
     // gets their BoardID and BoardName
     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sessionId: sessionId})
@@ -99,80 +99,387 @@ if (boards === null || boards === undefined) {
 
 </script>
 <div class="board-container">
-    {!boardIdParam ? (
-            <div class="boards-overview" x-data="boardCreation">
-                <div style="padding-bottom: 20px">
-                    <BoardHeader {boards}></BoardHeader>
-                </div>
-                <div class="boards-grid">
-                    {boards?.map((boardGroup) => (boardGroup.map((board) => (
-                                    <div class="your-boards-card">
-                                        <p>
-                                            {board.boardName}
-                                        </p>
-                                        <a href=`/boards?boardId=${board.boardID}`>
-                                            GO TO BOARD
-                                        </a>
-                                    </div>))))}
+{!boardIdParam ? (
+    <div class="boards-overview" x-data="boardCreation">
+        <div style="padding-bottom: 20px">
+            <BoardHeader {boards}></BoardHeader>
+        </div>
+        <div class="boards-grid">
+            {boards?.map((boardGroup) => (boardGroup.map((board) => (
+                    <div class="your-boards-card"
+                         x-data='{ isDropdownOpen: false }'
+                         style="position: relative;">
+                        <p>{board.boardName}</p>
 
-                    <!--     Card Input -->
-                    <template x-if="!showCardInput">
-                        <div class="board-card add-board" @click="showCardInput = true">
-                            <div class="add-content">
-                                <i class="fas fa-plus"></i>
-                                <span>Create New Board</span>
-                            </div>
-                        </div>
-                    </template>
+                        <!-- Dropdown trigger -->
+                        <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
 
-                    <template x-if="showCardInput">
-                        <div class="board-card">
-                            <div class="input-group">
-                                <input
-                                        type="text"
-                                        x-model="boardName"
-                                        @keyup.enter="createBoard()"
-                                        placeholder="Board name"
-                                        class="board-input"
-                                        autofocus
-                                />
-                                <div class="button-group">
-                                    <button @click="createBoard()" class="submit-btn">
-                                        Create
-                                    </button>
-                                    <button @click="showCardInput = false; boardName = ''"
-                                            class="cancel-btn">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
+                        <!-- Dropdown menu -->
+                        <div class="dropdown-menu"
+                             x-show="isDropdownOpen"
+                             x-cloak
+                             @click.away="isDropdownOpen = false"
+                             style="position: absolute; right: 10px; top: 35px;">
+                            <!-- Update Name button -->
+                            <button class="dropdown-item" @click=`
+                                    const newName = prompt('Neuen Boardnamen eingeben:', '${board.boardName}');
+                                    if (newName) {
+                                        fetch('${serverURL}/boards/update', {
+                                            method: 'PATCH',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                sessionId: '${sessionId}',
+                                                boardId: ${board.boardID},
+                                                boardName: newName
+                                            })
+                                        }).then(() => window.location.reload());
+                                    }
+                                `>
+                                Umbenennen
+                            </button>
+
+                            <!-- Delete button -->
+                            <button class="dropdown-item delete" @click=`
+                                    const accept = confirm('Möchten Sie das Board "${board.boardName}" wirklich löschen?');
+                                    if (accept === true){
+                                    fetch('${serverURL}/boards/delete', {
+                                        method: 'DELETE',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ 
+                                            sessionId: '${sessionId}', 
+                                            boardId: ${board.boardID}
+                                        })
+                                    }).then(() => window.location.reload());
+                                    }
+
+                                `>
+                                Löschen
+                            </button>
                         </div>
-                    </template>
-                </div>
-            </div>) : (
-            <main class="content" x-data="{ showProjectBoard: false }">
-                <div class="main">
-                    <!-- Render TaskBoard immediately with x-show -->
-                    <div class="board scrollable" x-show="!showProjectBoard">
-                        <ProjectBoard boardID={boardIdParam}/>
+
+                        <a href=`/boards?boardId=${board.boardID}`>
+                            Zum Board
+                        </a>
+                    </div>))))}
+
+            <!--     Card Input -->
+            <template x-if="!showCardInput">
+                <div class="board-card add-board" @click="showCardInput = true">
+                    <div class="add-content">
+                        <i class="fas fa-plus"></i>
+                        <span>Neues Board anlegen</span>
                     </div>
-
-                    <!-- Render ProjectBoard on demand -->
-                    <template x-if="showProjectBoard">
-                        <div class="board scrollable">
-                            <TaskBoard boardID={boardIdParam}/>
-                        </div>
-                    </template>
                 </div>
-            </main>)}
+            </template>
+
+            <template x-if="showCardInput">
+                <div class="board-card">
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                x-model="boardName"
+                                @keyup.enter="createBoard()"
+                                placeholder="Boardname"
+                                class="board-input"
+                                autofocus
+                        />
+                        <div class="button-group">
+                            <button @click="createBoard()" class="submit-btn">
+                                Erstellen
+                            </button>
+                            <button @click="showCardInput = false; boardName = ''"
+                                    class="cancel-btn">
+                                Abbrechen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>) : (
+    <main class="content" x-data="{ showProjectBoard: false }">
+        <div class="main">
+            <!-- Render TaskBoard immediately with x-show -->
+            <div class="board scrollable" x-show="!showProjectBoard">
+                <ProjectBoard boardID={boardIdParam}/>
+            </div>
+
+            <!-- Render ProjectBoard on demand -->
+            <template x-if="showProjectBoard">
+                <div class="board scrollable">
+                    <TaskBoard boardID={boardIdParam}/>
+                </div>
+            </template>
+        </div>
+    </main>)}
 </div>
 
 <style lang="scss">
+
+
+  .dropdown-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-trigger {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #999;
+    z-index: 1;
+    font-size: 1.5rem;
+  }
+
+  .dropdown-menu {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 120px;
+  }
+
+  [x-cloak] {
+    display: none !important;
+  }
+
+  .your-boards-card {
+    /* Remove overflow: hidden */
+    overflow: visible;
+  }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--copy);
+  }
+
+  .dropdown-item:hover {
+    background: var(--foreground);
+  }
+
+  .dropdown-item.delete {
+    color: var(--error);
+  }
+
+  .board-input {
+    width: 85%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1e293b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.95);
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #818cf8;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+  }
+
+  .button-group {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .submit-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    &::before {
+      content: '+';
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  }
+
+  .cancel-btn {
+    background: transparent;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #f8fafc;
+      color: #475569;
+      border-color: #cbd5e1;
+    }
+
+    &:active {
+      background: #f1f5f9;
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .board-input {
+      padding: 0.65rem 0.9rem;
+      font-size: 0.9rem;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+      padding: 0.65rem 1.25rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .board-card {
+    &.add-board {
+      background: linear-gradient(135deg, rgba(224, 231, 255, 0.8), rgba(221, 214, 254, 0.8));
+      border: 2px dashed #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .add-content {
+        color: #4f46e5;
+        position: relative;
+        z-index: 1;
+
+        i {
+          font-size: 1.75rem;
+          margin-bottom: 1rem;
+          background: rgba(255, 255, 255, 0.9);
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 37.5%;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+        }
+
+        span {
+          display: block;
+          font-weight: 600;
+          font-size: 1.1rem;
+          transition: color 0.3s ease;
+        }
+      }
+
+      &:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        border-color: #4f46e5;
+
+        &::before {
+          opacity: 1;
+        }
+
+        .add-content {
+          i {
+            color: #4f46e5;
+            transform: rotate(90deg);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+          }
+
+          span {
+            color: #4338ca;
+          }
+        }
+      }
+
+      &:active {
+        transform: translateY(0) scale(0.98);
+      }
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .boards-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 0 2%;
+    }
+
+    .board-card.add-board {
+      min-height: 140px;
+
+      .add-content {
+        i {
+          width: 40px;
+          height: 40px;
+          font-size: 1.5rem;
+        }
+
+        span {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+
   .your-boards-card {
     background: var(--foreground);
     color: var(--copy);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1rem;
     min-height: 150px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -245,7 +552,7 @@ if (boards === null || boards === undefined) {
   .board-card {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1rem;
     min-height: 150px;
     cursor: pointer;
     transition: all 0.2s ease;

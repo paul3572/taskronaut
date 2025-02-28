@@ -19,7 +19,7 @@
 
   --success: #00c400;
   --warning: #c4c400;
-  --error: #c40000;
+  --error: #F40000;
   --success-content: #c4ffc4;
   --warning-content: #000000;
   --error-content: #ffc4c4;
@@ -907,11 +907,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40%;
+  height: 90vh;
   width: 30vw;
-  backdrop-filter: blur(5px);
+  min-width: 300px;
   z-index: 100;
-  top: 70px;
+  top: 20px;
   right: 5px;
 
   bottom: 0;
@@ -963,7 +963,7 @@ body {
   .ptp-input {
     display: flex;
     justify-content: space-between;
-    padding-top: 10px;
+    border-top: 10px;
 
     input {
       width: 75%;

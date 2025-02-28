@@ -72,9 +72,9 @@ console.log('Users:', users);
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ 
+                        sessionId: this.sessionId,
                         boardId: this.userData.boardId,
-                        email: this.userData.email,
-                        sessionId: this.sessionId
+                        email: this.userData.email
                     })
                 }).then(response => {
                     if (response.ok) window.location.reload();

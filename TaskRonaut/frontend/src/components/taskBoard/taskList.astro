@@ -6,38 +6,43 @@ let sessionId = Astro.cookies.get('sessionId').value;
 
 let boardId = Astro.props.boardId;
 
-const responseTasks = await fetch(`${serverURL}/tasks/tasks/user/`, {
+const responseTasks = await fetch(`${serverURL}/tasks/get/byBoard`, {
     method: 'POST', headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId})
+    }, body: JSON.stringify({sessionId: sessionId, boardId: boardId})
 });
 
-const lists = [{listID: 'todo', listName: 'Zu erledigen'}, {
-    listID: 'doing',
-    listName: 'In Bearbeitung'
-}, {listID: 'validated', listName: 'Geprüft'}, {listID: 'done', listName: 'Erledigt'}];
+const lists = [
+    { listID: 'todo', listName: 'Zu erledigen' },
+    { listID: 'doing', listName: 'In Bearbeitung' },
+    { listID: 'validated', listName: 'Geprüft' },
+    { listID: 'done', listName: 'Erledigt' }
+];
 
 const filteredTasks = {
-    todo: [], doing: [], validated: [], done: []
+    todo: [],
+    doing: [],
+    validated: [],
+    done: []
 };
 
-const {data: tasks} = await responseTasks.json();
+const { data: tasks } = await responseTasks.json();
+console.log(tasks);
 let taskList = [];
 for (let task of tasks) {
-    for (let key of task) {
-        taskList.push(key);
+    taskList.push(task);
 
-        if (key.taskStatus === 'todo') {
-            filteredTasks.todo.push(key);
-        } else if (key.taskStatus === 'doing') {
-            filteredTasks.doing.push(key);
-        } else if (key.taskStatus === 'validated') {
-            filteredTasks.validated.push(key);
-        } else if (key.taskStatus === 'done') {
-            filteredTasks.done.push(key);
-        }
+    if (task.taskStatus === 'todo') {
+        filteredTasks.todo.push(task);
+    } else if (task.taskStatus === 'doing') {
+        filteredTasks.doing.push(task);
+    } else if (task.taskStatus === 'validated') {
+        filteredTasks.validated.push(task);
+    } else if (task.taskStatus === 'done') {
+        filteredTasks.done.push(task);
     }
 }
+
 ---
 
 <div class="dragAndDrop">

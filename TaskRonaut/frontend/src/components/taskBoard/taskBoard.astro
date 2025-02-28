@@ -8,24 +8,24 @@ const url = Astro.url;
 let sessionId = Astro.cookies.get('sessionId').value;
 
 const boardIdParam = url.searchParams.get('boardId');
-// const response = await fetch(`${serverURL}/tasks/tasks/user/`, {
+const response = await fetch(`${serverURL}/tasks/get/byBoard`, {
 
-const response = await fetch(`${serverURL}/boards/boards/get`, {
+//const response = await fetch(`${serverURL}/boards/get`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
+    // body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
     body: JSON.stringify({ sessionId: sessionId, boardId: boardIdParam })
-    // body: JSON.stringify({ sessionId: sessionId, borardId: boardIdParam })
 
 });
 
 const { data: boards } = await response.json();
 
-// Get board ID from URL parameter
+// Flatten the boards array
 const allBoards = boards.flat();
 
-// Find selected board
+// Find the selected board
 let selectedBoardId = allBoards[0]?.boardID; // Default to first board
 if (boardIdParam) {
     const parsedId = parseInt(boardIdParam);

@@ -5,7 +5,6 @@ import {serverURL} from "../pages/conf.js";
 <div class="ptp" style="display: block">
     <button class="close" style="right: 0; top: 0" @click="showChat = false">X</button>
     <div id="messages"
-    <!-- TODO hx-get=`${serverURL}/chat/get-messages`-->
     hx-trigger="load" class="ptp-messages"></div>
     <form hx-post=`${serverURL}/chat/add-messages` hx-target="#messages" hx-swap="innerHTML" hx-ext="json-enc"
           class="ptp-input">
