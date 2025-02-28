@@ -40,8 +40,8 @@ class PsList {
             throw new Error('ListId not found');
         } else {
             console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId));
-            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId.boardID));
-            return boardId;
+            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId[0].boardID));
+            return boardId[0]?.boardID;
         }
     }
 }
