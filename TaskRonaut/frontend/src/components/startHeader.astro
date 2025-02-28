@@ -1,6 +1,5 @@
 ---
-import {firstName, lastName} from "../pages/user";
-import {serverURL} from "../pages/conf";---
+---
 <header class="header">
     <div class="left">
         <h1><a href="/" style="color: whitesmoke; text-decoration: none "><i class="fa-brands fa-space-awesome"></i>
@@ -33,53 +32,59 @@ import {serverURL} from "../pages/conf";---
         </div>
     </div>
 
-</header>
-<script>
-    import {firstName, lastName} from "../pages/user.js";
-    let sessionId = sessionStorage.getItem('sessionID');
-    import {serverURL} from "../pages/conf.js";
+    <style>
 
 
-    const authButtons = document.getElementById('auth-buttons');
-    const profileButton = document.getElementById('profile-button');
-    const usernameSpan = document.getElementById('username');
-    const userDropdown = document.getElementById('user-dropdown');
-    const logoutButton = document.getElementById('logout-button');
-    const boardsButton = document.getElementById('boards-button');
+    </style>
 
-    if (sessionId) {
-        usernameSpan.innerText = `${firstName} ${lastName}`;
-        profileButton.style.display = 'block';
-        boardsButton.style.display = 'block';
-        authButtons.style.display = 'none';
-    } else {
-        authButtons.style.display = 'block';
-    }
-
-    profileButton.addEventListener('click', () => {
-        userDropdown.style.display = userDropdown.style.display === 'none' ? 'block' : 'none';
-    });
+    <script>
+        import {firstName, lastName} from "../pages/user.js";
+        import {sessionId} from "../pages/user";
+        import {serverURL} from "../pages/conf.js";
 
 
-    logoutButton.addEventListener('click', () => {
-        fetch(`${serverURL}/authentication/logout`, {
-            method: 'POST', headers: {
-                'Content-Type': 'application/json'
-            }, body: JSON.stringify({sessionId: sessionId})
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
+        const authButtons = document.getElementById('auth-buttons');
+        const profileButton = document.getElementById('profile-button');
+        const usernameSpan = document.getElementById('username');
+        const userDropdown = document.getElementById('user-dropdown');
+        const logoutButton = document.getElementById('logout-button');
+        const boardsButton = document.getElementById('boards-button');
 
+        if (sessionId) {
+            usernameSpan.innerText = `${firstName} ${lastName}`;
+            profileButton.style.display = 'block';
+            boardsButton.style.display = 'block';
+            authButtons.style.display = 'none';
+        } else {
+            authButtons.style.display = 'block';
+        }
+
+        profileButton.addEventListener('click', () => {
+            userDropdown.style.display = userDropdown.style.display === 'none' ? 'block' : 'none';
+        });
+
+
+        logoutButton.addEventListener('click', () => {
+            fetch(`${serverURL}/authentication/logout`, {
+                method: 'POST', headers: {
+                    'Content-Type': 'application/json'
+                }, body: JSON.stringify({sessionId: sessionId})
             })
-            .catch(error => {
-                console.error('Error logging out:', error);
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
 
-            });
-        sessionStorage.removeItem('sessionCookie');
-        sessionStorage.removeItem('sessionID');
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('userId');
-        window.location.href = '/login';
-    });
-</script>
+                })
+                .catch(error => {
+                    console.error('Error logging out:', error);
+
+                });
+            sessionStorage.removeItem('sessionCookie');
+            sessionStorage.removeItem('sessionID');
+            sessionStorage.removeItem('user');
+            sessionStorage.removeItem('userId');
+            window.location.href = '/login';
+        });
+    </script>
+
+</header>

@@ -623,7 +623,7 @@ if (boards === null || boards === undefined) {
 
     Alpine.start();
 
-    let sessionId = sessionStorage.getItem('sessionID');
+    let sessionId = Astro.cookies.get('sessionID').value;
 
     if (document.cookie.includes('sessionId') === null) {
         window.location.href = `/getCookies`;
