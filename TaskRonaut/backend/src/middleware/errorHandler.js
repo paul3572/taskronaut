@@ -12,7 +12,7 @@ import {
     InvalidTokenError,
     NoBoardsFoundError,
     PermissionDeniedError,
-    QueryExecutionError, UserIsAlreadyMember,
+    QueryExecutionError, UserIsAlreadyMember, UserIsAlreadyMemberError,
     UserNotFoundError
 } from "./errors.mjs";
 
