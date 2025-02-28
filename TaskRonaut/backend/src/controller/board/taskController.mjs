@@ -35,9 +35,9 @@ class TaskController {
         }
     }
 
-    async updateTask(sessionId, taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID) {
+    async updateTask(sessionId, taskId, taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
         try {
-            const result = await psTask.patchTask(taskId, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID);
+            const result = await psTask.patchTask(taskId, taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID);
             logger.info(chalk.hex(styles.success)`Task successfully updated`);
             return {statusCode: 200};
         } catch (error) {

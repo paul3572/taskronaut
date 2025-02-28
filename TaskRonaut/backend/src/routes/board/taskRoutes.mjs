@@ -14,7 +14,7 @@ router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`USER TASKS REQUESTED: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {sessionId}=req.body;
+    const {sessionId} = req.body;
     await serverResponse(res, await taskController.getAllTask(sessionId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
@@ -25,7 +25,6 @@ router.post('/tasks', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, taskName, boardID, listID} = req.body;
-
 
 
     await serverResponse(res, await taskController.addNewDefaultTask(sessionId, taskName, boardID, listID));
@@ -49,7 +48,8 @@ router.put('/tasks/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.patch('/tasks/update', async (req, res) => {    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
+router.patch('/tasks/update', async (req, res) => {
+    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`UPDATE TASK: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
@@ -57,18 +57,17 @@ router.patch('/tasks/update', async (req, res) => {    logger.info(chalk.hex(sty
         sessionID,
         taskID,
         taskName,
-        taskCreator,
         taskCreationDate,
         dueDate,
         taskDescription,
         priorities,
         taskStatus,
         comments,
-        taskHistoryID,
         boardID,
         listID
     } = req.body;
-    await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, taskCreator, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, taskHistoryID, boardID, listID));    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
+    await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, taskCreationDate, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
+    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
 router.delete('/tasks/:id', async (req, res) => {

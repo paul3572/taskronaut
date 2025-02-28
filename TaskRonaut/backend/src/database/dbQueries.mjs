@@ -35,7 +35,7 @@ export const listQueries = {
     readListsFromBoard: 'SELECT * FROM Lists WHERE boardID = ?',
 };
 export const taskQueries = {
-    updateTask: 'UPDATE Tasks SET taskName = ?, taskCreatorID = ?, taskCreationDate = ?, dueDate = ?, taskDescription = ?, priorities = ?, taskStatus = ?, comments = ?, taskHistoryID = ?, boardID = ?, listID = ? WHERE taskID = ?',
+    updateTask: 'UPDATE Tasks SET taskName = ?, taskCreationDate = ?, dueDate = ?, taskDescription = ?, priorities = ?, taskStatus = ?, comments = ?, boardID = ?, listID = ? WHERE taskID = ?',
     authorizeUser: 'INSERT INTO AuthorizedUsers (userID, taskID, isAuthorized, isResponsible) VALUES (?, ?, ?, ?)',
     getTaskId: 'SELECT taskID FROM Tasks WHERE taskCreatorID = ? AND taskName = ? AND boardID = ? AND listID = ?',
     getAllTasks: 'SELECT * FROM Tasks',
