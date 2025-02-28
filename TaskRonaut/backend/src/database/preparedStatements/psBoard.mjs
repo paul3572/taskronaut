@@ -59,7 +59,9 @@ class PsBoard {
         }
     }
 
-    async updateBoard() {
+    async updateBoard(boardId, boardName) {
+        const [tasksResult] = await dbConnection.query(boardQueries.updateBoard,[boardName, boardId]);
+        return tasksResult;
     }
 
     async deleteBoard(boardId) {

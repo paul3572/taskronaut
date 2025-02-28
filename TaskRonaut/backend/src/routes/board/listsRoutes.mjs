@@ -36,6 +36,17 @@ router.post('/lists', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
+router.patch('/update', async (req, res) => {
+    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
+    logger.info(chalk.hex(styles.dialogStart)`UPDATE LIST: `);
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
+
+    const {sessionId, listId, listName} =  req.body;
+    await serverResponse(res, await listController.updateList(sessionId, listId, listName));
+    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
+});
+
 router.delete('/lists/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DELETE LIST: `);

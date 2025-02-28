@@ -39,15 +39,6 @@ router.post('/tasks/get', async (req, res) => {
     await serverResponse(res, await taskController.getSpecificTasks(sessionId, boardId));
 });
 
-router.put('/tasks/:id', async (req, res) => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`UPDATE TASK: `);
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-
-    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
-});
-
 router.patch('/tasks/update', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`UPDATE TASK: `);

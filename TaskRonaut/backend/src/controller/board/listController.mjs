@@ -4,6 +4,7 @@ import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 import {PermissionDeniedError, UserNotFoundError} from "../../middleware/errors.mjs";
+import {findUserBySessionId} from "../../middleware/session.mjs";
 
 class ListController {
     async listRequest() {
@@ -55,9 +56,11 @@ class ListController {
         }
     }
 
-    async updateList(listId, listName) {
+    async updateList(sessionId, listId, listName) {
         try {
-            console.log("hallo");
+            const myUserId = await findUserBySessionId(sessionId);
+            const result = await psList.updateList(listId, listName);
+            return {statusCode: 200};
         } catch (exception) {
             return await errorHandler(exception);
         }

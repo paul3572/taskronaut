@@ -5,6 +5,7 @@ import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
+import psList from "../../database/preparedStatements/psList.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {
@@ -37,6 +38,15 @@ class BoardController {
             return {statusCode: 200, data: result[0]};
         } catch (error) {
             return await errorHandler(error);
+        }
+    }
+    async updateBoard(sessionId, boardId, boardName) {
+        try {
+            const myUserId = await findUserBySessionId(sessionId);
+            const result = await psBoard.updateBoard(boardId, boardName);
+            return {statusCode: 200};
+        } catch (exception) {
+            return await errorHandler(exception);
         }
     }
 

@@ -5,6 +5,7 @@ import boardMemberController from "../../controller/board/boardMemberController.
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
+import listController from "../../controller/board/listController.mjs";
 
 const router = Router();
 
@@ -26,6 +27,17 @@ router.post('/boards', async (req, res) => {
     const {boardName, sessionId} = req.body;
     logger.debug(boardName);
     await serverResponse(res, await boardController.addBoard(boardName, sessionId));
+    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
+});
+
+router.patch('/update', async (req, res) => {
+    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
+    logger.info(chalk.hex(styles.dialogStart)`UPDATE BOARD-NAME: `);
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
+    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
+
+    const {sessionId, boardId, boardName} =  req.body;
+    await serverResponse(res, await boardController.updateBoard(sessionId, boardId, boardName));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

@@ -20,6 +20,8 @@ class PsList {
     }
 
     async updateList(listId, listName) {
+        const [tasksResult] = await dbConnection.query(listQueries.updateList, [listName, listId]);
+        return tasksResult;
     }
 
     async deleteList(listId) {
