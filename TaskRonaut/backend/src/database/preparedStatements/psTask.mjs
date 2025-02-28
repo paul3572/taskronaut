@@ -53,8 +53,8 @@ class PsTask {
     }
 
 
-    async selectUserTasks(userId, boardId) {
-        const [tasks] = await dbConnection.query(joins.getBoardTasks, [userId]);
+    async selectUserTasks(boardId) {
+        const [tasks] = await dbConnection.query(joins.getBoardTasks, [boardId]);
         console.log(JSON.stringify(tasks));
         logger.debug(chalk.hex(styles.debug)(`Tasks: ${JSON.stringify(tasks)}`));
         return tasks;
