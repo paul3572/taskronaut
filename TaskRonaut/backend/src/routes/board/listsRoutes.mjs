@@ -47,14 +47,14 @@ router.patch('/update', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.delete('/lists/:id', async (req, res) => {
+router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DELETE LIST: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const listId = req.params.id;
+    const {sessionId, listId} =  req.body;
     logger.info(`DELETE LIST ID: ${listId}`);
-    await serverResponse(res, await listController.removeList(listId));
+    await serverResponse(res, await listController.removeList(sessionId, listId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

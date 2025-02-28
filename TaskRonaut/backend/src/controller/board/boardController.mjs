@@ -5,6 +5,7 @@ import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
+import {PermissionDeniedError} from "../../middleware/errors.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {
@@ -52,9 +53,14 @@ class BoardController {
     async removeBoard(sessionId, boardId) {
         try {
             const myUserId = await findUserBySessionId(sessionId);
-            const result = await psBoard.deleteBoard(boardId);
-            logger.info(chalk.hex(styles.success)`Board mit ID ${boardId} erfolgreich entfernt`);
-            return {statusCode: 200};
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+                throw new PermissionDeniedError("User is not allowed to board");
+            } else {
+                const result = await psBoard.deleteBoard(boardId);
+                logger.info(chalk.hex(styles.success)`Board mit ID ${boardId} erfolgreich entfernt`);
+                return {statusCode: 200};
+            }
         } catch (error) {
             return await errorHandler(error);
         }

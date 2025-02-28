@@ -65,10 +65,17 @@ class ListController {
         }
     }
 
-    async removeList(listId) {
+    async removeList(sessionId, listId) {
         try {
-            const result = await psList.deleteList(listId);
-            return {statusCode: 200};
+            const myUserId = await findUserBySessionId(sessionId);
+            const boardId = await psList.selectBoardIdFromList(listId);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+                throw new PermissionDeniedError("User is not allowed to board");
+            } else {
+                const result = await psList.deleteList(listId);
+                return {statusCode: 200};
+            }
         } catch (exception) {
             return await errorHandler(exception);
         }

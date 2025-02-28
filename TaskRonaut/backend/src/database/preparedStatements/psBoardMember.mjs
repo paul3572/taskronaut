@@ -25,7 +25,7 @@ class PsBoardMember {
             }
         }
         logger.error(chalk.hex(styles.critical) + `User ${userId} is not allowed to board ${boardId}`);
-
+        return false;
     }
 
     async insertNewBoardMembers(userId, boardId) {

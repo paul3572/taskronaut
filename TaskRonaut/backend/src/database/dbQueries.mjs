@@ -29,6 +29,7 @@ export const boardMemberQueries = {
     selectBoardUserEntries: 'SELECT * FROM BoardMembers WHERE userID = ? AND boardID = ?',
 };
 export const listQueries = {
+    getBoardIdFromList: 'SELECT boardID FROM Lists WHERE listID = ?',
     getLists: 'SELECT * FROM Lists',
     createList: 'INSERT INTO Lists (listName, boardID) VALUES (?, ?)',
     updateList: 'UPDATE Lists SET listName = ? WHERE listID = ?',
