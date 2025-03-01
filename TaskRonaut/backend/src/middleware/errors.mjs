@@ -93,6 +93,12 @@ export class UserIsAlreadyMemberError extends Error {
         this.name = "UserIsAlreadyMemberError";
     }
 }
+export class NoMessagesFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "NoMessagesFoundError";
+    }
+}
 
 export class UserNotActivatedError extends Error {
     constructor(message) {

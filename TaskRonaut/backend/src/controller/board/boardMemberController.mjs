@@ -58,13 +58,13 @@ class BoardMemberController {
             if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
                 throw new Error("Issuing User is not allowed to board");
             }
-            // TODO: Check if userToAdd is already in board
             const userToAdd = await psAuthentication.getUserIdByEmail(email);
             console.log("UserToAdd: " + JSON.stringify(userToAdd));
             const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
             if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
                 const result = await psBoardMember.insertNewBoardMembers(userToAdd.id, boardId);
                 logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
+                //TODO: Add user to board chat
                 return {statusCode: 201, data: result};
             } else {
                 throw new UserIsAlreadyMemberError();
@@ -89,6 +89,7 @@ class BoardMemberController {
             } else {
                 const result = await psBoardMember.deleteBoardMembers(userToAdd.id);
                 logger.info(chalk.hex(styles.success)`User with email ${email} deleted successfully`);
+                //TODO: Add Chat member
                 return {statusCode: 200, message: `User with email ${email} deleted successfully`};
             }
         } catch (error) {

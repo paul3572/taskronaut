@@ -31,11 +31,10 @@ class PsBoardMember {
 
     async insertNewBoardMembers(userId, boardId) {
         const [result] = await dbConnection.query(boardMemberQueries.insertBoardMember, [userId, boardId]);
+        //TODO: Insert boardmember to chatmember
         return result;
     }
 
-    async updateBoardMembers() {
-    }
 
     async deleteBoardMembers(userId) {
         const [rows] = await connection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
@@ -43,6 +42,7 @@ class PsBoardMember {
             throw new UserNotFoundError(`No board members found for user with ID ${userId}`);
         }
         await connection.query(boardMemberQueries.deleteBoardMemberById, [userId]);
+        //TODO: Delete member from chat member
         return null;
     }
 

@@ -20,6 +20,12 @@ export const boardQueries = {
     deleteBoardById: 'DELETE FROM Boards WHERE boardID = ?',
     getBoardById: 'SELECT * FROM Boards WHERE boardID = ?',
 };
+export const chatQueries = {
+    insertChat: 'INSERT INTO Chats (boardName) VALUES (?)',
+    updateBoard: 'UPDATE Boards SET boardName = ? WHERE boardID = ?',
+    deleteBoardById: 'DELETE FROM Boards WHERE boardID = ?',
+    getBoardById: 'SELECT * FROM Boards WHERE boardID = ?',
+};
 export const boardMemberQueries = {
     getAllBoardMembers: 'SELECT * FROM BoardMembers WHERE boardId = ?',
     getBoardMemberByUserId: 'SELECT * FROM BoardMembers WHERE userID = ?',
@@ -54,11 +60,25 @@ export const taskQueries = {
     addDeafaultTask: 'INSERT INTO Tasks (taskCreatorID, taskName, boardID, listID) VALUES (?, ?, ?, ?)',
 
 };
-export const messageQueries = {
-    getAllMessages: 'SELECT * FROM Messages',
-    addMessage: 'INSERT INTO Messages (`from`, `to`, content) VALUES (?, ?, ?)',
-    getMessageById: 'SELECT * FROM Messages WHERE id = ?'
+export const boardMessageQueries = {
+    createMessage: 'INSERT INTO BoardMessages (boardID, senderID, message) VALUES (?, ?, ?)',
+    deleteMessage: 'DELETE FROM BoardMessages WHERE messageID = ?',
+    updateMessage: 'UPDATE BoardMessages SET message = ? WHERE messageID = ?',
+    getMessageById: 'SELECT * FROM BoardMessages WHERE messageID = ?',
+    getMessagesByUserId: 'SELECT * FROM BoardMessages WHERE userID = ?',
+    getMessagesByBoardId: 'SELECT * FROM BoardMessages WHERE boardID = ?',
+    getBoardIdByMessageId: 'SELECT boardID FROM BoardMessages WHERE messageID = ?',
+
 };
+export const p2pMessageQueries = {
+    isUserAuthor: 'SELECT * FROM P2PMessages WHERE senderID = ? AND messageID = ?',
+    createMessage: 'INSERT INTO P2PMessages (senderID, receiverID, message) VALUES (?, ?, ?)',
+    deleteMessage: 'DELETE FROM P2PMessages WHERE messageID = ?',
+    updateMessage: 'UPDATE P2PMessages SET message = ? WHERE messageID = ?',
+    getMessageById: 'SELECT * FROM P2PMessages WHERE messageID = ?',
+    getMessagesByReceiverId: 'SELECT * FROM P2PMessages WHERE receiverID = ?',
+    getMessagesByUsers: 'SELECT * FROM P2PMessages WHERE senderID = ? AND receiverID = ?',
+}
 export const sessionQueries = {
     updateSessionUserId: 'UPDATE Sessions SET userId = ? WHERE sessionId = ?',
     getUserIdBySessionId: 'SELECT userId FROM Sessions WHERE sessionId = ?',

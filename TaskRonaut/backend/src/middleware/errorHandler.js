@@ -10,7 +10,7 @@ import {
     InvalidLoginDataError,
     InvalidSessionError,
     InvalidTokenError,
-    NoBoardsFoundError,
+    NoBoardsFoundError, NoMessagesFoundError,
     PermissionDeniedError,
     QueryExecutionError, UserIsAlreadyMemberError, UserNotActivatedError,
     UserNotFoundError
@@ -49,6 +49,10 @@ export async function errorHandler(error) {
         logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
         return {statusCode: 403};
     } else if (error instanceof InvalidTokenError) {
+        logger.error(chalk.hex(styles.critical)`${errorMessage}`);
+        logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
+        return {statusCode: 401};
+    } else if (error instanceof NoMessagesFoundError) {
         logger.error(chalk.hex(styles.critical)`${errorMessage}`);
         logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
         return {statusCode: 401};

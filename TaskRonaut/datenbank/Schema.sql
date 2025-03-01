@@ -2,122 +2,84 @@ DROP DATABASE IF EXISTS TaskRonaut;
 CREATE DATABASE TaskRonaut;
 USE TaskRonaut;
 
--- Tabelle 'Users' erstellen
-DROP TABLE IF EXISTS Users;
-CREATE TABLE Users
-(
+-- Users Tabelle
+CREATE TABLE Users (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    email           VARCHAR(255) NOT NULL,
+    email           VARCHAR(255) NOT NULL UNIQUE,
     password        VARCHAR(255) NOT NULL,
     firstname       VARCHAR(255) NOT NULL,
     lastname        VARCHAR(255) NOT NULL,
-    activationToken VARCHAR(255) default null,
-    activated       boolean      default false,
-    UNIQUE (email)
+    activationToken VARCHAR(255) DEFAULT NULL,
+    activated       BOOLEAN DEFAULT FALSE
 );
 
--- Tabelle 'Boards' erstellen
-DROP TABLE IF EXISTS Boards;
-CREATE TABLE Boards
-(
+
+-- Board Tabelle mit Chat-Verknüpfung
+CREATE TABLE Boards (
     boardID   INT AUTO_INCREMENT PRIMARY KEY,
     boardName VARCHAR(255) NOT NULL
 );
+CREATE TABLE P2PMessages(
+    messageID INT AUTO_INCREMENT PRIMARY KEY,
+    message   VARCHAR(255) DEFAULT '',
+    senderID  INT,
+    reciverID INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (senderID) REFERENCES Users (id),
+    FOREIGN KEY (reciverID) REFERENCES Users (id)
+);
 
--- Tabelle 'Lists' erstellen
-DROP TABLE IF EXISTS Lists;
-CREATE TABLE Lists
-(
+-- Listen pro Board
+CREATE TABLE Lists (
     listID   INT AUTO_INCREMENT PRIMARY KEY,
     listName VARCHAR(255) NOT NULL,
     boardID  INT,
-    FOREIGN KEY (boardID) REFERENCES Boards (boardID)
-);
-
-
--- Tabelle 'Tasks' erstellen
-DROP TABLE IF EXISTS Tasks;
-CREATE TABLE Tasks
-(
-    taskID           INT AUTO_INCREMENT PRIMARY KEY,
-    taskCreatorID    INT,
-    taskCreationDate TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    dueDate          DATE         DEFAULT (CURRENT_DATE),
-    taskDescription  VARCHAR(800) DEFAULT '',
-    taskName         VARCHAR(255),
-    priorities       INT          DEFAULT 1,
-    taskStatus       VARCHAR(255) DEFAULT 'todo',
-    comments         VARCHAR(800) DEFAULT '',
-    taskHistoryID    INT,
-    boardID          INT,
-    listID           INT,
-    FOREIGN KEY (taskCreatorID) REFERENCES Users (id),
-    FOREIGN KEY (boardID) REFERENCES Boards (boardID),
-    FOREIGN KEY (listID) REFERENCES Lists (listID) ON DELETE CASCADE
-);
-
--- Tabelle 'Messages' erstellen
-DROP TABLE IF EXISTS Messages;
-CREATE TABLE Messages
-(
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id   INT  NOT NULL,
-    receiver_id INT  NOT NULL,
-    message     TEXT NOT NULL,
-    timestamp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sender_id) REFERENCES Users (id),
-    FOREIGN KEY (receiver_id) REFERENCES Users (id)
-);
-
--- Tabelle 'Groups' erstellen
-DROP TABLE IF EXISTS UserGroups;
-CREATE TABLE UserGroups
-(
-    groupID   INT AUTO_INCREMENT PRIMARY KEY,
-    memberID  INT,
-    groupName VARCHAR(255),
-    FOREIGN KEY (memberID) REFERENCES Users (id)
-);
-
--- Tabelle 'Roles' erstellen
-DROP TABLE IF EXISTS Roles;
-CREATE TABLE Roles
-(
-    roleID   int AUTO_INCREMENT PRIMARY KEY,
-    roleName varchar(255),
-    reading  int,
-    writing  int
-);
-
--- Zwischentabelle 'BoardMembers' erstellen
-DROP TABLE IF EXISTS BoardMembers;
-CREATE TABLE BoardMembers
-(
-    roleID  int,
-    userID  int,
-    boardID int,
-    FOREIGN KEY (roleID) REFERENCES Roles (roleID),
-    FOREIGN KEY (userID) REFERENCES Users (id),
     FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE
 );
 
--- Zwischentabelle 'AuthorizedUsers' erstellen
-DROP TABLE IF EXISTS AuthorizedUsers;
-CREATE TABLE AuthorizedUsers
-(
-    userID        int,
-    taskID        int,
-    isAuthorized  BOOLEAN default false,
-    isResponsible BOOLEAN default false,
-    FOREIGN KEY (userID) REFERENCES Users (id),
-    FOREIGN KEY (taskID) REFERENCES Tasks (taskID) ON DELETE CASCADE
+-- Aufgaben pro Liste
+CREATE TABLE Tasks (
+    taskID           INT AUTO_INCREMENT PRIMARY KEY,
+    taskCreatorID    INT,
+    taskCreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    dueDate          DATE DEFAULT (CURRENT_DATE),
+    taskDescription  VARCHAR(800) DEFAULT '',
+    taskName         VARCHAR(255),
+    priorities       INT DEFAULT 1,
+    taskStatus       VARCHAR(255) DEFAULT 'todo',
+    comments         VARCHAR(800) DEFAULT '',
+    boardID          INT,
+    listID           INT,
+    FOREIGN KEY (taskCreatorID) REFERENCES Users (id) ON DELETE SET NULL,
+    FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE,
+    FOREIGN KEY (listID) REFERENCES Lists (listID) ON DELETE CASCADE
+);
+
+-- Nachrichten in Chats
+CREATE TABLE BoardMessages (
+    messageID INT AUTO_INCREMENT PRIMARY KEY,
+    boardID    INT NOT NULL,
+    senderID  INT NOT NULL,
+    message   TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE,
+    FOREIGN KEY (senderID) REFERENCES Users (id) ON DELETE CASCADE
 );
 
 
--- Tabelle 'Sessions' erstellen
-DROP TABLE IF EXISTS Sessions;
-CREATE TABLE Sessions
-(
+-- Autorisierte Benutzer für Aufgaben
+CREATE TABLE AuthorizedUsers (
+    userID        INT,
+    taskID        INT,
+    isAuthorized  BOOLEAN DEFAULT FALSE,
+    isResponsible BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (userID, taskID),
+    FOREIGN KEY (userID) REFERENCES Users (id) ON DELETE CASCADE,
+    FOREIGN KEY (taskID) REFERENCES Tasks (taskID) ON DELETE CASCADE
+);
+
+-- Sitzungen für Login-Management
+CREATE TABLE Sessions (
     sessionId VARCHAR(255) PRIMARY KEY,
     userId    INT NOT NULL,
     expires   TIMESTAMP DEFAULT (NOW() + INTERVAL 1 DAY),

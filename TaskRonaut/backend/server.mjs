@@ -7,6 +7,7 @@ import swaggerDocument from './src/config/swaggerAll.json' assert {type: 'json'}
 
 import testRoutes from './testRoutes.mjs';
 import ptpRoutes from './src/routes/chat/ptpRoutes.mjs';
+import boardChatRoutes from './src/routes/chat/BoardChatRoutes.mjs';
 import loginRoutes from './src/routes/authentication/loginRoutes.mjs';
 import taskRoutes from './src/routes/board/taskRoutes.mjs';
 import boardRoutes from './src/routes/board/boardRoutes.mjs';
@@ -15,7 +16,6 @@ import userDataRoutes from "./src/routes/authentication/userDataRoutes.mjs";
 import {styles} from "./src/database/loggingStyle.mjs";
 import logger from "./src/middleware/logger.mjs";
 import {domainName, port} from "./src/config/serverOptions.mjs";
-
 
 
 const app = express();
@@ -31,7 +31,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const apiRouter = express.Router();
 
 apiRouter.use('/authentication', loginRoutes);
-apiRouter.use('/chat', ptpRoutes);
+apiRouter.use('/ptp', ptpRoutes);
+apiRouter.use('/boardChat', boardChatRoutes);
 apiRouter.use('/tasks', taskRoutes);
 apiRouter.use('/boards', boardRoutes);
 apiRouter.use('/lists', listRoutes);
