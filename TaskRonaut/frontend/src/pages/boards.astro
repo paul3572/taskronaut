@@ -38,8 +38,6 @@ if (boards === null || boards === undefined) {
     }
     console.log("boards: ", boards);
 }
-
-
 ---
 
 <!DOCTYPE html>
@@ -114,7 +112,7 @@ if (boards === null || boards === undefined) {
 
                         </div>
 
-                        <a href="/boards?boardId=${board.boardID}">
+                        <a href=`/boards?boardId=${board.boardID}`>
                             Zum Board
                         </a>
                     </div>
@@ -625,7 +623,7 @@ if (boards === null || boards === undefined) {
 
     Alpine.start();
 
-    const sessionId = "{sessionId}";
+    import {sessionId} from './user.js';
 
     if (document.cookie.includes('sessionId') === null) {
         window.location.href = `/getCookies`;

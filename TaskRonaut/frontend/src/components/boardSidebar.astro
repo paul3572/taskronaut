@@ -27,7 +27,7 @@ console.log('Users:', users);
         <h1>Mitglieder</h1>
         <ul class="sidebar-users">
             {users.map(user => (
-                    <li class="user-item">
+                    <li class="user-item" id=`user-${user?.firstName+user?.lastName}`>
                         <!-- Profile Section -->
                         <div x-data="{ showProfile: false }">
                             <button class="profileIcon" @click="showProfile = !showProfile">
@@ -54,20 +54,16 @@ console.log('Users:', users);
                         <button
                                 x-cloak
                                 x-transition
-                                @click=`
-                                fetch("${serverURL}/boards/remove", {
-                                    method: 'DELETE',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ 
-                                        sessionId: '${sessionId}',
-                                        boardId: ${boardID},
-                                        email: '${user.email}'
-                                    })
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                                `
-                                class="submit-task-button"
+                                hx-delete=`${serverURL}/boards/remove`
+                                hx-headers='{"Content-Type": "application/json"}'
+                                hx-vals=`js:{
+                                    sessionId: "${sessionId}",
+                                    boardId: ${boardID},
+                                    email: "${user.email}"
+                                }`
+                                hx-trigger="click"
+                                hx-target=`#user-${user?.firstName+user?.lastName}`
+                                hx-swap="delete"
                         >
                             delete
                         </button>

@@ -18,17 +18,19 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
                         <div class="task" x-data="{ openDetails: false }">
                             <div @click="openDetails = !openDetails" style="flex-direction: column">
                                 <div class={`task-status status-${task.taskStatus}`}
-                                     style="float: left; height: 60px; width: 2%;"/>
+                                     style="float: left; height: 70px; width: 2%;"/>
                                 <div style="width: 95%; float: right;">
                                     <h3>{task.taskName}</h3>
-                                    {task.dueDate && <p>Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
+                                    {task.dueDate && <p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
+                                    <p>Priorität: {task.priorities}/5</p>
                                 </div>
                             </div>
                             <div x-show="openDetails" @click.away="openDetails = false" class="dropdown">
                                 <TaskDetails task={task}/>
                             </div>
                         </div>))}
-            </>)}
+            </>
+        )}
 
     <div x-data=`{
         taskData: {

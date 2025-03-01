@@ -15,16 +15,8 @@ import '../styles/global.css';
 
     Alpine.start();
 </script>
-<div class="confirm-email-container">
+<div class="confirm-email-container" style="padding: 10px;">
     <div class="confirm-email" id="confirm-email-container">
-        <a class="close-button" hx-post="/"
-           hx-trigger="click"
-           hx-target="body"
-           hx-swap="outerHTML"
-           hx-push-url="/"
-        >x</a>
-        <!-- Close button to hide the component -->
-
         <div x-data="{ email: '' }" x-init="email = localStorage.getItem('userEmail')">
             <h2>Bestätigen Sie Ihre E-Mail</h2>
             <p>Vielen Dank für Ihre Registrierung!</p>

@@ -4,18 +4,19 @@ import { serverURL } from '../../pages/conf.js';
 ---
 
 <div
-    x-cloak
-    class="task-details-screen"
-    x-data=`{
-         sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1].replace(/"/g, ''),
-     }`>
+        id="taskDetails"
+        x-cloak
+        class="task-details-screen"
+        x-data=`{
+        sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1].replace(/"/g, ''),
+    }`>
     <div class="task-details-block"
          x-data=`{
          taskData: {
              sessionID: sessionId,
              taskID: Number('${task.taskID}'),
              taskName: '${task.taskName}',
-             dueDate: '${task.dueDate}',
+             dueDate: '${task.dueDate.split("T")[0]}',
              taskDescription: '${task.taskDescription}',
              priorities: '${task.priorities}',
              taskStatus: '${task.taskStatus}',
@@ -23,7 +24,7 @@ import { serverURL } from '../../pages/conf.js';
              boardID: Number('${task.boardID}'),
              listID: Number('${task.listID}')
          },
-          taskCreationDate: '${task.taskCreationDate}',
+         taskCreationDate: '${task.taskCreationDate}',
          showInput: false,
        }`>
 
@@ -54,14 +55,13 @@ import { serverURL } from '../../pages/conf.js';
                 -->
 
                 <label for="taskCreationDate">Erstellt am:</label>
-                <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskCreationDate).toISOString().slice(0, 16)">
+                <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskCreationDate).toISOString().slice(0, 16)" readonly>
 
                 <label for="dueDate">Fällig am:</label>
                 <input type="date"
                        id="dueDate"
                        name="dueDate"
-                       x-model="taskData.dueDate"
-                       :value="taskData.dueDate.split('T')[0]">
+                       x-model="taskData.dueDate">
 
                 <label for="priorities">Priorität:</label>
                 <div class="slider-container">
