@@ -37,6 +37,16 @@ CREATE TABLE Lists (
     FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE
 );
 
+-- Zwischentabelle 'BoardMembers' erstellen
+DROP TABLE IF EXISTS BoardMembers;
+CREATE TABLE BoardMembers
+(
+    userID  int,
+    boardID int,
+    FOREIGN KEY (userID) REFERENCES Users (id),
+    FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE
+);
+
 -- Aufgaben pro Liste
 CREATE TABLE Tasks (
     taskID           INT AUTO_INCREMENT PRIMARY KEY,
