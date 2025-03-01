@@ -14,7 +14,7 @@ class psPtPMessages {
     async getMessages(myUserId, otherUser) {
         const [sentMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [myUserId, otherUser]);
         const [receivedMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [otherUser, myUserId]);
-        console.log(JSON.stringify("Array: "[sentMessages, receivedMessages]));
+        console.log(JSON.stringify("Array: "+[sentMessages] +"other"+[receivedMessages]));
         return [sentMessages, receivedMessages];
     }
 
