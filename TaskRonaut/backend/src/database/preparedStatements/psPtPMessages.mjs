@@ -19,7 +19,7 @@ class psPtPMessages {
             let messageId = sentMessage.messageID;
             let message = sentMessage.message;
             let userIdSender = sentMessage.senderID;
-            let userIdReceiver = sentMessage.receiverID;
+            let userIdReceiver = sentMessage.reciverID;
             let timestamp = sentMessage.timestamp;
 
             const userSender = await psAuthentication.getUserById(userIdSender);
@@ -34,7 +34,7 @@ class psPtPMessages {
                 messageID: messageId,
                 message: message,
                 senderID: senderName,
-                receiverID: receiverName,
+                reciverID: receiverName,
                 timestamp: timestamp
             });
         }
@@ -44,7 +44,7 @@ class psPtPMessages {
             let messageId = returnMessage.messageID;
             let message = returnMessage.message;
             let userIdSender = returnMessage.senderID;
-            let userIdReceiver = returnMessage.receiverID;
+            let userIdReceiver = returnMessage.reciverID;
             let timestamp = returnMessage.timestamp;
 
             const userSender = await psAuthentication.getUserById(userIdSender);
@@ -57,7 +57,7 @@ class psPtPMessages {
                 messageID: messageId,
                 message: message,
                 senderID: senderName,
-                receiverID: receiverName,
+                reciverID: receiverName,
                 timestamp: timestamp
             });
         }
