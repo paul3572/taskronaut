@@ -1,5 +1,6 @@
 import connection from "../dbCon.mjs";
-import {p2pMessageQueries} from "../dbQueries.mjs";
+import {authenticationQueries, p2pMessageQueries} from "../dbQueries.mjs";
+import psAuthentication from "./psAuthentication.mjs";
 
 class psPtPMessages {
     async insertNewMessage(myUserId, otherUser, message) {
@@ -13,9 +14,53 @@ class psPtPMessages {
 
     async getMessages(myUserId, otherUser) {
         const [sentMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [myUserId, otherUser]);
+        let returnMessagesS = [];
+        for (const sentMessage of sentMessages) {
+            let messageId = sentMessage.messageID;
+            let message = sentMessage.message;
+            let userIdSender = sentMessage.senderID;
+            let userIdReceiver = sentMessage.receiverID;
+            let timestamp = sentMessage.timestamp;
+
+            const userSender = await psAuthentication.getUserById(userIdSender);
+            const userReceiver = await psAuthentication.getUserById(userIdReceiver);
+
+            const senderName = userSender[0].firstName + " " + userSender[0].lastName;
+            const receiverName = userReceiver[0].firstName + " " + userReceiver[0].lastName;
+
+            returnMessagesS.push({
+                messageID: messageId,
+                message: message,
+                senderID: senderName,
+                receiverID: receiverName,
+                timestamp: timestamp
+            });
+        }
         const [receivedMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [otherUser, myUserId]);
-        console.log(JSON.stringify("Array: "+[sentMessages] +"other"+[receivedMessages]));
-        return [sentMessages, receivedMessages];
+        let returnMessagesR = [];
+        for (const returnMessage of receivedMessages) {
+            let messageId = returnMessage.messageID;
+            let message = returnMessage.message;
+            let userIdSender = returnMessage.senderID;
+            let userIdReceiver = returnMessage.receiverID;
+            let timestamp = returnMessage.timestamp;
+
+            const userSender = await psAuthentication.getUserById(userIdSender);
+            const userReceiver = await psAuthentication.getUserById(userIdReceiver);
+
+            const senderName = userSender[0].firstName + " " + userSender[0].lastName;
+            const receiverName = userReceiver[0].firstName + " " + userReceiver[0].lastName;
+
+            returnMessagesR.push({
+                messageID: messageId,
+                message: message,
+                senderID: senderName,
+                receiverID: receiverName,
+                timestamp: timestamp
+            });
+        }
+        console.log(JSON.stringify(returnMessagesS));
+        return [returnMessagesS, returnMessagesR];
     }
 
     async deleteMessage(messageId) {
@@ -25,6 +70,7 @@ class psPtPMessages {
         }
         throw new Error();
     }
+
     async isUserAuthor(myUserId, messageId) {
         const [result] = await connection.query(p2pMessageQueries.isUserAuthor, [myUserId, messageId]);
         if (result !== null) {
