@@ -20,8 +20,9 @@ class PtpMessagesController {
         try {
             const myUserId = await findUserBySessionId(sessionId);
             const otherUser = await psAuthentication.getUserIdByEmail(otherUserEmail);
-            console.log("myUserId: " + myUserId+ " otherUser: " + otherUser);
-            const result = await psPtPMessages.getMessages(myUserId, otherUser);
+            const otherUserId = otherUser.id;
+            console.log("myUserId: " + myUserId+ " otherUser: " + otherUserId);
+            const result = await psPtPMessages.getMessages(myUserId, otherUserId);
             return {statusCode: 200, data: result};
         } catch (error) {
             await errorHandler(error);
