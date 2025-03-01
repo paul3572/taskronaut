@@ -14,6 +14,24 @@ console.log('Session ID:', sessionId);
     <p style="color: whitesmoke">Session ID: <span id="sessionIdDisplay"></span></p>
 
     <script>
+        // Retrieve the stored JSON object from sessionStorage
+        const userData = JSON.parse(sessionStorage.getItem("user"));
+
+        if (userData) {
+            // Combine firstName and lastName
+            const fullName = `${userData.firstName} ${userData.lastName}`;
+
+            // Set a cookie with the fullName value
+            // This sets a cookie named "fullName" that expires in 7 days
+            const days = 7;
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `fullName=${encodeURIComponent(fullName)}; expires=${expires}; path=/`;
+
+            console.log("Cookie set:", document.cookie);
+        } else {
+            console.log("User data not found in sessionStorage.");
+        }
+
         const sessionId = sessionStorage.getItem('sessionID');
         if (sessionId) {
             document.getElementById('sessionIdDisplay').textContent = sessionId;

@@ -1,29 +1,76 @@
 ---
 import {serverURL} from "../pages/conf.js";
+
+let sessionId = Astro.cookies.get('sessionId').value;
+
+
+
+let otherUserEmail = Astro.props.otherUserEmail;
+let otherUserName = Astro.props.otherUserName;
+
+
+
+console.log("Other User Email:" + otherUserEmail);
+
+let localFullName = Astro.cookies.get('fullName').value;;
+
+
+
+const response = await fetch(`${serverURL}/ptp/view`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify({sessionId: sessionId, otherUserEmail: otherUserEmail})
+});
+
+
+const {data: ptp} = await response.json();
+
+console.log("PTP:")
+console.log(ptp);
 ---
 <div class="ptp" style="display: block">
     <button class="close" style="right: 0; top: 0" @click="showChat = false">X</button>
     <div id="messages"
-         hx-trigger="load"
          class="ptp-messages">
-        <div class="message message-own">
-            <div class="message-sender">You</div>
-            <div class="message-content">Hello everyone!</div>
-        </div>
+        {}
+        {ptp.flat().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((msg) => {
+            const isOwn = msg.senderID === `${localFullName}`;
 
-        <div class="message message-other">
-            <div class="message-sender">John Doe</div>
-            <div class="message-content">Hi there!</div>
-        </div>
+            return (
+                    <div class={`message ${isOwn ? 'message-own' : 'message-other'}`}>
+                        <div class="message-sender">{isOwn ? 'Du' : `${otherUserName}`}</div>
+                        <div class="message-content">{msg.message}</div>
+                    </div>
+            )
+        })}
     </div>
-    <form hx-post=`${serverURL}/chat/add-messages`
-          hx-target="#messages"
-          hx-swap="innerHTML"
-          hx-ext="json-enc"
-          class="ptp-input">
-        <input type="text" name="message" placeholder="Schreibe eine Nachricht...">
-        <button type="submit">Senden</button>
-    </form>
+    <div class="ptp-input"
+        x-data=`{
+            messageData: {
+            message: '',
+            }
+            }`
+    >
+        <input placeholder="Schreibe eine Nachricht..."
+               type="text"
+               x-model="messageData.message"/>
+        <button
+            @click=`
+            fetch('${serverURL}/ptp/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                sessionId: "${sessionId}",
+                otherUserEmail: "${otherUserEmail}",
+                message: messageData.message
+                })
+            }).then(() => {
+                window.location.reload();
+            });
+            `
+        >Senden</button>
+    </div>
 </div>
 
 <style>
@@ -53,9 +100,11 @@ import {serverURL} from "../pages/conf.js";
 
     .ptp-messages {
         display: flex;
+        height: 83vh;
         flex-direction: column;
         gap: 12px;
         min-height: min-content;
+        overflow-y: scroll;
     }
 
     .message {
@@ -88,7 +137,8 @@ import {serverURL} from "../pages/conf.js";
         flex-shrink: 0;
         display: flex;
         gap: 10px;
-        padding-top: 15px;
+        margin-top: 5px;
+        padding-top: 10px;
         border-top: 1px solid var(--border);
     }
 

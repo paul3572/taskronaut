@@ -47,7 +47,7 @@ console.log('Users:', users);
                                 <i class="fa-regular fa-comment"></i>
                             </button>
                             <template x-if="showChat">
-                                <Ptp/>  <!-- Add client directive for hydration -->
+                                <Ptp otherUserEmail={user?.email} otherUserName={user?.firstName + " " + user?.lastName}/>
                             </template>
                         </div>
 
