@@ -24,6 +24,8 @@ class psPtPMessages {
 
             const userSender = await psAuthentication.getUserById(userIdSender);
             const userReceiver = await psAuthentication.getUserById(userIdReceiver);
+            console.log(userSender);
+            console.log(userReceiver);
 
             const senderName = userSender.firstname + " " + userSender.lastname;
             const receiverName = userReceiver.firstname + " " + userReceiver.lastname;
