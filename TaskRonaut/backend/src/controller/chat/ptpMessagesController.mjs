@@ -9,7 +9,8 @@ class PtpMessagesController {
         try {
             const myUserId = await findUserBySessionId(sessionId);
             const otherUser = await psAuthentication.getUserIdByEmail(otherUserEmail);
-            await psPtPMessages.insertNewMessage(myUserId, otherUser, message);
+            const otherUserId = otherUser.id;
+            await psPtPMessages.insertNewMessage(myUserId, otherUserId, message);
             return {statusCode: 201};
         } catch (error) {
             await errorHandler(error);
