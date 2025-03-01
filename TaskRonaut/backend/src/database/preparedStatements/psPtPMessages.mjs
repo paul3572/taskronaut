@@ -1,6 +1,5 @@
 import connection from "../dbCon.mjs";
-import {boardMessageQueries, p2pMessageQueries} from "../dbQueries.mjs";
-import {NoMessagesFoundError} from "../../middleware/errors.mjs";
+import {p2pMessageQueries} from "../dbQueries.mjs";
 
 class psPtPMessages {
     async insertNewMessage(myUserId, otherUser, message) {

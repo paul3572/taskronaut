@@ -6,7 +6,6 @@ import {findUserBySessionId} from "../../middleware/session.mjs";
 import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 import {PermissionDeniedError} from "../../middleware/errors.mjs";
-import psChatmembers from "../../database/preparedStatements/psChatmembers.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {
