@@ -17,7 +17,7 @@ class PsAuthentication {
     async getUserById(id) {
         const [rows] = await dbConnection.query(authenticationQueries.getUserById, [id]);
         if (!rows || rows.length === 0) {
-            throw new UserNotFoundError("Benutzer mit der angegebenen ID nicht gefunden.");
+            //throw new UserNotFoundError("Benutzer mit der angegebenen ID nicht gefunden.");
         }
         if (rows instanceof Error) {
             throw new QueryExecutionError("Fehler bei der Datenbankabfrage: " + rows.message);
