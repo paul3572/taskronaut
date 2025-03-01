@@ -72,12 +72,12 @@ export const boardMessageQueries = {
 };
 export const p2pMessageQueries = {
     isUserAuthor: 'SELECT * FROM P2PMessages WHERE senderID = ? AND messageID = ?',
-    createMessage: 'INSERT INTO P2PMessages (senderID, receiverID, message) VALUES (?, ?, ?)',
+    createMessage: 'INSERT INTO P2PMessages (senderID, reciverID, message) VALUES (?, ?, ?)',
     deleteMessage: 'DELETE FROM P2PMessages WHERE messageID = ?',
     updateMessage: 'UPDATE P2PMessages SET message = ? WHERE messageID = ?',
     getMessageById: 'SELECT * FROM P2PMessages WHERE messageID = ?',
-    getMessagesByReceiverId: 'SELECT * FROM P2PMessages WHERE receiverID = ?',
-    getMessagesByUsers: 'SELECT * FROM P2PMessages WHERE senderID = ? AND receiverID = ?',
+    getMessagesByReceiverId: 'SELECT * FROM P2PMessages WHERE reciverID = ?',
+    getMessagesByUsers: 'SELECT * FROM P2PMessages WHERE senderID = ? AND reciverID = ?',
 }
 export const sessionQueries = {
     updateSessionUserId: 'UPDATE Sessions SET userId = ? WHERE sessionId = ?',
