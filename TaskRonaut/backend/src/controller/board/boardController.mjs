@@ -57,7 +57,7 @@ class BoardController {
     async removeBoard(sessionId, boardId) {
         try {
             const myUserId = await findUserBySessionId(sessionId);
-            const userToAddEntry = await psBoard.deleteBoard(myUserId, boardId);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
             console.log("UserToAddEntry: " + JSON.stringify(myUserId, boardId));
             if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
                 throw new PermissionDeniedError("User is not allowed to board");
