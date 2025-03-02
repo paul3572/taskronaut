@@ -25,14 +25,14 @@ class BoardMessagesController {
         }
     }
 
-    async view(sessionId, chatId) {
+    async view(sessionId, boardId) {
         try {
             const myUserId = await findUserBySessionId(sessionId);
             const myUserIdEntries = await psBoardMember.getBoardUserEntries(myUserId, boardId);
             if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
                 throw new PermissionDeniedError("User is not allowed to board-chat");
             } else {
-                const result = await psMessages.getMessages(chatId);
+                const result = await psMessages.getMessages(boardId);
                 return {statusCode: 200, data: result};
             }
         } catch (error) {
