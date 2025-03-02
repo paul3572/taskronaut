@@ -13,9 +13,7 @@ if (!sessionCookie) {
 let sessionId = sessionCookie.value;
 
 const response = await fetch(`${serverURL}/boards/get`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({sessionId: sessionId})
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sessionId: sessionId})
 });
 
 const {data: boards} = await response.json();
@@ -57,124 +55,154 @@ if (boards === null || boards === undefined) {
 
 <body>
 <div class="board-container">
-{!boardIdParam ? (
-    <div class="boards-overview" x-data="boardCreation">
-        <div style="padding-bottom: 20px">
-            <BoardHeader {boards}></BoardHeader>
-        </div>
-        <div class="boards-grid">
-            {boards?.map((boardGroup) => (boardGroup.map((board) => (
-                    <div id=`board-${board.boardID}` class="your-boards-card" x-data='{ isDropdownOpen: false }'>
-                        <h1 style="margin: 0">{board.boardName}</h1>
-
-                        <!-- Dropdown trigger -->
-                        <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-
-                        <!-- Dropdown menu -->
-                        <div class="dropdown-menu"
-                             x-show="isDropdownOpen"
-                             x-cloak
-                             @click.away="isDropdownOpen = false"
-                             style="position: absolute; right: 10px; top: 35px;">
-
-                            <!-- Update Name button -->
-                            <button class="dropdown-item" @click=`
-                                const newName = prompt('Neuen Boardnamen eingeben:', '${board.boardName}');
-                                if (newName) {
-                                    fetch('${serverURL}/boards/update', {
-                                        method: 'PATCH',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({
-                                            sessionId: '${sessionId}',
-                                            boardId: ${board.boardID},
-                                            boardName: newName
-                                        })
-                                    }).then(() => window.location.reload());
-                                }
-                            `>
-                                Umbenennen
-                            </button>
-
-                            <!-- Delete button (HTMX) -->
-                            <button class="dropdown-item delete"
-                                    hx-delete=`${serverURL}/boards/delete`
-                                    hx-headers='{"Content-Type": "application/json"}'
-                                    hx-vals=`js:{
-                                        sessionId: "${sessionId}",
-                                        boardId: "${board.boardID}"
-                                    }`
-                                    hx-trigger="click"
-                                    hx-target=`#board-${board.boardID}`
-                                    hx-swap="delete"
-                            >
-                                Löschen
-                            </button>
-
-
-                        </div>
-
-                        <a href=`/boards?boardId=${board.boardID}`>
-                            Zum Board
-                        </a>
-                    </div>
-
-            ))))}
-
-            <!--     Card Input -->
-            <template x-if="!showCardInput">
-                <div class="board-card add-board" @click="showCardInput = true">
-                    <div class="add-content">
-                        <i class="fas fa-plus"></i>
-                        <span>Neues Board anlegen</span>
-                    </div>
-                </div>
-            </template>
-
-            <template x-if="showCardInput">
-                <div class="board-card">
-                    <div class="input-group">
-                        <input
-                                type="text"
-                                x-model="boardName"
-                                @keyup.enter="createBoard()"
-                                placeholder="Boardname"
-                                class="board-input"
-                                autofocus
-                        />
-                        <div class="button-group">
-                            <button @click="createBoard()" class="submit-btn">
-                                Erstellen
-                            </button>
-                            <button @click="showCardInput = false; boardName = ''"
-                                    class="cancel-btn">
-                                Abbrechen
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>) : (
-    <main class="content" x-data="{ showProjectBoard: false }">
-        <div class="main">
-            <!-- Render TaskBoard immediately with x-show -->
-            <div class="board scrollable" x-show="!showProjectBoard">
-                <ProjectBoard boardID={boardIdParam}/>
+    {!boardIdParam ? (
+        <div class="boards-overview" x-data="boardCreation">
+            <div style="padding-bottom: 20px">
+                <BoardHeader {boards}></BoardHeader>
             </div>
+            <div class="boards-grid">
+                {boards?.map((boardGroup) => (boardGroup.map((board) => (
+                        <div id=`board-${board.boardID}` class="your-boards-card"
+                             x-data=`{
+                            isDropdownOpen: false,
+                            isRenaming: false,
+                            newBoardName: "${board.boardName}",
+                            fetchUpdateBoard() {
+                                if (!this.newBoardName.trim()) return;
+                                fetch("${serverURL}/boards/update", {
+                                    method: "PATCH",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        sessionId: "${sessionId}",
+                                        boardId: "${board.boardID}",
+                                        boardName: this.newBoardName
+                                    })
+                                    }).then(() => window.location.reload());
+                                    this.isRenaming = false;
+                                }
+                            }`
+                        >
+                            <h1 style="margin: 0">{board.boardName}</h1>
 
-            <!-- Render ProjectBoard on demand -->
-            <template x-if="showProjectBoard">
-                <div class="board scrollable">
-                    <TaskBoard boardID={boardIdParam}/>
+                            <!-- Dropdown trigger -->
+                            <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div class="dropdown-menu"
+                                 x-show="isDropdownOpen"
+                                 x-cloak
+                                 @click.away="isDropdownOpen = false"
+                                 style="position: absolute; right: 10px; top: 35px;">
+
+                                <div x-show="!isRenaming">
+                                    <!-- Update Name button -->
+                                    <button class="dropdown-item"
+                                            @click="isRenaming = true; newBoardName = `${board.boardName}`">
+                                        Umbenennen
+                                    </button>
+
+                                    <!-- Delete button (HTMX) -->
+                                    <button class="dropdown-item delete"
+                                            hx-delete=`${serverURL}/boards/delete`
+                                            hx-headers='{"Content-Type": "application/json"}'
+                                            hx-vals=`js:{ sessionId: "${sessionId}", boardId: "${board.boardID}" }`
+                                            hx-trigger="click"
+                                            hx-swap="delete">
+                                        Löschen
+                                    </button>
+                                </div>
+
+                                <div x-show="isRenaming" class="rename-form">
+                                    <input type="text"
+                                           x-model="newBoardName"
+                                           class="rename-input"
+                                           @keyup.enter="$event.stopPropagation(); fetchUpdateBoard()"
+                                           autofocus>
+                                    <div class="rename-buttons">
+                                        <button class="dropdown-item confirm"
+                                                @click="fetchUpdateBoard()"
+                                                style="color: var(--success)">
+                                            Bestätigen
+                                        </button>
+                                        <button class="dropdown-item"
+                                                @click="isRenaming = false"
+                                                style="color: var(--error)">
+                                            Abbrechen
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <a href=`/boards?boardId=${board.boardID}`>
+                                Zum Board
+                            </a>
+                        </div>
+                ))))}
+
+                <!--     Card Input -->
+                <template x-if="!showCardInput">
+                    <div class="board-card add-board" @click="showCardInput = true">
+                        <div class="add-content">
+                            <i class="fas fa-plus"></i>
+                            <span>Neues Board anlegen</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="showCardInput">
+                    <div class="board-card">
+                        <div class="input-group">
+                            <input
+                                    type="text"
+                                    x-model="boardName"
+                                    @keyup.enter="createBoard()"
+                                    placeholder="Boardname"
+                                    class="board-input"
+                                    autofocus
+
+                            />
+                            <div class="button-group">
+                                <button @click="createBoard()" class="submit-btn">
+                                    Erstellen
+                                </button>
+                                <button @click="showCardInput = false; boardName = ''"
+                                        class="cancel-btn">
+                                    Abbrechen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>) : (
+        <main class="content" x-data="{ showProjectBoard: false }">
+            <div class="main">
+                <!-- Render TaskBoard immediately with x-show -->
+                <div class="board scrollable" x-show="!showProjectBoard">
+                    <ProjectBoard boardID={boardIdParam}/>
                 </div>
-            </template>
-        </div>
-    </main>)}
+
+                <!-- Render ProjectBoard on demand -->
+                <template x-if="showProjectBoard">
+                    <div class="board scrollable">
+                        <TaskBoard boardID={boardIdParam}/>
+                    </div>
+                </template>
+            </div>
+        </main>
+    )}
 </div>
 
 <style lang="scss">
+
+  .rename-input{
+    padding: 5px;
+    font-size: medium;
+  }
 
 
   .dropdown-container {
@@ -196,6 +224,7 @@ if (boards === null || boards === undefined) {
   }
 
   .dropdown-menu {
+    transform: translateY(10px);
     background: var(--background);
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -470,8 +499,8 @@ if (boards === null || boards === undefined) {
 
   .board-container {
     min-height: 100vh;
-    height:100vh;
-    background: linear-gradient(135deg, var(--primary), #334155);
+    height: 100vh;
+    background: linear-gradient(-30deg, var(--primary-dark) 30%, var(--secondary-dark) 90%);
   }
 
   .boards-overview {
