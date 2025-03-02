@@ -8,20 +8,18 @@ import BoardHeader from "../components/boardHeader.astro";
 
 const sessionCookie = Astro.cookies.get('sessionId');
 if (!sessionCookie) {
-    // Handle the missing cookie case (e.g., redirect to login or show an error)
     return Astro.redirect('/getCookies');
 }
 let sessionId = sessionCookie.value;
 
 const response = await fetch(`${serverURL}/boards/get`, {
-    // gets all the boards a user has access to
-    // gets their BoardID and BoardName
-    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sessionId: sessionId})
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({sessionId: sessionId})
 });
 
 const {data: boards} = await response.json();
 
-// Get current URL and check for boardId parameter
 const url = new URL(Astro.request.url);
 const boardIdParam = url.searchParams.get('boardId');
 
@@ -29,6 +27,11 @@ console.log('Board ID Param:', boardIdParam);
 
 if (boards === null || boards === undefined) {
     console.log('Boards data is null or undefined');
+    // Check if the URL has a boardId parameter
+    if (boardIdParam !== null) {
+        // Redirect to /boards without the boardId parameter
+        return Astro.redirect('/boards');
+    }
 } else {
     let boardList = [];
     for (let task of boards) {

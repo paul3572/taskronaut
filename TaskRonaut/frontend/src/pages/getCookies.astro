@@ -1,8 +1,5 @@
 ---
 
-let sessionId = Astro.cookies.get('sessionId');
-console.log('Session ID:', sessionId);
-
 ---
 <!DOCTYPE html>
 <html>
@@ -12,30 +9,21 @@ console.log('Session ID:', sessionId);
 <body style="background-color: #18191b">
 <div>
     <p style="color: whitesmoke">Session ID: <span id="sessionIdDisplay"></span></p>
+    <p style="color: whitesmoke">User: <span id="user"></span></p>
 
     <script>
-        // Retrieve the stored JSON object from sessionStorage
-        const userData = JSON.parse(sessionStorage.getItem("user"));
-
-        if (userData) {
-            // Combine firstName and lastName
-            const fullName = `${userData.firstName} ${userData.lastName}`;
-
-            // Set a cookie with the fullName value
-            // This sets a cookie named "fullName" that expires in 7 days
-            const days = 7;
-            const expires = new Date(Date.now() + days * 864e5).toUTCString();
-            document.cookie = `fullName=${encodeURIComponent(fullName)}; expires=${expires}; path=/`;
-
-            console.log("Cookie set:", document.cookie);
-        } else {
-            console.log("User data not found in sessionStorage.");
-        }
+        import { firstName, lastName } from "./user.js";
 
         const sessionId = sessionStorage.getItem('sessionID');
-        if (sessionId) {
+
+
+        if (sessionId || firstName || lastName) {
             document.getElementById('sessionIdDisplay').textContent = sessionId;
             document.cookie = `sessionId=${sessionId}; path=/; max-age=86400`; // 1 tag
+
+            document.cookie = `user=${firstName} ${lastName};`;
+            document.getElementById('user').textContent = `${firstName} ${lastName}`;
+
             window.location.href = '/boards'
 
         } else {
