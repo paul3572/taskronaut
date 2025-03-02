@@ -99,7 +99,7 @@ if (boards === null || boards === undefined) {
                                 <div x-show="!isRenaming">
                                     <!-- Update Name button -->
                                     <button class="dropdown-item"
-                                            @click="isRenaming = true; newBoardName = `${board.boardName}`">
+                                            @click=`isRenaming = true; newBoardName = "${board.boardName}"`>
                                         Umbenennen
                                     </button>
 
@@ -109,7 +109,9 @@ if (boards === null || boards === undefined) {
                                             hx-headers='{"Content-Type": "application/json"}'
                                             hx-vals=`js:{ sessionId: "${sessionId}", boardId: "${board.boardID}" }`
                                             hx-trigger="click"
-                                            hx-swap="delete">
+                                            hx-swap="delete"
+                                            hx-target=`#board-${board.boardID}`
+                                    >
                                         Löschen
                                     </button>
                                 </div>
