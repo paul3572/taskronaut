@@ -30,14 +30,12 @@ class BoardController {
                 userId = await findUserBySessionId(sessionId);
             }
 
-            // Add Boards:
+            //  Add Boards:
             const result = await psBoard.insertNewBoard(boardName);
             const boardId = result[0].insertId;
             logger.info(chalk.hex(styles.success)('Boards successfully added'));
             console.log("result[0].insertId: " + boardId);
             await psBoardMember.insertNewBoardMembers(userId, boardId);
-
-            // Add Board-Chat
 
 
 
@@ -49,7 +47,7 @@ class BoardController {
     async updateBoard(sessionId, boardId, boardName) {
         try {
             const myUserId = await findUserBySessionId(sessionId);
-            const result = await psChatmembers.getChatMemberEntry(boardId, boardName);
+            const result = await psBoard.updateBoard(boardId, boardName);
             return {statusCode: 200};
         } catch (exception) {
             return await errorHandler(exception);
@@ -59,7 +57,8 @@ class BoardController {
     async removeBoard(sessionId, boardId) {
         try {
             const myUserId = await findUserBySessionId(sessionId);
-            const userToAddEntry = await psChatmembers.getChatMemberEntry(myUserId, boardId);
+            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+            console.log("UserToAddEntry: " + JSON.stringify(myUserId, boardId));
             if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
                 throw new PermissionDeniedError("User is not allowed to board");
             } else {
