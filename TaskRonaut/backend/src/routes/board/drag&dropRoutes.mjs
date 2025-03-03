@@ -2,11 +2,11 @@ import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import {serverResponse} from "../../middleware/serverResponse.mjs";
-import router from "./taskRoutes.mjs";
 import dragANDdropController from "../../controller/board/dragANDdropController.mjs";
+import {Router} from "express";
 
 
-const Router = new Router();
+const router = new Router();
 router.patch('/list', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)`DRAG&DROP LIST: `);
