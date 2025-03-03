@@ -13,7 +13,7 @@ class PtpMessagesController {
             await psPtPMessages.insertNewMessage(myUserId, otherUserId, message);
             return {statusCode: 201};
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
     }
 
@@ -26,7 +26,7 @@ class PtpMessagesController {
             const result = await psPtPMessages.getMessages(myUserId, otherUserId);
             return {statusCode: 200, data: result};
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
     }
 
@@ -41,7 +41,7 @@ class PtpMessagesController {
                 throw new PermissionDeniedError("You are not the author of this message");
             }
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
     }
 }

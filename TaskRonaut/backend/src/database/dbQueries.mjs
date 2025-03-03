@@ -58,8 +58,11 @@ export const taskQueries = {
     deleteTaskbyBoardList: 'DELETE FROM Tasks WHERE listID IN (SELECT listID FROM Lists WHERE boardID = ?)',
     getTasksByUserId: 'SELECT  taskID, isResponsible FROM AuthorizedUsers WHERE isAuthorized = 1 AND userID = ?',
     addDeafaultTask: 'INSERT INTO Tasks (taskCreatorID, taskName, boardID, listID) VALUES (?, ?, ?, ?)',
-
 };
+export const dragANDdropQueries = {
+    updateListId: 'UPDATE Tasks SET listID = ? WHERE taskID = ?',
+    updateTaskStatus: 'UPDATE Tasks SET taskStatus = ? WHERE taskID = ?',
+}
 export const boardMessageQueries = {
     createMessage: 'INSERT INTO BoardMessages (boardID, senderID, message) VALUES (?, ?, ?)',
     deleteMessage: 'DELETE FROM BoardMessages WHERE messageID = ?',

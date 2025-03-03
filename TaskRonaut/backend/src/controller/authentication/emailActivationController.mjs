@@ -19,19 +19,6 @@ class EmailActivationController {
             }
         } catch (error) {
             return await errorHandler(error);
-            /*
-            logger.error(error);
-            if (error instanceof UserNotFoundError) {
-                return {statusCode: 404, message: error.message};
-            } else if (error instanceof DatabaseError) {
-                return {statusCode: 500, message: "Database error while checking user authentication"};
-            } else if (error instanceof PermissionDeniedError) {
-                return {statusCode: 401, message: "User is not authenticated"};
-            } else {
-                return {statusCode: 500, message: "Error while checking user authentication"};
-            }
-
-             */
         }
     }
 
@@ -56,21 +43,6 @@ class EmailActivationController {
             return {statusCode: 200, message: "User activation successful"};
         } catch (error) {
             return await errorHandler(error);
-            /*
-            logger.error(error);
-            if (error instanceof InvalidTokenError) {
-                return {statusCode: 400, message: error.message};
-            } else if (error instanceof UserNotFoundError) {
-                return {statusCode: 404, message: error.message};
-            } else if (error instanceof ActivationError) {
-                return {statusCode: 500, message: error.message};
-            } else if (error instanceof DatabaseError) {
-                return {statusCode: 500, message: "Database error while activating user"};
-            } else {
-                return {statusCode: 500, message: "Error while activating user"};
-            }
-
-             */
         }
     }
 }

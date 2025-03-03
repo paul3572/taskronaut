@@ -16,12 +16,8 @@ class BoardMessagesController {
                 await psBoardMessages.insertNewMessage(boardId, myUserId, message);
                 return {statusCode: 201};
             }
-
-
-            await psMessages.insertNewMessage(chatId, myUserid, message);
-            return {statusCode: 201};
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
     }
 
@@ -36,7 +32,7 @@ class BoardMessagesController {
                 return {statusCode: 200, data: result};
             }
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
     }
 
@@ -53,7 +49,7 @@ class BoardMessagesController {
             }
 
         } catch (error) {
-            await errorHandler(error);
+            return await errorHandler(error);
         }
 
     }

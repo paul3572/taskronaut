@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import swaggerDocument from './src/config/swaggerAll.json' assert {type: 'json'};
 
 import testRoutes from './testRoutes.mjs';
+import dragANDdropRoutes from './src/routes/board/drag&dropRoutes.mjs';
 import ptpRoutes from './src/routes/chat/ptpRoutes.mjs';
 import boardChatRoutes from './src/routes/chat/BoardChatRoutes.mjs';
 import loginRoutes from './src/routes/authentication/loginRoutes.mjs';
@@ -37,6 +38,7 @@ apiRouter.use('/tasks', taskRoutes);
 apiRouter.use('/boards', boardRoutes);
 apiRouter.use('/lists', listRoutes);
 apiRouter.use('/user', userDataRoutes);
+apiRouter.use('/dragANDdrop', dragANDdropRoutes);
 
 app.use('/api', apiRouter);
 app.use(testRoutes);

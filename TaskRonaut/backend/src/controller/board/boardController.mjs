@@ -61,7 +61,7 @@ class BoardController {
             console.log("UserToAddEntry: " + JSON.stringify(myUserId, boardId));
             if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
                 throw new PermissionDeniedError("User is not allowed to board");
-            } else {
+            } else {    
                 const result = await psBoard.deleteBoard(boardId);
                 logger.info(chalk.hex(styles.success)`Board mit ID ${boardId} erfolgreich entfernt`);
                 //TODO: Delete Chat
