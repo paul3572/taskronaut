@@ -4,15 +4,15 @@ import {serverURL} from "../pages/conf.js";
 let sessionId = Astro.cookies.get('sessionId').value;
 
 
+let localFullName = Astro.cookies.get('user').value;
+console.log("localFullName "+localFullName);
 
 let otherUserEmail = Astro.props.otherUserEmail;
+console.log("otherUserEmail "+otherUserEmail)
+
 let otherUserName = Astro.props.otherUserName;
+console.log("otherUserName " +otherUserName)
 
-
-
-console.log("Other User Email:" + otherUserEmail);
-
-let localFullName = Astro.cookies.get('user').value;
 
 
 

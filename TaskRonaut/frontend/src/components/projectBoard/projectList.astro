@@ -155,7 +155,6 @@ const {data: lists} = await responseLists.json();
         </div>
     </div>
 </div>
-
 <style>
     .list-header {
         display: flex;
@@ -226,3 +225,63 @@ const {data: lists} = await responseLists.json();
         background: var(--foreground);
     }
 </style>
+
+<script>
+
+    import 'htmx.org';
+    import Alpine from 'alpinejs';
+    import {serverURL} from '../../pages/conf.js';
+
+    // Alpine.js Board Creation Logic
+    Alpine.data('boardCreation', () => ({
+        showHeaderInput: false,
+        showCardInput: false,
+        boardName: '',
+        async createBoard() {
+            if (!this.boardName.trim()) return;
+            try {
+                const sessionId = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('sessionId='))
+                    ?.split('=')[1];
+
+                const response = await fetch(`${serverURL}/boards/boards/`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        sessionId: sessionId,
+                        boardName: this.boardName
+                    })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Board creation failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }));
+
+
+    // Session validation
+    const sessionId = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('sessionId='))
+        ?.split('=')[1];
+
+    if (!document.cookie.includes('sessionId')) {
+        window.location.href = `/getCookies`;
+    }
+
+    if (!sessionId) {
+        window.location.href = `/login`;
+    }
+</script>
+
+
+
+
+
