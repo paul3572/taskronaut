@@ -1,17 +1,20 @@
 ---
 import Task from './task.astro';
-import {serverURL} from '../../pages/conf.js';
+import { serverURL } from '../../pages/conf.js';
 
 let sessionId = Astro.cookies.get('sessionId').value;
-
 let boardId = Astro.props.boardId;
 
+// Fetch tasks
 const responseTasks = await fetch(`${serverURL}/tasks/get/byBoard`, {
-    method: 'POST', headers: {
-        'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: boardId})
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId: sessionId, boardId: boardId }),
 });
 
+const { data: tasks } = await responseTasks.json();
+
+// Define status lists
 const lists = [
     { listID: 'todo', listName: 'Zu erledigen' },
     { listID: 'doing', listName: 'In Bearbeitung' },
@@ -19,6 +22,7 @@ const lists = [
     { listID: 'done', listName: 'Erledigt' }
 ];
 
+// Filter tasks by status
 const filteredTasks = {
     todo: [],
     doing: [],
@@ -26,12 +30,7 @@ const filteredTasks = {
     done: []
 };
 
-const { data: tasks } = await responseTasks.json();
-console.log(tasks);
-let taskList = [];
 for (let task of tasks) {
-    taskList.push(task);
-
     if (task.taskStatus === 'todo') {
         filteredTasks.todo.push(task);
     } else if (task.taskStatus === 'doing') {
@@ -43,16 +42,40 @@ for (let task of tasks) {
     }
 }
 
+console.log(tasks)
 ---
-
 <div class="dragAndDrop">
     {lists.map(list => (
             <div
                     class="list"
-                    @drop="dropTask(event, { listID: list.listID })"
+                    @dragover.prevent
+                    @drop=`(event) => {
+                        const taskId = event.dataTransfer.getData('text/plain');
+                        fetch('${serverURL}/dragANDdrop/status', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            sessionID: '${sessionId}',
+                            taskID: taskId,
+                            taskStatus: '${list.listID}'
+                          })
+                        }).then(() => window.location.reload());
+                      }`
                     id={`list-${list.listID}`}
             >
                 <h2>{list.listName}</h2>
                 <Task listID={list.listID} tasks={filteredTasks[list.listID]}></Task>
-            </div>))}
+            </div>
+    ))}
 </div>
+
+<style>
+    .list {
+        min-height: 30px;
+        transition: background 0.2s;
+    }
+
+    .list.drag-over {
+        background: var(--foreground);
+    }
+</style>

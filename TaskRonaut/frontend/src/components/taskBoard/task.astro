@@ -1,16 +1,22 @@
 ---
 import TaskDetails from "./taskDetails.astro";
-const {tasks} = Astro.props;
+const { tasks } = Astro.props;
 ---
 
 {tasks.length === 0 ? (
-<></>) : (
+<></>
+    ) : (
 <>
     {tasks.map(task => (
-            <div class="task" x-data="{ openDetails: false }" id=`task-${task.taskID}`>
+            <div
+                    class="task"
+                    draggable="true"
+                    @dragstart=`event.dataTransfer.setData('text/plain', '${task.taskID}')`
+                    x-data="{ openDetails: false }"
+                    id={`task-${task.taskID}`}
+            >
                 <div @click="openDetails = !openDetails" style="flex-direction: column">
-                    <div class={`task-status status-${task.taskStatus}`}
-                         style="float: left; height: 70px; width: 2%;"/>
+                    <div class={`task-status status-${task.taskStatus}`} style="float: left; height: 70px; width: 2%;" />
                     <div style="width: 95%; float: right;">
                         <h3>{task.taskName}</h3>
                         {task.dueDate && <p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
@@ -18,9 +24,19 @@ const {tasks} = Astro.props;
                     </div>
                 </div>
                 <div x-show="openDetails" @click.away="openDetails = false" class="dropdown">
-                    <TaskDetails task={task}/>
+                    <TaskDetails task={task} />
                 </div>
             </div>
     ))}
 </>
-    )}
+        )}
+
+<style>
+    .task[draggable="true"] {
+        cursor: grab;
+    }
+
+    .task[draggable="true"]:active {
+        cursor: grabbing;
+    }
+</style>
