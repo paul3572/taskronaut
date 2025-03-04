@@ -13,6 +13,10 @@ export function initalizeLogger() {
     if (logInConsole) {
         transports.push(new winston.transports.Console({
             level: 'debug',
+            format: combine(
+                timestamp(),
+                logFormat // Keine globale Colorize-Funktion
+            )
         }));
     }
 
