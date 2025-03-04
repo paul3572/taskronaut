@@ -17,6 +17,7 @@ services:
       dockerfile: Dockerfile
     expose:
       - "3001"
+    tty: true
     depends_on:
       - datenbank
     environment:
