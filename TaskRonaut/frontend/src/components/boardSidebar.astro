@@ -3,6 +3,8 @@ import Alpine from 'alpinejs';
 import Ptp from "./ptp.astro";
 
 import {serverURL} from "../pages/conf";
+import ProjectBoard from "./projectBoard/projectBoard.astro";
+import BoardChat from "./boardChat.astro";
 const {boardID} = Astro.props;
 
 let sessionId = Astro.cookies.get('sessionId').value;
@@ -124,9 +126,5 @@ console.log('Users:', users);
                 </div>
             </div>
         </ul>
-        <hr/>
     </nav>
-    <div class="sidebar-footer">
-        <p></p>
-    </div>
 </aside>

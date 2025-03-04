@@ -2,44 +2,33 @@
 import {serverURL} from "../pages/conf.js";
 
 let sessionId = Astro.cookies.get('sessionId').value;
+let {boardId} = Astro.props;
+let localFullName = Astro.cookies.get('user').value;
 
+console.log("Board ID:" + boardId);
 
-
-let otherUserEmail = Astro.props.otherUserEmail;
-let otherUserName = Astro.props.otherUserName;
-
-
-
-console.log("Other User Email:" + otherUserEmail);
-
-let localFullName = Astro.cookies.get('user').value;;
-
-
-
-const response = await fetch(`${serverURL}/ptp/view`, {
+const response = await fetch(`${serverURL}/boardChat/view`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, otherUserEmail: otherUserEmail})
+    },
+    body: JSON.stringify({sessionId: sessionId, boardId: boardId})
 });
 
+const {data: messages} = await response.json();
 
-const {data: ptp} = await response.json();
-
-console.log("PTP:")
-console.log(ptp);
+console.log("Chat Messages:")
+console.log(messages);
 ---
 <div class="ptp" style="display: block">
     <button class="close" style="right: 0; top: 0" @click="showChat = false">X</button>
-    <div id="messages"
-         class="ptp-messages">
-        {}
-        {ptp.flat().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((msg) => {
+    <div id="messages" class="ptp-messages">
+        {messages.flat().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map((msg) => {
             const isOwn = msg.senderID === `${localFullName}`;
 
             return (
                     <div class={`message ${isOwn ? 'message-own' : 'message-other'}`}>
-                        <div class="message-sender">{isOwn ? 'Du' : `${otherUserName}`}</div>
+                        <div class="message-sender">{isOwn ? 'Du' : msg.senderID}</div>
                         <div class="message-content">{msg.message}</div>
                     </div>
             )
@@ -47,31 +36,29 @@ console.log(ptp);
     </div>
     <div class="ptp-input"
          x-data=`{
-        messageData: {
-            message: '',
-        }
-    }`
+            messageData: {
+                message: '',
+            }
+        }`
     >
         <input placeholder="Schreibe eine Nachricht..."
                type="text"
-               x-model="messageData.message"
-               maxlength="255"/>
-        <span class="char-count" x-text="`${messageData.message.length}/255`"></span>
-        <button @click=`
-                fetch('${serverURL}/ptp/send', {
+               x-model="messageData.message"/>
+        <button
+                @click=`
+                fetch('${serverURL}/boardChat/send', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                    sessionId: "${sessionId}",
-                    otherUserEmail: "${otherUserEmail}",
-                    message: messageData.message
+                        sessionId: "${sessionId}",
+                        boardId: "${boardId}",
+                        message: messageData.message
                     })
                 }).then(() => {
                     window.location.reload();
                 });
-                `>
-            Senden
-        </button>
+            `
+        >Senden</button>
     </div>
 </div>
 
@@ -107,14 +94,6 @@ console.log(ptp);
         gap: 12px;
         min-height: min-content;
         overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
-    .message-content {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        hyphens: auto;
-        white-space: normal;
     }
 
     .message {
@@ -150,27 +129,18 @@ console.log(ptp);
         margin-top: 5px;
         padding-top: 10px;
         border-top: 1px solid var(--border);
-        position: relative;
-    }
-
-    .char-count {
-        color: var(--copy-light);
-        font-size: 0.8rem;
-        align-self: center;
-        margin-left: auto;
-        padding: 0 8px;
     }
 
     /* Scrollbar styling */
-    .ptp-messages-container::-webkit-scrollbar {
+    .ptp-messages::-webkit-scrollbar {
         width: 8px;
     }
 
-    .ptp-messages-container::-webkit-scrollbar-track {
+    .ptp-messages::-webkit-scrollbar-track {
         background: var(--border);
     }
 
-    .ptp-messages-container::-webkit-scrollbar-thumb {
+    .ptp-messages::-webkit-scrollbar-thumb {
         background-color: var(--primary);
         border-radius: 4px;
     }
