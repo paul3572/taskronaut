@@ -14,7 +14,7 @@ export const styles = {
     info: '#17A2B8',
     light: '#F8F9FA',
     dark: '#343A40',
-    debug: '#6C757D',
+    debug: '#220bcd',
     trace: '#007BFF',
     critical: '#FF0000',
     notice: '#FFD700',

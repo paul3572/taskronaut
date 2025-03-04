@@ -15,7 +15,7 @@ export function initalizeLogger() {
             level: 'debug',
             format: combine(
                 timestamp(),
-                logFormat // Keine globale Colorize-Funktion
+                logFormat
             )
         }));
     }
