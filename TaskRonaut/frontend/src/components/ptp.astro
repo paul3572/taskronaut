@@ -47,7 +47,17 @@ const {data: ptp} = await response.json();
                        x-model="messageData.message"
                        maxlength="255"/>
                 <span class="char-count" x-text="`${messageData.message.length}/255`"></span>
-                <button @click="sendMessage">Senden</button>
+                <button @click=`
+                    fetch('${serverURL}/ptp/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId: "${sessionId}",
+                    otherUserEmail: "${otherUserEmail}",
+                    message: messageData.message
+                })
+            });
+                `>Senden</button>
             </div>
         </div>
     </div>
