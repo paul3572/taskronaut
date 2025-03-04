@@ -32,6 +32,7 @@ const {data: ptp} = await response.json();
         <div class="ptp-messages-container" id="messages">
             {ptp.flat().sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()).map((msg) => {
                 const isOwn = msg.senderID === `${localFullName}`;
+                console.log(msg.senderID +"," + localFullName)
                 return (
                         <div class=`message ${isOwn ? 'message-own' : 'message-other'}`>
                             <div class="message-sender">{isOwn ? 'Du' : `${otherUserName}`}</div>

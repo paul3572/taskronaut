@@ -16,8 +16,8 @@ if (typeof window !== 'undefined') {
         const user = JSON.parse(sessionStorage.getItem('user'));
         const rawFirstName = user?.firstName ?? '';
         const rawLastName = user?.lastName ?? '';
-        firstName = rawFirstName ? rawFirstName.charAt(0).toUpperCase() + rawFirstName.slice(1) : null;
-        lastName = rawLastName ? rawLastName.charAt(0).toUpperCase() + rawLastName.slice(1) : null;
+        firstName = rawFirstName;
+        lastName = rawLastName;
         email = user?.email ?? null;
     }
 }
