@@ -1,6 +1,5 @@
 import connection from "../dbCon.mjs";
 import {boardMessageQueries, p2pMessageQueries} from "../dbQueries.mjs";
-import {NoMessagesFoundError} from "../../middleware/errors.mjs";
 import psAuthentication from "./psAuthentication.mjs";
 
 class PsBoardMessages {
@@ -16,12 +15,12 @@ class PsBoardMessages {
     async getMessages(boardId) {
         const [messages] = await connection.query(boardMessageQueries.getMessagesByBoardId, [boardId]);
         let returnMessages = [];
-        for (const message of messages) {
-            let messageId = message.messageID;
-            let message = message.message;
-            let userIdSender = message.senderID;
-            let boardId = message.boardID;
-            let timestamp = message.timestamp;
+        for (const nachtricht of messages) {
+            let messageId = nachtricht.messageID;
+            let message = nachtricht.message;
+            let userIdSender = nachtricht.senderID;
+            let boardId = nachtricht.boardID;
+            let timestamp = nachtricht.timestamp;
 
             const userSender = await psAuthentication.getUserById(userIdSender);
             console.log(userSender);
