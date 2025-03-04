@@ -1,39 +1,24 @@
 ---
 import Task from './project.astro';
-
 import {serverURL} from '../../pages/conf.js';
 
 let sessionId = Astro.cookies.get('sessionId').value;
-
-
 const {boardID} = Astro.props;
 
+// Fetch tasks
 const responseTasks = await fetch(`${serverURL}/tasks/get/byBoard`, {
-    method: 'POST', headers: {
-        'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: boardID})
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({sessionId: sessionId, boardId: boardID}),
 });
-
 const {data: tasks} = await responseTasks.json();
 
-console.log("tasks/get/byBoard: " + tasks);
-
-
-console.log(tasks);
-let taskList = [];
-for (let task of tasks) {
-    taskList.push(task);
-}
-
-
-
+// Fetch lists
 const responseLists = await fetch(`${serverURL}/lists/lists/board/`, {
-    method: 'POST', headers: {
-        'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: boardID})
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({sessionId: sessionId, boardId: boardID}),
 });
-
-
 const {data: lists} = await responseLists.json();
 ---
 <div class="dragAndDrop"
@@ -58,39 +43,49 @@ const {data: lists} = await responseLists.json();
             <>
                 {lists && lists.map(list => (
                         <div class="list"
-                             id=`list-${list.listID}`
+                             id={`list-${list.listID}`}
                              x-data=`{
-                              isDropdownOpen: false,
-                              isRenaming: false,
-                              originalListName: "${list.listName}", // Store the original name
-                              newListName: "${list.listName}",
-                              fetchUpdateList() {
-                                if (!this.newListName.trim()) return;
-                                fetch('${serverURL}/lists/update', {
-                                  method: 'PATCH',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    sessionId: '${sessionId}',
-                                    listId: '${list.listID}',
-                                    listName: this.newListName
-                                  })
-                                }).then(() => window.location.reload());
-                                this.isRenaming = false;
-                              }
-                            }`>
+              isDropdownOpen: false,
+              isRenaming: false,
+              originalListName: "${list.listName}",
+              newListName: "${list.listName}",
+              fetchUpdateList() {
+                if (!this.newListName.trim()) return;
+                fetch('${serverURL}/lists/update', {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    sessionId: '${sessionId}',
+                    listId: '${list.listID}',
+                    listName: this.newListName
+                  })
+                }).then(() => window.location.reload());
+                this.isRenaming = false;
+              },
+              handleDrop(event) {
+                event.preventDefault();
+                const taskId = event.dataTransfer.getData('text/plain');
+                fetch('${serverURL}/dragANDdrop/list', {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    sessionID: '${sessionId}',
+                    taskID: taskId,
+                    listID: '${list.listID}'
+                  })
+                }).then(() => window.location.reload());
+              }
+            }`
+                             @dragover.prevent
+                             @drop="handleDrop($event)">
                             <div class="list-header">
                                 <h2>{list.listName}</h2>
-
                                 <div class="dropdown-container">
-                                    <!-- Dropdown trigger -->
                                     <button class="dropdown-trigger" @click="isDropdownOpen = !isDropdownOpen">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
-                                    <div class="dropdown-menu"
-                                         x-show="isDropdownOpen"
-                                         x-cloak
+                                    <div class="dropdown-menu" x-show="isDropdownOpen" x-cloak
                                          @click.away="isDropdownOpen = false">
-
                                         <div x-show="!isRenaming">
                                             <button class="dropdown-item"
                                                     @click="isRenaming = true; newListName = originalListName">
@@ -106,102 +101,56 @@ const {data: lists} = await responseLists.json();
                                                 Löschen
                                             </button>
                                         </div>
-
                                         <div x-show="isRenaming" class="rename-form">
-                                            <input type="text"
-                                                   x-model="newListName"
-                                                   class="rename-input"
-                                                   autofocus>
+                                            <input type="text" x-model="newListName" class="rename-input" autofocus>
                                             <div class="rename-buttons">
-                                                <button class="dropdown-item confirm"
-                                                        @click="fetchUpdateList()"
+                                                <button class="dropdown-item confirm" @click="fetchUpdateList()"
                                                         style="color: var(--success)">
                                                     Bestätigen
                                                 </button>
-                                                <button class="dropdown-item"
-                                                        @click="isRenaming = false"
+                                                <button class="dropdown-item" @click="isRenaming = false"
                                                         style="color: var(--error)">
                                                     Abbrechen
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
-
-
-                                <!-- Dropdown menu -->
-
                             </div>
-                            <Task listID={list.listID} tasks={taskList} boardID={boardID}></Task>
+                            <Task listID={list.listID} tasks={tasks} boardID={boardID}></Task>
                         </div>))}
             </>)}
 
     <div class="add-list" x-data=`{
-        showInput: false,
-        taskData: { listName: "", userId: userId },
-        toggleInput() {
-            this.showInput = !this.showInput;
-        },
-        saveList() {
-            if (this.taskData.listName.trim() !== "") {
-                fetch("${serverURL}/lists/lists", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    sessionId: sessionId.replace(/"/g, ''), 
-                    boardId: ${boardID},
-                    listName: this.taskData.listName 
-                })
-                }).then(() => {
-                    window.location.reload();
-                });
-            }
-        },
-        cancelList() {
-            this.showInput = false;
-            this.taskData.listName = "";
-        },
-        showForm: false,
-        showButton: true,
-        init() {
-          this.$watch('showForm', value => {
-            if (value) {
-              this.showButton = false;
-            } else {
-              setTimeout(() => { this.showButton = true; }, 90);
-            }
-          });
-        }
-    }`>
-
-        <!-- Button for creating a list -->
-        <button
-                @click="showForm = true"
-                x-show="showButton"
-                class="add-list-button">
+    showInput: false,
+    taskData: { listName: "", userId: userId },
+    toggleInput() { this.showInput = !this.showInput; },
+    saveList() {
+      if (this.taskData.listName.trim() !== "") {
+        fetch("${serverURL}/lists/lists", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            sessionId: sessionId.replace(/"/g, ''), 
+            boardId: ${boardID},
+            listName: this.taskData.listName 
+          })
+        }).then(() => window.location.reload());
+      }
+    },
+    cancelList() {
+      this.showInput = false;
+      this.taskData.listName = "";
+    }
+  }`>
+        <button @click="showForm = true" x-show="showButton" class="add-list-button">
             + Liste Erstellen
         </button>
-
-        <!-- Input field and buttons for list creation -->
         <div x-show="showForm" x-cloak x-transition>
-            <input
-                    type="text"
-                    placeholder="Name der Liste"
-                    x-model="taskData.listName"
-                    class="list-name-input"
-            />
+            <input type="text" placeholder="Name der Liste" x-model="taskData.listName" class="list-name-input"/>
             <div class="save-list-space">
-                <button @click="saveList" class="submit-list-button">
-                    Liste Speichern
-                </button>
-                <button @click="showForm = false"
-                        class="cancel-list-button">
-                    &#10006
-                </button>
+                <button @click="saveList" class="submit-list-button">Liste Speichern</button>
+                <button @click="showForm = false" class="cancel-list-button">&#10006</button>
             </div>
         </div>
     </div>
@@ -236,7 +185,7 @@ const {data: lists} = await responseLists.json();
     }
 
     .dropdown-menu {
-        position: fixed;  /* Changed to fixed positioning */
+        position: fixed;
         transform: translate(-50%, 5px);
         background: var(--background);
         border: 1px solid var(--border);
@@ -247,7 +196,6 @@ const {data: lists} = await responseLists.json();
         padding: 6px 0;
     }
 
-    /* Rest of the styles remain the same */
     .dropdown-item {
         display: block;
         width: 100%;
@@ -269,8 +217,13 @@ const {data: lists} = await responseLists.json();
         color: var(--error);
     }
 
-    /* Ensure lists don't clip dropdowns */
     .list {
         overflow: visible !important;
+        min-height: 100px;
+        transition: background 0.2s;
+    }
+
+    .list.drag-over {
+        background: var(--foreground);
     }
 </style>

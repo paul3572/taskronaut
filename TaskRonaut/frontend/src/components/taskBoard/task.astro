@@ -7,23 +7,20 @@ const {tasks} = Astro.props;
 <></>) : (
 <>
     {tasks.map(task => (
-            <div
-                    class="task"
-                    x-data="{ open: false }"
-            >
-                <div @click="open = !open" style="flex-direction: column">
+            <div class="task" x-data="{ openDetails: false }" id=`task-${task.taskID}`>
+                <div @click="openDetails = !openDetails" style="flex-direction: column">
                     <div class={`task-status status-${task.taskStatus}`}
-                         style="float: left; height: 70px; width: 2%;">
-                    </div>
+                         style="float: left; height: 70px; width: 2%;"/>
                     <div style="width: 95%; float: right;">
                         <h3>{task.taskName}</h3>
-                        {task.dueDate && (<p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>)}
+                        {task.dueDate && <p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
                         <p>Priorität: {task.priorities}/5</p>
                     </div>
                 </div>
-                <div x-show="open" @click.away="open = false" class="dropdown">
-                    <TaskDetails task={task}></TaskDetails>
+                <div x-show="openDetails" @click.away="openDetails = false" class="dropdown">
+                    <TaskDetails task={task}/>
                 </div>
-            </div>))}
+            </div>
+    ))}
 </>
     )}

@@ -1,14 +1,14 @@
 ---
 import {serverURL} from "../../pages/conf.js";
 import TaskDetails from "../taskBoard/taskDetails.astro";
-const {boardID ,listID, tasks} = Astro.props;
+const {boardID, listID, tasks} = Astro.props;
 
 // Filter tasks matching the current listID
 const listTasks = tasks.filter(task => task.listID === listID, boardID);
 ---
 
 <div
-    x-data="{
+        x-data="{
     sessionId: sessionStorage.getItem('sessionID').slice(1, -1),
     userId: sessionStorage.getItem('userId')
 }">
@@ -16,24 +16,42 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
             <></>) : (
             <>
                 {listTasks.map(task => (
-                        <div class="task" x-data="{ openDetails: false }" id=`task-${task.taskId}`>
-                            <div @click="openDetails = !openDetails" style="flex-direction: column">
-                                <div class={`task-status status-${task.taskStatus}`}
-                                     style="float: left; height: 70px; width: 2%;"/>
-                                <div style="width: 95%; float: right;">
-                                    <h3>{task.taskName}</h3>
-                                    {task.dueDate && <p style="margin-bottom: 1px">Fällig am: {new Date(task.dueDate).toLocaleDateString()}</p>}
-                                    <p>Priorität: {task.priorities}/5</p>
+                        <div
+                                x-data="{ openDetails: false }"
+                                id={`task-${task.taskID}`}
+                        >
+
+                            <div
+                                    class="task"
+                                    draggable="true"
+                                    @dragstart={`event.dataTransfer.setData('text/plain', "${task.taskID}")`}
+
+                            >
+                                <div @click="openDetails = !openDetails" style="flex-direction: column">
+                                    <div class={`task-status status-${task.taskStatus}`}
+                                         style="float: left; height: 70px; width: 2%;"/>
+                                    <div style="width: 95%; float: right;">
+                                        <h3>{task.taskName}</h3>
+                                        {task.dueDate && <p style="margin-bottom: 1px">Fällig
+                                            am: {new Date(task.dueDate).toLocaleDateString()}</p>}
+                                        <p>Priorität: {task.priorities}/5</p>
+                                    </div>
                                 </div>
+
                             </div>
+
                             <div x-show="openDetails" @click.away="openDetails = false" class="dropdown">
                                 <TaskDetails task={task}/>
                             </div>
-                        </div>))}
+
+
+                        </div>
+
+                ))}
             </>
         )}
 
-    <div x-data=`{
+        <div x-data=`{
         taskData: {
             sessionId: sessionId,
             taskName: '',
@@ -57,28 +75,28 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
         }
 
     }`>
-        <button
-                x-show="showButton"
-                @click="showForm = true"
-                class="add-task-button">
-            + Aufgabe hinzufügen
-        </button>
-
-        <div x-show="showForm" x-transition class="task-input">
-            <label x-cloak>
-                Aufgabenname
-                <input type="text"
-                       x-model="taskData.taskName"
-                       placeholder="Aufgabenname"
-                       class="task-name-input"
-                       x-cloak
-                       x-transition
-                />
-            </label>
             <button
-                    x-cloak
-                    x-transition
-                    @click=`
+                    x-show="showButton"
+                    @click="showForm = true"
+                    class="add-task-button">
+                + Aufgabe hinzufügen
+            </button>
+
+            <div x-show="showForm" x-transition class="task-input">
+                <label x-cloak>
+                    Aufgabenname
+                    <input type="text"
+                           x-model="taskData.taskName"
+                           placeholder="Aufgabenname"
+                           class="task-name-input"
+                           x-cloak
+                           x-transition
+                    />
+                </label>
+                <button
+                        x-cloak
+                        x-transition
+                        @click=`
                         if (taskData.taskName.trim()) {
                             fetch("${serverURL}/tasks/tasks", {
                                 method: 'POST',
@@ -92,15 +110,15 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
                             alert('Bitte geben Sie einen Namen für die Aufgabe ein');
                         }
                     `
-                    class="submit-task-button">
-                + Aufgabe erstellen
-            </button>
-            <button @click="showForm = false; taskData.taskName = ''"
-                    class="cancel-task-button"
-                    x-cloak
-                    x-transition>
-                &#10006;
-            </button>
+                        class="submit-task-button">
+                    + Aufgabe erstellen
+                </button>
+                <button @click="showForm = false; taskData.taskName = ''"
+                        class="cancel-task-button"
+                        x-cloak
+                        x-transition>
+                    &#10006;
+                </button>
+            </div>
         </div>
-    </div>
-</div>
+        </div>

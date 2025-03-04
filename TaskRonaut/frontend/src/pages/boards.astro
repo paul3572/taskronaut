@@ -145,55 +145,53 @@ if (boards === null || boards === undefined) {
                         </div>
                 ))))}
 
-                <!--     Card Input -->
-                <template x-if="!showCardInput">
-                    <div class="board-card add-board" @click="showCardInput = true">
-                        <div class="add-content">
-                            <i class="fas fa-plus"></i>
-                            <span>Neues Board anlegen</span>
+                <!-- Card Input Section Modified -->
+                <div class="board-card add-board"
+                     x-show="!showCardInput"
+                     x-cloak
+                     @click="showCardInput = true">
+                    <div class="add-content">
+                        <i class="fas fa-plus"></i>
+                        <span>Neues Board anlegen</span>
+                    </div>
+                </div>
+
+                <div class="board-card" x-show="showCardInput" x-cloak>
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                x-model="boardName"
+                                @keyup.enter="createBoard()"
+                                placeholder="Boardname"
+                                class="board-input"
+                                autofocus
+                        />
+                        <div class="button-group">
+                            <button @click="createBoard()" class="submit-btn">
+                                Erstellen
+                            </button>
+                            <button @click="showCardInput = false; boardName = ''"
+                                    class="cancel-btn">
+                                Abbrechen
+                            </button>
                         </div>
                     </div>
-                </template>
-
-                <template x-if="showCardInput">
-                    <div class="board-card">
-                        <div class="input-group">
-                            <input
-                                    type="text"
-                                    x-model="boardName"
-                                    @keyup.enter="createBoard()"
-                                    placeholder="Boardname"
-                                    class="board-input"
-                                    autofocus
-
-                            />
-                            <div class="button-group">
-                                <button @click="createBoard()" class="submit-btn">
-                                    Erstellen
-                                </button>
-                                <button @click="showCardInput = false; boardName = ''"
-                                        class="cancel-btn">
-                                    Abbrechen
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
+                </div>
             </div>
         </div>) : (
         <main class="content" x-data="{ showProjectBoard: false }">
-            <div class="main">
-                <!-- Render TaskBoard immediately with x-show -->
+            <div class="main" id="main">
+                <!-- ProjectBoard shown by default -->
                 <div class="board scrollable" x-show="!showProjectBoard">
                     <ProjectBoard boardID={boardIdParam}/>
                 </div>
 
-                <!-- Render ProjectBoard on demand -->
-                <template x-if="showProjectBoard">
-                    <div class="board scrollable">
-                        <TaskBoard boardID={boardIdParam}/>
-                    </div>
-                </template>
+                <!-- TaskBoard shown when toggled -->
+                <div class="board scrollable"
+                     x-show="showProjectBoard"
+                     x-cloak>
+                    <TaskBoard boardID={boardIdParam}/>
+                </div>
             </div>
         </main>
     )}

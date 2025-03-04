@@ -1,124 +1,91 @@
 ---
 const { task } = Astro.props;
 import { serverURL } from '../../pages/conf.js';
-let sessionId = Astro.cookies.get('sessionId').value;
+const sessionId = Astro.cookies.get('sessionId').value;
 ---
 
-<div
-        id="taskDetails"
-        x-cloak
-        class="task-details-screen"
-        x-data=`{
-        sessionId: document.cookie.split('; ').find(row => row.startsWith('sessionId=')).split('=')[1].replace(/"/g, ''),
-    }`>
-    <div class="task-details-block"
-         x-data=`{
-         taskData: {
-             sessionID: sessionId,
-             taskID: Number('${task.taskID}'),
-             taskName: '${task.taskName}',
-             dueDate: '${task.dueDate.split("T")[0]}',
-             taskDescription: '${task.taskDescription}',
-             priorities: '${task.priorities}',
-             taskStatus: '${task.taskStatus}',
-             comments: '${task.comments}',
-             boardID: Number('${task.boardID}'),
-             listID: Number('${task.listID}')
-         },
-         taskCreationDate: '${task.taskCreationDate}',
-         showInput: false,
-       }`>
+<div id="taskDetails" class="task-details-screen" x-cloak>
+    <form class="task-details-block"
+          hx-patch={`${serverURL}/tasks/tasks/update`}
+          hx-vals={`js:{sessionId: '${sessionId}', taskID: ${task.taskID}, listID: ${task.listID}, boardID: ${task.boardID} }`  }          hx-swap="none"
+          hx-on::after-request="window.location.reload()">
+
+
 
         <p class="closeButton" @click="openDetails = !openDetails">&#10006</p>
 
         <div class="task-details-content">
-
             <div class="left-side">
                 <div class="left-top">
                     <label for="taskName">Name:</label>
-                    <input type="text" id="taskName" name="taskName" x-model="taskData.taskName">
+                    <input type="text"
+                           id="taskName"
+                           name="taskName"
+                           value={task.taskName}>
                 </div>
                 <div class="left-middle">
                     <label for="taskDescription">Beschreibung:</label>
-                    <textarea id="taskDescription" name="taskDescription" x-model="taskData.taskDescription"></textarea>
+                    <textarea id="taskDescription" name="taskDescription">{task.taskDescription}</textarea>
                 </div>
                 <div class="left-bottom">
                     <label for="comments">Kommentare:</label>
-                    <textarea id="comments" name="comments" x-model="taskData.comments"></textarea>
+                    <textarea id="comments" name="comments">{task.comments}</textarea>
                 </div>
             </div>
 
             <div class="right-side">
-
-                <!--
-                <label for="taskCreator">Erstellt von:</label>
-                <input type="text" id="taskCreator" name="taskCreator" x-model="taskData.taskCreator">
-                -->
-
                 <label for="taskCreationDate">Erstellt am:</label>
-                <input type="datetime-local" id="taskCreationDate" name="taskCreationDate" :value="new Date(taskCreationDate).toISOString().slice(0, 16)" readonly>
+                <input type="datetime-local"
+                       id="taskCreationDate"
+                       value={new Date(task.taskCreationDate).toISOString().slice(0, 16)}
+                       readonly>
 
                 <label for="dueDate">Fällig am:</label>
                 <input type="date"
                        id="dueDate"
                        name="dueDate"
-                       x-model="taskData.dueDate">
+                       value={task.dueDate.split('T')[0]}>
 
                 <label for="priorities">Priorität:</label>
                 <div class="slider-container">
-                    <input type="range" id="priorities" name="priorities"
-                           x-model="taskData.priorities"
-                           min="1" max="5" step="1">
-                    <span class="slider-value" x-text="taskData.priorities"></span>
+                    <input type="range"
+                           id="priorities"
+                           name="priorities"
+                           value={task.priorities}
+                           min="1"
+                           max="5"
+                           step="1"
+                           oninput="document.getElementById('priorityValue').textContent = this.value">
+                    <span class="slider-value" id="priorityValue">{task.priorities}</span>
                 </div>
 
-                <label for="category">Kategorie:</label>
-                <input type="text" id="category" name="category" x-model="taskData.category">
-
                 <label for="taskStatus">Status:</label>
-                <select id="taskStatus" name="taskStatus" x-model="taskData.taskStatus">
-                    <option value="todo">Zu erledigen</option>
-                    <option value="doing">In Bearbeitung</option>
-                    <option value="validated">Geprüft</option>
-                    <option value="done">Erledigt</option>
+                <select id="taskStatus" name="taskStatus">
+                    <option value="todo" selected={task.taskStatus === 'todo'}>Zu erledigen</option>
+                    <option value="doing" selected={task.taskStatus === 'doing'}>In Bearbeitung</option>
+                    <option value="validated" selected={task.taskStatus === 'validated'}>Geprüft</option>
+                    <option value="done" selected={task.taskStatus === 'done'}>Erledigt</option>
                 </select>
 
                 <div class="buttons">
                     <button class="delete-button"
-
                             hx-delete=`${serverURL}/tasks/delete`
-                            hx-headers='{"Content-Type": "application/json"}'
                             hx-vals=`js:{ sessionId: "${sessionId}", taskId: "${Number(task.taskID)}" }`
                             hx-trigger="click"
-                            hx-swap="delete"
-                            hx-target=`#task-${task.taskId}`
-
-
+                            hx-swap="none"
+                            hx-on::after-request="window.location.reload()"
                     >
-                        <svg viewBox="0 0 448 512" class="svgIcon">
-                            <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
-                        </svg>
+                        delete
                     </button>
-                    <button class="save-button" @click=`
-                    fetch('${serverURL}/tasks/tasks/update', {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            ...taskData,
-                            dueDate: new Date(taskData.dueDate).toISOString().split('T')[0]
-                        })
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                `>
-                        <svg viewBox="0 0 448 512" class="svgIcon">
-                            <path d="M433.9 129.9L318.1 14.1C310.7 6.7 300.2 0 288 0H48C21.5 0 0 21.5 0 48V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V160c0-12.2-6.7-22.7-14.1-30.1zM224 416c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm96-208c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h224c8.8 0 16 7.2 16 16v128z"></path>
-                        </svg>
+                    <button class="save-button" type="submit">
+                        save
                     </button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
+
+<style>
+    /* Existing styles remain */
+</style>
