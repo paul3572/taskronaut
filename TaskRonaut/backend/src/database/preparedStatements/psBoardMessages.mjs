@@ -1,6 +1,7 @@
 import connection from "../dbCon.mjs";
-import {boardMessageQueries} from "../dbQueries.mjs";
+import {boardMessageQueries, p2pMessageQueries} from "../dbQueries.mjs";
 import {NoMessagesFoundError} from "../../middleware/errors.mjs";
+import psAuthentication from "./psAuthentication.mjs";
 
 class PsBoardMessages {
     async insertNewMessage(boardId, senderID, message) {
@@ -13,11 +14,29 @@ class PsBoardMessages {
     }
 
     async getMessages(boardId) {
-        const [result] = await connection.query(boardMessageQueries.getMessagesByBoardId, [boardId]);
-        if (result !== null) {
-            return result;
+        const [messages] = await connection.query(boardMessageQueries.getMessagesByBoardId, [boardId]);
+        let returnMessages = [];
+        for (const message of messages) {
+            let messageId = message.messageID;
+            let message = message.message;
+            let userIdSender = message.senderID;
+            let boardId = message.boardID;
+            let timestamp = message.timestamp;
+
+            const userSender = await psAuthentication.getUserById(userIdSender);
+            console.log(userSender);
+
+            const senderName = userSender.firstName + " " + userSender.lastName;
+
+            returnMessages.push({
+                messageID: messageId,
+                message: message,
+                senderID: senderName,
+                boardID: boardId,
+                timestamp: timestamp
+            });
         }
-        throw new NoMessagesFoundError();
+        return returnMessages;
     }
 
     async deleteMessage(messageId) {
