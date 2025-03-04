@@ -87,12 +87,14 @@ export class InvalidInputError extends Error {
         this.name = "InvalidInputError";
     }
 }
+
 export class UserIsAlreadyMemberError extends Error {
     constructor(message) {
         super(message);
         this.name = "UserIsAlreadyMemberError";
     }
 }
+
 export class NoMessagesFoundError extends Error {
     constructor(message) {
         super(message);

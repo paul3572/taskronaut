@@ -84,6 +84,5 @@ export async function findUserBySessionId(sessionId) {
 }
 
 async function isCookieValid(sessionId) {
-    console.log("Implementieren");
     return true;
 }

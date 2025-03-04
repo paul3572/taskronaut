@@ -48,7 +48,6 @@ class TaskController {
 
     async removeTask(sessionId, taskId) {
         try {
-            console.log("TaskID: " + taskId);
             const myUserId = await findUserBySessionId(sessionId);
             const boardId = await psTask.selectBoardIdByTask(taskId);
             const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);

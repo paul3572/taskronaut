@@ -24,8 +24,6 @@ class psPtPMessages {
 
             const userSender = await psAuthentication.getUserById(userIdSender);
             const userReceiver = await psAuthentication.getUserById(userIdReceiver);
-            console.log(userSender);
-            console.log(userReceiver);
 
             const senderName = userSender.firstName + " " + userSender.lastName;
             const receiverName = userReceiver.firstName + " " + userReceiver.lastName;
@@ -61,7 +59,6 @@ class psPtPMessages {
                 timestamp: timestamp
             });
         }
-        console.log(JSON.stringify(returnMessagesS));
         return [returnMessagesS, returnMessagesR];
     }
 

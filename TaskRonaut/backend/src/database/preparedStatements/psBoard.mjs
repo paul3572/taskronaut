@@ -60,15 +60,14 @@ class PsBoard {
     }
 
     async updateBoard(boardId, boardName) {
-        const [tasksResult] = await dbConnection.query(boardQueries.updateBoard,[boardName, boardId]);
+        const [tasksResult] = await dbConnection.query(boardQueries.updateBoard, [boardName, boardId]);
         return tasksResult;
     }
 
     async deleteBoard(boardId) {
-        console.log("BoardID: "+boardId);
         logger.info("Deleting tasks...");
         const [tasksResult] = await dbConnection.query(taskQueries.deleteTasksByBoardId, [boardId]);
-        console.log(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
+        logger.info(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
 
         logger.info("Deleting board members...");
         const [membersResult] = await dbConnection.query(boardMemberQueries.deleteBoardMemberByBoardId, [boardId]);
@@ -82,7 +81,6 @@ class PsBoard {
         const [listResult] = await dbConnection.query(listQueries.deleteListByBoardId, [boardId]);
         logger.info(`Deleted ${listResult.affectedRows} list(s) related to the list`);
 
-        console.log("ListResult: "+JSON.stringify(boardId));
         logger.info("...deleting boards");
         const [boardResult] = await dbConnection.query(boardQueries.deleteBoardById, [boardId]);
         logger.info(`Deleted ${tasksResult.affectedRows} task(s) related to the list`);
@@ -90,7 +88,6 @@ class PsBoard {
             logger.info('BoardId not found');
             throw new BoardNotFoundError(boardId);
         } else {
-            console.log("BoardResult: "+JSON.stringify(boardResult));
             return boardResult;
         }
 

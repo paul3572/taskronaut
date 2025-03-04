@@ -23,7 +23,6 @@ class PsBoardMessages {
             let timestamp = nachtricht.timestamp;
 
             const userSender = await psAuthentication.getUserById(userIdSender);
-            console.log(userSender);
 
             const senderName = userSender.firstName + " " + userSender.lastName;
 

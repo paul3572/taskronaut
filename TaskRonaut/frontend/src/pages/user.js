@@ -20,10 +20,6 @@ if (typeof window !== 'undefined') {
         lastName = rawLastName ? rawLastName.charAt(0).toUpperCase() + rawLastName.slice(1) : null;
         email = user?.email ?? null;
     }
-
-    console.log("COOKIE: " + JSON.stringify(sessionCookie));
-    console.log("SESSION ID: " + JSON.stringify(sessionId));
-    console.log("USER: " + JSON.stringify(JSON.parse(sessionStorage.getItem('user'))));
 }
 
 async function getUserId(sessionId) {

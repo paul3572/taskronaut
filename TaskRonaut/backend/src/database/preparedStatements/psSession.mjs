@@ -13,8 +13,8 @@ class PsSession {
     }
 
     async getUserIdFromSessionId(sessionId) {
-            const [rows] = await dbConnection.query(sessionQueries.getUserIdBySessionId, [sessionId]);
-            const myUserId = rows[0];
+        const [rows] = await dbConnection.query(sessionQueries.getUserIdBySessionId, [sessionId]);
+        const myUserId = rows[0];
         if (myUserId !== null || undefined) {
             return myUserId;
         } else {
@@ -24,17 +24,15 @@ class PsSession {
 
     async updateUserIdInSession(userId, sessionId) {
         const [rows] = await dbConnection.query(sessionQueries.updateSessionUserId, [userId, sessionId]);
-        if (rows instanceof Error){
+        if (rows instanceof Error) {
             throw new QueryExecutionError;
         }
-        console.log(rows);
-        console.log(await this.getUserIdFromSessionId(sessionId));
         return rows[0];
     }
 
     async getAllSessionIds() {
         const [rows] = await dbConnection.query(sessionQueries.getSessionIds);
-        if (rows instanceof Error){
+        if (rows instanceof Error) {
             throw new QueryExecutionError;
         }
         return rows;

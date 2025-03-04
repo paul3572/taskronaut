@@ -61,10 +61,7 @@ class LoginController {
                 }
                 const hashedPassword = await sha256(password);
                 const isPasswordValid = hashedPassword === user.password;
-                console.log("Hashed PW: " + hashedPassword);
-                console.log("User PW: " + user.password);
                 const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
-                console.log("Email activated: " + emailIsActivated);
                 if (emailIsActivated === 0) {
                     throw new UserNotActivatedError("User not activated.");
                 }

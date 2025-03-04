@@ -16,7 +16,6 @@ class PsDragANDdrop {
     async patchStatus(taskId, taskStatus) {
         logger.debug(`Executing query: ${dragANDdropQueries.updateTaskStatus} with parameters: ${[taskStatus, taskId]}`);
         const [result] = await dbConnection.query(dragANDdropQueries.updateTaskStatus, [taskStatus, taskId]);
-        console.log(dragANDdropQueries.updateTaskStatus, [taskStatus, taskId]);
         if (result.affectedRows === 0) {
             throw new Error("Task not found");
         } else {

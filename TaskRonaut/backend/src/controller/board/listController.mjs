@@ -20,7 +20,6 @@ class ListController {
     async listsForBoard(sessionId, boardId) {
         try {
             const userId = await psAuthentication.getUserIdBySessionId(sessionId);
-            console.log("userId: " + userId);
             if (userId === null || undefined) {
                 throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
             }
@@ -42,12 +41,10 @@ class ListController {
                 throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
             }
             const isAllowed = await psBoardMember.isUserAllowedToBoard(userId, boardId);
-            console.log(isAllowed);
             if (!isAllowed) {
                 throw new PermissionDeniedError("Benutzer hat keine Berechtigung für diesen Board.");
             }
             const result = await psList.insertList(listName, boardId);
-            console.log("SessionId: " + sessionId);
             return {statusCode: 201};
         } catch (exception) {
             return await errorHandler(exception);

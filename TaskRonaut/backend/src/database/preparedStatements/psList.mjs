@@ -34,13 +34,12 @@ class PsList {
             return result;
         }
     }
+
     async selectBoardIdFromList(listId) {
         const [boardId] = await dbConnection.query(listQueries.getBoardIdFromList, [listId]);
         if (boardId.length === 0) {
             throw new Error('ListId not found');
         } else {
-            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId));
-            console.log("BOARD ID FROM LIST:"+JSON.stringify(boardId[0].boardID));
             return boardId[0]?.boardID;
         }
     }

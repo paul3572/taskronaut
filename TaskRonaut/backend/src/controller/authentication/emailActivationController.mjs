@@ -2,7 +2,13 @@ import connection from "../../database/dbCon.mjs";
 import {authenticationQueries} from "../../database/dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {ActivationError, DatabaseError, InvalidTokenError, PermissionDeniedError, UserNotFoundError} from "../../middleware/errors.mjs";
+import {
+    ActivationError,
+    DatabaseError,
+    InvalidTokenError,
+    PermissionDeniedError,
+    UserNotFoundError
+} from "../../middleware/errors.mjs";
 
 class EmailActivationController {
     async isEmailAuthenticated(userId) {
