@@ -33,12 +33,8 @@ class PsBoardMember {
     }
 
 
-    async deleteBoardMembers(userId) {
-        const [rows] = await connection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
-        if (rows.affectedRows === 0) {
-            throw new UserNotFoundError(`No board members found for user with ID ${userId}`);
-        }
-        await connection.query(boardMemberQueries.deleteBoardMemberById, [userId]);
+    async deleteBoardMembers(userId, boardId) {
+        await connection.query(boardMemberQueries.deleteBoardMemberById, [userId, boardId]);
         //TODO: Delete member from chat member
         return null;
     }

@@ -30,7 +30,7 @@ export const boardMemberQueries = {
     getAllBoardMembers: 'SELECT * FROM BoardMembers WHERE boardId = ?',
     getBoardMemberByUserId: 'SELECT * FROM BoardMembers WHERE userID = ?',
     insertBoardMember: 'INSERT INTO BoardMembers (userID, boardID) VALUES (?, ?)',
-    deleteBoardMemberById: 'DELETE FROM BoardMembers WHERE userID = ?',
+    deleteBoardMemberById: 'DELETE FROM BoardMembers WHERE userID = ? AND boardID = ?',
     deleteBoardMemberByBoardId: 'DELETE FROM BoardMembers WHERE boardID = ?',
     selectBoardUserEntries: 'SELECT * FROM BoardMembers WHERE userID = ? AND boardID = ?',
 };

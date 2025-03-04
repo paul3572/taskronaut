@@ -79,12 +79,12 @@ class BoardMemberController {
                 throw new Error("Issuing User is not allowed to board");
             }
 
-            const userToAdd = await psAuthentication.getUserIdByEmail(email);
-            const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
-            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+            const userToDelete = await psAuthentication.getUserIdByEmail(email);
+            const userToDeleteEntry = await psBoardMember.getBoardUserEntries(userToDelete.id, boardId);
+            if (userToDeleteEntry[0] === null || userToDeleteEntry[0] === undefined) {
                 throw new UserNotFoundError(`User with email ${email} is not a member of board with id ${boardId}`);
             } else {
-                const result = await psBoardMember.deleteBoardMembers(userToAdd.id);
+                const result = await psBoardMember.deleteBoardMembers(userToDelete.id, boardId);
                 logger.info(chalk.hex(styles.success)`User with email ${email} deleted successfully`);
                 //TODO: Add Chat member
                 return {statusCode: 200, message: `User with email ${email} deleted successfully`};
