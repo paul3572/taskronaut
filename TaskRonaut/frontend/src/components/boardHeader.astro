@@ -56,16 +56,16 @@ import {serverURL} from '../pages/conf.js';
                                 type="text"
                                 x-model="boardName"
                                 @keyup.enter="createBoard()"
-                                placeholder="Board name"
+                                placeholder="Board-Name"
                                 class="board-input"
                                 autofocus
                         />
                         <button @click="createBoard()" class="submit-board-button">
-                            Create
+                            Erstellen
                         </button>
                         <button @click="showHeaderInput = false; boardName = ''"
                                 class="cancel-btn">
-                            Cancel
+                            Abbrechen
                         </button>
                     </div>
                 </template>
@@ -73,3 +73,53 @@ import {serverURL} from '../pages/conf.js';
         </div>
     </div>
 </div>
+
+<style lang="scss">
+
+    .board-input{
+      transition: border 0.3s ease;
+      background-color: var(--background);
+      color: var(--copy);
+      margin-left: 15px;
+      font-size: medium;
+      cursor: pointer;
+      padding: 5px 10px 5px 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .submit-board-button{
+      transition: border 0.3s ease;
+      background-color: var(--primary-dark);
+      color: var(--copy);
+      margin-left: 5px;
+      font-size: medium;
+      cursor: pointer;
+      padding: 5px 10px 5px 10px;
+      border-radius: 5px;
+      border: none;
+
+      &:hover{
+        border: none;
+        background-color: darken(#003B91FF, 10%);
+      }
+    }
+
+    .cancel-btn{
+      transition: border 0.3s ease;
+      background-color: var(--error);
+      color: var(--copy);
+      margin-left: 5px;
+      font-size: medium;
+      cursor: pointer;
+      padding: 5px 10px 5px 10px;
+      border-radius: 5px;
+      border: none;
+
+      &:hover{
+        border: none;
+        background-color: darken(#C40000FF, 10%);
+      }
+    }
+
+</style>
