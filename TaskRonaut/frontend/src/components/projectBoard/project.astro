@@ -7,7 +7,8 @@ const {boardID ,listID, tasks} = Astro.props;
 const listTasks = tasks.filter(task => task.listID === listID, boardID);
 ---
 
-<div x-data="{
+<div
+    x-data="{
     sessionId: sessionStorage.getItem('sessionID').slice(1, -1),
     userId: sessionStorage.getItem('userId')
 }">
@@ -15,7 +16,7 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
             <></>) : (
             <>
                 {listTasks.map(task => (
-                        <div class="task" x-data="{ openDetails: false }">
+                        <div class="task" x-data="{ openDetails: false }" id=`task-${task.taskId}`>
                             <div @click="openDetails = !openDetails" style="flex-direction: column">
                                 <div class={`task-status status-${task.taskStatus}`}
                                      style="float: left; height: 70px; width: 2%;"/>

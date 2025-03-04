@@ -20,6 +20,8 @@
   --success: #00c400;
   --warning: #c4c400;
   --error: #F40000;
+  --error-background: #970000;
+
   --success-content: #c4ffc4;
   --warning-content: #000000;
   --error-content: #ffc4c4;
@@ -452,56 +454,6 @@ body {
 
 }
 
-.sidebar {
-  width: 15%;
-  min-width: 220px;
-  background-color: var(--foreground);
-  text-align: left;
-  right: 0;
-  height: 100%;
-
-
-  hr {
-    color: var(--border);
-    margin: 0;
-  }
-
-  .sidebar-content {
-    padding: 0 10px;
-
-    .sidebar-users {
-      max-height: 30rem;
-      overflow-y: scroll;
-      scrollbar-width: thin;
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .user-item {
-      display: flex;
-      align-items: center;
-      justify-content: left;
-    }
-
-    .chatCheckBox {
-      color: white;
-      background-color: black;
-      border: none;
-      border-radius: 50px;
-    }
-
-    .profileIcon {
-      color: white;
-      background-color: black;
-      border: none;
-      border-radius: 50px;
-    }
-  }
-}
 
 
 .dragAndDrop {

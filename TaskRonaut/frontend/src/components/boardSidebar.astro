@@ -20,8 +20,6 @@ console.log(sessionId)
 
 const {data: users} = await boardMembers.json();
 console.log('Users:', users);
-
-
 ---
 <aside class="sidebar">
     <nav class="sidebar-content">
@@ -29,16 +27,16 @@ console.log('Users:', users);
         <h1>Mitglieder</h1>
         <ul class="sidebar-users">
             {users.map(user => (
-                    <li class="user-item" id=`user-${user?.firstName+user?.lastName}`>
-                        <!-- Profile Section -->
+                    <li class="user-item" id=`user-${user?.firstName + user?.lastName}`>
+                        <!-- Profile Section
                         <div x-data="{ showProfile: false }">
                             <button class="profileIcon" @click="showProfile = !showProfile">
                                 <i class="fa-solid fa-user"></i>
                             </button>
                             <template x-if="showProfile">
-                                <!-- Add profile content component here when needed -->
                             </template>
                         </div>
+                        -->
 
                         <p>{user?.firstName} {user?.lastName}</p>
 
@@ -49,12 +47,12 @@ console.log('Users:', users);
                                 <i class="fa-regular fa-comment"></i>
                             </button>
                             <template x-if="showChat">
-                                <Ptp otherUserEmail={user?.email} otherUserName={user?.firstName + " " + user?.lastName}/>
+                                <Ptp otherUserEmail={user?.email}
+                                     otherUserName={user?.firstName + " " + user?.lastName}/>
                             </template>
                         </div>
 
-                        <button
-                                x-cloak
+                        <button class="removeUserCheckBox"
                                 x-transition
                                 hx-delete=`${serverURL}/boards/remove`
                                 hx-headers='{"Content-Type": "application/json"}'
@@ -64,18 +62,18 @@ console.log('Users:', users);
                                     email: "${user.email}"
                                 }`
                                 hx-trigger="click"
-                                hx-target=`#user-${user?.firstName+user?.lastName}`
+                                hx-target=`#user-${user?.firstName + user?.lastName}`
                                 hx-swap="delete"
                         >
-                            delete
+                            <i class="fa-solid fa-user-minus"></i>
                         </button>
-                    </li>
-            ))}
+                    </li>))}
         </ul>
 
         <!-- Add User Section -->
         <ul>
-            <li>Add user</li>
+            <hr/>
+            <li>Benutzer hinzufügen</li>
             <div class="add-board-member" x-data=`{
                     showInput: false,
                     userData: { email: "", boardId: ${boardID} },
@@ -106,25 +104,237 @@ console.log('Users:', users);
                     }
                 }`>
                 <button @click="toggleInput" class="add-member-btn">
-                    + Add Board Member
+                    + Benutzer hinzufügen
                 </button>
 
                 <div x-show="showInput" class="member-input-container">
                     <input type="email"
                            x-model="userData.email"
-                           placeholder="Enter email"
-                           class="member-input">
+                           placeholder="Email des Benutzers"
+                           class="member-input"
+                           x-cloak
+                    >
 
                     <div class="member-action-btns">
-                        <button @click="saveMember" class="save-member-btn">
-                            Add Member
+                        <button @click="saveMember" class="save-member-btn" x-cloak>
+                            hinzufügen
                         </button>
-                        <button @click="cancelMember" class="cancel-member-btn">
-                            Cancel
+                        <button @click="cancelMember" class="cancel-member-btn" x-cloak>
+                            abbrechen
                         </button>
                     </div>
                 </div>
             </div>
         </ul>
     </nav>
+
+    <footer>
+        <div x-data="{ showBoardChat: false }">
+            <button class="chatCheckBox" @click="showBoardChat = !showBoardChat">
+                <i class="fa-regular fa-comment"></i> Board Chat
+            </button>
+            <template x-if="showBoardChat" x-cloak>
+                <BoardChat boardId={boardID}></BoardChat>
+            </template>
+        </div>
+    </footer>
+
 </aside>
+
+<style lang="scss">
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+    min-width: 220px;
+    background-color: var(--foreground);
+    position: relative;
+    height: 92.5%;
+    padding-bottom: 10vh;
+
+    hr {
+      border: 0;
+      height: 1px;
+      background-color: var(--border);
+      margin: 0 0 5px 0;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      padding: 0 10px;
+      overflow-y: auto;
+
+      .sidebar-users {
+        max-height: 30rem;
+        overflow-y: auto;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .user-item {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+
+      }
+
+      .chatCheckBox {
+        color: white;
+        background-color: black;
+        border: none;
+        border-radius: 50px;
+      }
+
+      .profileIcon {
+        color: white;
+        background-color: black;
+        border: none;
+        border-radius: 50px;
+      }
+
+
+
+      .add-board-member {
+        margin: 10px 0;
+
+        .add-member-btn {
+          width: 100%;
+          padding: 8px;
+          background-color: var(--background);
+          color: var(--text);
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-size: 0.9rem;
+
+          &:hover {
+            background-color: var(--foreground);
+          }
+        }
+
+        .member-input-container {
+          margin-top: 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .member-input {
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--background);
+            color: var(--text);
+            font-size: 0.9rem;
+
+            &::placeholder {
+              color: var(--text-muted);
+              opacity: 0.7;
+            }
+          }
+
+          .member-action-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+
+            button {
+              padding: 6px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 0.85rem;
+              transition: opacity 0.2s;
+            }
+
+            .save-member-btn {
+              background-color: var(--primary-dark);
+              color: var(--success-text);
+            }
+
+            .cancel-member-btn {
+              background-color: var(--error-background);
+              color: var(--error-text);
+            }
+
+            button:hover {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+
+    }
+
+    footer {
+      padding: 10px;
+      background-color: var(--foreground);
+      border-top: 1px solid var(--border);
+
+      .chatCheckBox {
+        width: 100%;
+        padding: 8px;
+        background-color: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: var(--background);
+        }
+      }
+    }
+
+    /* Global sidebar button styles */
+    .chatCheckBox {
+      color: var(--text);
+      background-color: var(--background);
+      border: none;
+      border-radius: 50px;
+      padding: 8px;
+      margin: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+
+    }
+
+    .removeUserCheckBox {
+      color: var(--text);
+      background-color: var(--error-background);
+      border: none;
+      border-radius: 50px;
+      padding: 8px;
+      margin: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+
+    }
+  }
+</style>

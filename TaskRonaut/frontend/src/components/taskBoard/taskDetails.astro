@@ -1,6 +1,7 @@
 ---
 const { task } = Astro.props;
 import { serverURL } from '../../pages/conf.js';
+let sessionId = Astro.cookies.get('sessionId').value;
 ---
 
 <div
@@ -84,17 +85,14 @@ import { serverURL } from '../../pages/conf.js';
 
                 <div class="buttons">
                     <button class="delete-button"
-                            @click=`
-                    fetch('${serverURL}/tasks/delete', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ sessionId: sessionId, taskId: taskData.taskID })
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                `
+
+                            hx-delete=`${serverURL}/tasks/delete`
+                            hx-headers='{"Content-Type": "application/json"}'
+                            hx-vals=`js:{ sessionId: "${sessionId}", taskId: "${Number(task.taskID)}" }`
+                            hx-trigger="click"
+                            hx-swap="delete"
+                            hx-target=`#task-${task.taskId}`
+
 
                     >
                         <svg viewBox="0 0 448 512" class="svgIcon">
