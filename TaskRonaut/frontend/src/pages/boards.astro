@@ -162,7 +162,7 @@ if (boards === null || boards === undefined) {
                                 type="text"
                                 x-model="boardName"
                                 @keyup.enter="createBoard()"
-                                placeholder="Boardname"
+                                placeholder="Board-Name"
                                 class="board-input"
                                 autofocus
                         />
@@ -273,7 +273,7 @@ if (boards === null || boards === undefined) {
     background: rgba(255, 255, 255, 0.95);
 
     &::placeholder {
-      color: #94a3b8;
+      color: black;
     }
 
     &:focus {
@@ -319,7 +319,7 @@ if (boards === null || boards === undefined) {
   }
 
   .cancel-btn {
-    background: transparent;
+    background: #d1d1d1;
     color: #64748b;
     border: 2px solid #e2e8f0;
     padding: 0.75rem 1.5rem;
@@ -329,7 +329,7 @@ if (boards === null || boards === undefined) {
     transition: all 0.2s ease;
 
     &:hover {
-      background: #f8fafc;
+      background: #cdcdcd;
       color: #475569;
       border-color: #cbd5e1;
     }
