@@ -75,34 +75,49 @@ console.log('Users:', users);
             <hr/>
             <li>Benutzer hinzufügen</li>
             <div class="add-board-member" x-data=`{
-                    showInput: false,
-                    userData: { email: "", boardId: ${boardID} },
-                    sessionId: "${sessionId}",
-                    toggleInput() {
-                        this.showInput = !this.showInput;
-                    },
-                    saveMember() {
-                        if (this.userData.email.trim() !== "") {
-                            fetch("${serverURL}/boards/board-member-to-board", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({ 
-                                    sessionId: this.sessionId,
-                                    boardId: this.userData.boardId,
-                                    email: this.userData.email
-                                })
-                            }).then(response => {
-                                if (response.ok) window.location.reload();
-                            });
-                        }
-                    },
-                    cancelMember() {
-                        this.showInput = false;
-                        this.userData.email = "";
+        showInput: false,
+        userData: { email: "", boardId: ${boardID} },
+        sessionId: "${sessionId}",
+        toggleInput() {
+            this.showInput = !this.showInput;
+        },
+        async saveMember() {
+            const email = this.userData.email.trim();
+            if (!email) {
+                alert('Bitte geben Sie eine E-Mail-Adresse ein.');
+                return;
+            }
+            
+            try {
+                const response = await fetch("${serverURL}/boards/board-member-to-board", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        sessionId: this.sessionId,
+                        boardId: this.userData.boardId,
+                        email: email
+                    })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    if (response.status === 404) {
+                        alert('Benutzer mit dieser E-Mail wurde nicht gefunden');
+                    } else {
+                        alert('Fehler beim Hinzufügen: ' + response.statusText);
                     }
-                }`>
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Netzwerkfehler - Bitte Verbindung überprüfen');
+            }
+        },
+        cancelMember() {
+            this.showInput = false;
+            this.userData.email = "";
+        }
+    }`>
                 <button @click="toggleInput" class="add-member-btn">
                     + Benutzer hinzufügen
                 </button>
@@ -196,7 +211,6 @@ console.log('Users:', users);
         border: none;
         border-radius: 50px;
       }
-
 
 
       .add-board-member {
