@@ -18,26 +18,24 @@ const {data: messages} = await response.json();
 console.log("Chat Messages:")
 console.log(messages);
 ---
+<div class="board-chat">
+    <div class="board-chat-container">
+        <button class="board-chat-close" @click="showBoardChat = false">×</button>
 
-
-<div class="ptp">
-    <div class="ptp-container">
-        <button class="close" @click="showBoardChat = false">×</button>
-
-        <div class="ptp-messages-container">
+        <div class="board-chat-messages-container">
             {messages.flat().sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()).map((msg) => {
                 const isOwn = msg.senderID === `${localFullName}`;
 
                 return (
-                        <div class={`message ${isOwn ? 'message-own' : 'message-other'}`}>
-                            <div class="message-sender">{isOwn ? 'Du' : msg.senderID}</div>
-                            <div class="message-content">{msg.message}</div>
+                        <div class={`board-chat-message ${isOwn ? 'board-chat-message-own' : 'board-chat-message-other'}` }>
+                            <div class="board-chat-message-sender">{isOwn ? 'Du' : msg.senderID}</div>
+                            <div class="board-chat-message-content">{msg.message}</div>
                         </div>)
             })}
         </div>
 
-        <div class="ptp-input-container">
-            <div class="ptp-input"
+        <div class="board-chat-input-container">
+            <div class="board-chat-input"
                  x-data=`{
                     messageData: { message: '' }
                  }`>
@@ -62,150 +60,3 @@ console.log(messages);
         </div>
     </div>
 </div>
-
-<style lang="scss">
-  .ptp {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    height: 90vh;
-    width: 30vw;
-    min-width: 300px;
-    max-width: 500px;
-    right: 20px;
-    bottom: 20px;
-    background-color: var(--foreground);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    z-index: 100;
-  }
-
-  .ptp-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 15px;
-    position: relative;
-    margin-top: 20px;
-  }
-
-  .close {
-    position: absolute;
-    top: -15px;
-    right: 5px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    z-index: 1010;
-    font-size: medium;
-  }
-
-  .close:hover {
-    color: var(--error-text);
-    background-color: var(--error-background);
-  }
-
-  .ptp-messages-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: clip;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    scrollbar-width: thin;
-    height: 1px;
-  }
-
-  .ptp-input-container {
-    flex-shrink: 0;
-    padding-top: 10px;
-    border-top: 1px solid var(--border);
-  }
-
-  .ptp-input {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .ptp-input input {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background-color: var(--background);
-    color: var(--text);
-    font-size: 0.9rem;
-  }
-
-  .ptp-input button {
-    padding: 10px 18px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: all 0.2s;
-  }
-
-  .ptp-input button:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-  }
-
-  .message {
-    max-width: 75%;
-    padding: 10px 15px;
-    border-radius: 15px;
-    transition: transform 0.2s;
-  }
-
-  .message:hover {
-    transform: translateX(2px);
-  }
-
-  .message-own {
-    align-self: flex-end;
-    background-color: var(--primary);
-    color: white;
-    border-bottom-right-radius: 4px;
-  }
-
-  .message-other {
-    align-self: flex-start;
-    background-color: var(--background);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-bottom-left-radius: 4px;
-  }
-
-  .message-sender {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-muted);
-  }
-
-  /* Scrollbar styling */
-  .ptp-messages-container::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .ptp-messages-container::-webkit-scrollbar-track {
-    background: var(--border);
-  }
-
-  .ptp-messages-container::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 4px;
-  }
-</style>
