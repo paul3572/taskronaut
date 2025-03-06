@@ -9,7 +9,7 @@ const router = Router();
 
 router.post('/send', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`NEW P2P MESSAGE: `);
+    logger.info(chalk.hex(styles.dialogStart)(`NEW P2P MESSAGE: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, otherUserEmail, message} = req.body;
@@ -19,7 +19,7 @@ router.post('/send', async (req, res) => {
 
 router.post('/view', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`VIEW P2P MESSAGE LOG: `);
+    logger.info(chalk.hex(styles.dialogStart)(`VIEW P2P MESSAGE LOG: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, otherUserEmail} = req.body;
@@ -28,7 +28,7 @@ router.post('/view', async (req, res) => {
 });
 router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DELETE P2P MESSAGE: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DELETE P2P MESSAGE: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, messageId} = req.body;

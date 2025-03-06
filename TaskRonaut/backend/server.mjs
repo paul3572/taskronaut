@@ -17,7 +17,11 @@ import userDataRoutes from "./src/routes/authentication/userDataRoutes.mjs";
 import {styles} from "./src/database/loggingStyle.mjs";
 import logger from "./src/middleware/logger.mjs";
 import {domainName, port} from "./src/config/serverOptions.mjs";
+import {boardMembersRoutes} from "./src/routes/board/boardMembersRoutes.mjs";
+import boardMemberRoutes from "./src/routes/board/boardMemberRoutes.mjs";
 
+logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
+logger.info(chalk.hex(styles.serverProcess)('Server is starting...'));
 
 const app = express();
 
@@ -39,13 +43,12 @@ apiRouter.use('/boards', boardRoutes);
 apiRouter.use('/lists', listRoutes);
 apiRouter.use('/user', userDataRoutes);
 apiRouter.use('/dragANDdrop', dragANDdropRoutes);
+apiRouter.use('/board-members', boardMemberRoutes);
 
 app.use('/api', apiRouter);
 app.use(testRoutes);
 
 app.listen(port, async () => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.serverProcess)('Server is starting...'));
     logger.info(chalk.hex(styles.serverStatusInfo)(`Server running at http://${domainName}:${port}`));
     logger.info(chalk.hex(styles.serverStatusInfo)(`SwaggerUI available at http://${domainName}:${port}/api-docs`));
     logger.info(chalk.hex(styles.serverStatusInfo)(`Website is reachable at http://${domainName}:4321`));

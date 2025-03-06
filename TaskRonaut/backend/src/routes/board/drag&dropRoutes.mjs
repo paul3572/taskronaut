@@ -9,7 +9,7 @@ import {Router} from "express";
 const router = new Router();
 router.patch('/list', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DRAG&DROP LIST: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DRAG&DROP LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionID, taskID, listID} = req.body;
@@ -18,7 +18,7 @@ router.patch('/list', async (req, res) => {
 });
 router.patch('/status', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DRAG&DROP STATUS: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DRAG&DROP STATUS: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionID, taskID, taskStatus} = req.body;

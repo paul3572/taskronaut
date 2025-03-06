@@ -9,7 +9,7 @@ const router = Router();
 
 router.post('/send', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`NEW MESSAGE: `);
+    logger.info(chalk.hex(styles.dialogStart)(`NEW MESSAGE: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, message} = req.body;
@@ -19,7 +19,7 @@ router.post('/send', async (req, res) => {
 
 router.post('/view', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`VIEW MESSAGE LOG: `);
+    logger.info(chalk.hex(styles.dialogStart)(`VIEW MESSAGE LOG: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
@@ -28,7 +28,7 @@ router.post('/view', async (req, res) => {
 });
 router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DELETE MESSAGE: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DELETE MESSAGE: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, messageId} = req.body;

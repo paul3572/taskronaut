@@ -8,7 +8,7 @@ import userDataController from "../../controller/authentication/userDataControll
 const router = Router();
 router.post('/user', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`GET USER DATA: `);
+    logger.info(chalk.hex(styles.dialogStart)(`GET USER DATA: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const sessionId = req.body.sessionId;
@@ -17,7 +17,7 @@ router.post('/user', async (req, res) => {
 });
 router.get('/allSessions', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`GET SESSIONS: `);
+    logger.info(chalk.hex(styles.dialogStart)(`GET SESSIONS: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     await serverResponse(res, await userDataController.getSessions());
@@ -25,7 +25,7 @@ router.get('/allSessions', async (req, res) => {
 });
 router.post('/userId', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`GET USER ID: `);
+    logger.info(chalk.hex(styles.dialogStart)(`GET USER ID: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const sessionId = req.body.sessionId;

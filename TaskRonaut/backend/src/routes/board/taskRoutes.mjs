@@ -11,7 +11,7 @@ const router = Router();
 
 router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`USER TASKS REQUESTED: `);
+    logger.info(chalk.hex(styles.dialogStart)(`USER TASKS REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId} = req.body;
@@ -21,7 +21,7 @@ router.post('/tasks/get', async (req, res) => {
 
 router.post('/tasks', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`NEW TASK : `);
+    logger.info(chalk.hex(styles.dialogStart)(`NEW TASK : `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, taskName, boardID, listID} = req.body;
@@ -32,7 +32,7 @@ router.post('/tasks', async (req, res) => {
 
 router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`TASKS BY BOARD USER : `);
+    logger.info(chalk.hex(styles.dialogStart)(`TASKS BY BOARD USER : `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, boardId} = req.body;
@@ -41,7 +41,7 @@ router.post('/tasks/get', async (req, res) => {
 
 router.patch('/tasks/update', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`UPDATE TASK: `);
+    logger.info(chalk.hex(styles.dialogStart)(`UPDATE TASK: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {
@@ -62,7 +62,7 @@ router.patch('/tasks/update', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DELETE TASK: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DELETE TASK: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, taskId} = req.body;
@@ -72,7 +72,7 @@ router.delete('/delete', async (req, res) => {
 
 router.patch('/tasks/:id/listId', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`SET NEW LIST-ID FOR TASK: `);
+    logger.info(chalk.hex(styles.dialogStart)(`SET NEW LIST-ID FOR TASK: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
 
@@ -103,7 +103,7 @@ router.patch('/tasks/:id/listId', async (req, res) => {
 
 router.get('/getListIdFromTaskId/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`GET LIST-ID FROM TASK-ID: `);
+    logger.info(chalk.hex(styles.dialogStart)(`GET LIST-ID FROM TASK-ID: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const taskId = req.params.id;
@@ -113,7 +113,7 @@ router.get('/getListIdFromTaskId/:id', async (req, res) => {
 
 router.post('/get/byBoard', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`GET USER-SPECIFIC TASKS: `);
+    logger.info(chalk.hex(styles.dialogStart)(`GET USER-SPECIFIC TASKS: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;

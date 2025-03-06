@@ -13,7 +13,7 @@ router.use(express.urlencoded({extended: true}));
 
 router.post('/registration', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`REGISTRATION:`);
+    logger.info(chalk.hex(styles.dialogStart)(`REGISTRATION: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {email, password, firstName, lastName} = req.body;
@@ -25,7 +25,7 @@ router.post('/registration', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`LOGIN: `);
+    logger.info(chalk.hex(styles.dialogStart)(`LOGIN: `));
     const {email, password} = req.body;
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/isEmailActivated/:userId', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`USER-ACTIVATION-STATUS-REQUEST: `);
+    logger.info(chalk.hex(styles.dialogStart)(`USER-ACTIVATION-STATUS-REQUEST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const userId = req.params.userId;
@@ -45,7 +45,7 @@ router.get('/isEmailActivated/:userId', async (req, res) => {
 
 router.post('/activateEmail/:token', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`ACTIVATE USER: `);
+    logger.info(chalk.hex(styles.dialogStart)(`ACTIVATE USER: `));
     const token = req.params.token;
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
@@ -55,7 +55,7 @@ router.post('/activateEmail/:token', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`Logout angefordert für User-ID: ${req?.session?.userId}`,);
+    logger.info(chalk.hex(styles.dialogStart)(`Logout angefordert für User-ID: ${req?.session?.userId}`,));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     await destroySession(req, res);

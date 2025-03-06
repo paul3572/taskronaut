@@ -8,7 +8,7 @@ import {Router} from "express";
 const router = new Router();
 router.get('/lists', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`LIST REQUESTED: `);
+    logger.info(chalk.hex(styles.dialogStart)(`LIST REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     await serverResponse(res, await listController.listRequest());
@@ -18,7 +18,7 @@ router.get('/lists', async (req, res) => {
 
 router.post('/lists/board', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`BOARD-LISTS REQUESTED: `);
+    logger.info(chalk.hex(styles.dialogStart)(`BOARD-LISTS REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
@@ -28,7 +28,7 @@ router.post('/lists/board', async (req, res) => {
 
 router.post('/lists', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`NEW LIST: `);
+    logger.info(chalk.hex(styles.dialogStart)(`NEW LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
 
@@ -39,7 +39,7 @@ router.post('/lists', async (req, res) => {
 
 router.patch('/update', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`UPDATE LIST: `);
+    logger.info(chalk.hex(styles.dialogStart)(`UPDATE LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
 
@@ -50,7 +50,7 @@ router.patch('/update', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)`DELETE LIST: `);
+    logger.info(chalk.hex(styles.dialogStart)(`DELETE LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, listId} = req.body;
