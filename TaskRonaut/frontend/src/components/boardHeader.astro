@@ -5,21 +5,20 @@ import {serverURL} from '../pages/conf.js';
 ---
 <!-- TODO errors handlen, 404, 409 -->
 
-<div class="header">
-
+<div class="header" style="display: block">
     <div class="boards-overview" x-data="boardCreation">
-
-
         <div class="left">
-
-
             <h1>
-                <a href="/" style="color: whitesmoke; text-decoration: none ">
+                <a class="clickable"
+                   hx-post=`/`
+                   hx-push-url=`/`
+                   hx-swap="outerHTML"
+                   hx-target=`.board-container`
+                   style="color: whitesmoke; text-decoration: none">
                     <i class="fa-brands fa-space-awesome"></i>
                     TaskRonaut
                 </a>
             </h1>
-
 
             <div x-data="{ open: false }">
                 <button class="board-header-buttons" @click="open = !open">
@@ -38,55 +37,48 @@ import {serverURL} from '../pages/conf.js';
                         </a>
                     </ul>
                     <ul>
-                        {boards?.flat().map(board => (<a
-
-                                hx-post=`/boards?boardId=${board.boardID}`
-                                hx-push-url=`/boards?boardId=${board.boardID}`
-                                hx-swap="outerHTML"
-                                hx-target=`.board-container`
-
-                        >
-                            <li class="specific-boards-button">{board.boardName}</li>
-                        </a>))}
+                        {boards?.flat().map(board => (
+                                <a hx-post={`/boards?boardId=${board.boardID}`}
+                                   hx-push-url={`/boards?boardId=${board.boardID}`}
+                                   hx-swap="outerHTML"
+                                   hx-target={`.board-container`}
+                                >
+                                    <li class="specific-boards-button">{board.boardName}</li>
+                                </a>
+                        ))}
                     </ul>
                 </div>
             </div>
 
-
             <div class="creation-flow">
                 <!-- Header Input -->
-                <template x-if="!showHeaderInput">
-                    <button @click="showHeaderInput = true" class=" board-header-buttons">
-                        <i class="fas fa-plus"></i> Board erstellen
-                    </button>
-                </template>
+                <button x-show="!showHeaderInput" @click="showHeaderInput = true" class="board-header-buttons">
+                    <i class="fas fa-plus"></i> Board erstellen
+                </button>
 
-                <template x-if="showHeaderInput">
-                    <div class="input-group">
-                        <input
-                                type="text"
-                                x-model="boardName"
-                                @keyup.enter="createBoard()"
-                                placeholder="Board-Name"
-                                class="board-input"
-                                autofocus
-                        />
-                        <button @click="createBoard()" class="submit-board-button">
-                            Erstellen
-                        </button>
-                        <button @click="showHeaderInput = false; boardName = ''"
-                                class="cancel-btn">
-                            Abbrechen
-                        </button>
-                    </div>
-                </template>
+                <div class="input-group" x-show="showHeaderInput">
+                    <input
+                            type="text"
+                            x-model="boardName"
+                            @keyup.enter="createBoard()"
+                            placeholder="Board-Name"
+                            class="board-input"
+                            x-cloak
+                            autofocus
+                    />
+                    <button @click="createBoard()" class="submit-board-button" x-cloak>
+                        Erstellen
+                    </button>
+                    <button @click="showHeaderInput = false; boardName = ''" class="cancel-btn" x-cloak>
+                        Abbrechen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style lang="scss">
-
   .board-input {
     transition: border 0.3s ease;
     background-color: var(--background);
@@ -94,7 +86,7 @@ import {serverURL} from '../pages/conf.js';
     margin-left: 15px;
     font-size: medium;
     cursor: pointer;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: none;
   }
@@ -106,7 +98,7 @@ import {serverURL} from '../pages/conf.js';
     margin-left: 5px;
     font-size: medium;
     cursor: pointer;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: none;
 
@@ -123,7 +115,7 @@ import {serverURL} from '../pages/conf.js';
     margin-left: 5px;
     font-size: medium;
     cursor: pointer;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: none;
 
@@ -132,5 +124,4 @@ import {serverURL} from '../pages/conf.js';
       background-color: darken(#C40000FF, 10%);
     }
   }
-
 </style>

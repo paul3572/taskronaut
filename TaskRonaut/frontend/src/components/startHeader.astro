@@ -1,95 +1,67 @@
 ---
 ---
-<header class="header">
+<header class="header" x-data="{
+    user: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null,
+    serverURL: 'https://yourserverurl.com', // adjust to your server URL
+    userDropdownOpen: false,
+    logout() {
+        fetch(`${this.serverURL}/authentication/logout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: this.user })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Optionally handle the response data here
+        })
+        .catch(error => {
+            console.error('Error logging out:', error);
+        });
+        sessionStorage.removeItem('user');
+        window.location.href = '/login';
+    }
+}">
     <div class="left">
-    <h1>
-        <a href="/" style="color: whitesmoke; text-decoration: none "><i class="fa-brands fa-space-awesome"></i>
-            TaskRonaut
+        <h1>
+            <a href="/" style="color: whitesmoke; text-decoration: none">
+                <i class="fa-brands fa-space-awesome"></i> TaskRonaut
+            </a>
+        </h1>
+        <a id="boards-button"
+           hx-post="/boards"
+           hx-push-url="/boards"
+           hx-swap="outerHTML"
+           hx-target=".start-content"
+           style="color: whitesmoke; font-size: x-large; padding-left: 10px; text-decoration: none;"
+           x-show="user"
+           x-cloak
+           class="board-header-buttons">
+            Zu deinen Boards
         </a>
-    </h1>
-    <a id="boards-button" href="/boards"
-       style="color: whitesmoke; font-size: x-large; padding-left: 10px; text-decoration: none; display: none"
-       x-show="sessionId" class="board-header-buttons">
-        Zu deinen Boards
-    </a>
     </div>
     <div class="right">
-        <div id="auth-buttons">
+        <!-- Shown when no user is logged in -->
+        <div id="auth-buttons" x-show="!user" >
             <button hx-push-url="login" hx-get="/login" hx-target="#login-register-container" hx-swap="beforeend"
                     aria-label="Einloggen" class="login-register-button">
                 Einloggen
             </button>
-
             <button hx-push-url="register" hx-get="/register" hx-target="#login-register-container" hx-swap="beforeend"
                     aria-label="Registrieren" class="login-register-button">
                 Registrieren
             </button>
         </div>
-        <div id="profile-button" class="profile-button" style="display: none;">
-            <svg viewBox="0 0 344 384" height="26.72093023255814" width="24" class="user-icon">
-                <path
-                        d="M170.5 192q-35.5 0-60.5-25t-25-60.5T110 46t60.5-25T231 46t25 60.5t-25 60.5t-60.5 25zm0 43q31.5 0 69.5 9t69.5 29.5T341 320v43H0v-43q0-26 31.5-46.5T101 244t69.5-9z"
-                        fill="#ffffff"
-                ></path>
-            </svg>
-            <span id="username">User</span>
-
-            <div id="user-dropdown" class="user-dropdown" style="display: none;">
-                <button id="logout-button">Ausloggen</button>
+        <!-- Shown when a user is logged in -->
+        <div id="profile-button" class="profile-button" x-show="user" x-cloak>
+            <div @click="userDropdownOpen = !userDropdownOpen" style="display: flex; align-items: center; cursor: pointer;">
+                <svg viewBox="0 0 344 384" height="26.72" width="24" class="user-icon">
+                    <path d="M170.5 192q-35.5 0-60.5-25t-25-60.5T110 46t60.5-25T231 46t25 60.5t-25 60.5t-60.5 25zm0 43q31.5 0 69.5 9t69.5 29.5T341 320v43H0v-43q0-26 31.5-46.5T101 244t69.5-9z" fill="#ffffff"></path>
+                </svg>
+                <span id="username" x-text="`${user.firstName} ${user.lastName}`" style="margin-left: 0.5em;"></span>
+            </div>
+            <div id="user-dropdown" class="user-dropdown" x-show="userDropdownOpen" @click.away="userDropdownOpen = false" x-transition>
+                <button @click="logout">Ausloggen</button>
             </div>
         </div>
-
     </div>
-
-
-    <script>
-        import {firstName, lastName} from "../pages/user.js";
-        import {sessionId} from "../pages/user";
-        import {serverURL} from "../pages/conf.js";
-
-
-        const authButtons = document.getElementById('auth-buttons');
-        const profileButton = document.getElementById('profile-button');
-        const usernameSpan = document.getElementById('username');
-        const userDropdown = document.getElementById('user-dropdown');
-        const logoutButton = document.getElementById('logout-button');
-        const boardsButton = document.getElementById('boards-button');
-
-        if (sessionId) {
-            usernameSpan.innerText = `${firstName} ${lastName}`;
-            profileButton.style.display = 'block';
-            boardsButton.style.display = 'block';
-            authButtons.style.display = 'none';
-        } else {
-            authButtons.style.display = 'block';
-        }
-
-        profileButton.addEventListener('click', () => {
-            userDropdown.style.display = userDropdown.style.display === 'none' ? 'block' : 'none';
-        });
-
-
-        logoutButton.addEventListener('click', () => {
-            fetch(`${serverURL}/authentication/logout`, {
-                method: 'POST', headers: {
-                    'Content-Type': 'application/json'
-                }, body: JSON.stringify({sessionId: sessionId})
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // console.log(data);
-
-                })
-                .catch(error => {
-                    console.error('Error logging out:', error);
-
-                });
-            sessionStorage.removeItem('sessionCookie');
-            sessionStorage.removeItem('sessionID');
-            sessionStorage.removeItem('user');
-            sessionStorage.removeItem('userId');
-            window.location.href = '/login';
-        });
-    </script>
-
 </header>
