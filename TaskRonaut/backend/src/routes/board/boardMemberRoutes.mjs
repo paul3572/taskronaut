@@ -7,7 +7,7 @@ import boardMemberController from "../../controller/board/boardMemberController.
 
 const router = Router();
 
-router.post('/board-members', async (req, res) => {
+router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`BOARD-MEMBERS REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
@@ -37,7 +37,7 @@ router.delete('/remove', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/board-member-to-board', async (req, res) => {
+router.post('/add', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`NEW BOARD-MEMBER TO BOARD: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));

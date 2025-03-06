@@ -9,6 +9,7 @@ import logger from "../../middleware/logger.mjs";
 
 const router = Router();
 
+//TODO: Irrelevant
 router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`USER TASKS REQUESTED: `));
@@ -19,7 +20,7 @@ router.post('/tasks/get', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/tasks', async (req, res) => {
+router.post('/add', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`NEW TASK : `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
@@ -30,7 +31,7 @@ router.post('/tasks', async (req, res) => {
     await serverResponse(res, await taskController.addNewDefaultTask(sessionId, taskName, boardID, listID));
 });
 
-router.post('/tasks/get', async (req, res) => {
+router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`TASKS BY BOARD USER : `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
@@ -39,7 +40,7 @@ router.post('/tasks/get', async (req, res) => {
     await serverResponse(res, await taskController.getSpecificTasks(sessionId, boardId));
 });
 
-router.patch('/tasks/update', async (req, res) => {
+router.patch('/update', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`UPDATE TASK: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
@@ -69,7 +70,7 @@ router.delete('/delete', async (req, res) => {
     await serverResponse(res, await taskController.removeTask(sessionId, taskId))
     logger.info(chalk.hex(styles.dialogEnd)`Task deletion finished!`);
 });
-
+//TODO: Irrelevant
 router.patch('/tasks/:id/listId', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`SET NEW LIST-ID FOR TASK: `));
@@ -101,7 +102,7 @@ router.patch('/tasks/:id/listId', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.get('/getListIdFromTaskId/:id', async (req, res) => {
+router.get('/get/listId/:id', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`GET LIST-ID FROM TASK-ID: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));

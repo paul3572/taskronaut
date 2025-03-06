@@ -9,6 +9,8 @@ import {
     PermissionDeniedError,
     UserNotFoundError
 } from "../../middleware/errors.mjs";
+import chalk from "chalk";
+import {styles} from "../../database/loggingStyle.mjs";
 
 class EmailActivationController {
     async isEmailAuthenticated(userId) {
@@ -19,6 +21,7 @@ class EmailActivationController {
             }
             const isUserActivated = status[0]?.activated;
             if (typeof isUserActivated === 'boolean' || isUserActivated === 1 || isUserActivated === true) {
+                logger.debug((chalk.hex(styles.debug))("User is authenticated"));
                 return {statusCode: 200, message: "User is authenticated"};
             } else {
                 throw new PermissionDeniedError("User is not authenticated");

@@ -6,6 +6,7 @@ import logger from "../../middleware/logger.mjs";
 import {Router} from "express";
 
 const router = new Router();
+//TODO: Irrelevant
 router.get('/lists', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`LIST REQUESTED: `));
@@ -16,7 +17,7 @@ router.get('/lists', async (req, res) => {
 });
 
 
-router.post('/lists/board', async (req, res) => {
+router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`BOARD-LISTS REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
@@ -26,7 +27,7 @@ router.post('/lists/board', async (req, res) => {
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/lists', async (req, res) => {
+router.post('/add', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
     logger.info(chalk.hex(styles.dialogStart)(`NEW LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
