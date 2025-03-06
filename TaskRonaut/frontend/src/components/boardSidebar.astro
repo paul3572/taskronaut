@@ -1,40 +1,43 @@
 ---
 import Alpine from 'alpinejs';
 import Ptp from "./ptp.astro";
-
-import {serverURL} from "../pages/conf";
+import { serverURL } from "../pages/conf";
 import ProjectBoard from "./projectBoard/projectBoard.astro";
 import BoardChat from "./boardChat.astro";
-const {boardID} = Astro.props;
 
+const { boardID } = Astro.props;
 let sessionId = Astro.cookies.get('sessionId').value;
 console.log('List Session ID:', sessionId);
 
-const boardMembers = await fetch(`${serverURL}/boards/board-members/`, {
-    method: 'POST', headers: {
+const boardMembers = await fetch(`${serverURL}/board-members/get`, {
+    method: 'POST',
+    headers: {
         'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, boardId: boardID})
+    },
+    body: JSON.stringify({ sessionId: sessionId, boardId: boardID })
 });
 
-console.log(sessionId)
+console.log(sessionId);
 
-const {data: users} = await boardMembers.json();
+const { data: users } = await boardMembers.json();
 console.log('Users:', users);
 ---
+
 <aside class="sidebar">
     <nav class="sidebar-content">
-        <hr/>
+        <hr />
         <h1>Mitglieder</h1>
         <ul class="sidebar-users">
             {users.map(user => (
-                    <li class="user-item" id=`user-${user?.firstName + user?.lastName}`>
-                        <!-- Profile Section
+                    <li class="user-item" id={`user-${user?.firstName + user?.lastName}`}>
+                        <!-- Profile Section (commented out) -->
+                        <!--
                         <div x-data="{ showProfile: false }">
                             <button class="profileIcon" @click="showProfile = !showProfile">
                                 <i class="fa-solid fa-user"></i>
                             </button>
-                            <template x-if="showProfile">
-                            </template>
+                            <div x-show="showProfile" x-cloak>
+                            </div>
                         </div>
                         -->
 
@@ -42,99 +45,97 @@ console.log('Users:', users);
 
                         <!-- Chat Section -->
                         <div x-data="{ showChat: false }">
-                            <button class="chatCheckBox" @click="showChat = !showChat"
-                                    style="cursor: pointer">
+                            <button class="chatCheckBox" @click="showChat = !showChat" style="cursor: pointer">
                                 <i class="fa-regular fa-comment"></i>
                             </button>
-                            <template x-if="showChat">
-                                <Ptp otherUserEmail={user?.email}
-                                     otherUserName={user?.firstName + " " + user?.lastName}/>
-                            </template>
+                            <div x-show="showChat" x-cloak>
+                                <Ptp otherUserEmail={user?.email} otherUserName={user?.firstName + " " + user?.lastName} />
+                            </div>
                         </div>
 
+                        <!-- Remove User Button -->
                         <button class="removeUserCheckBox"
                                 x-transition
-                                hx-delete=`${serverURL}/boards/remove`
+                                hx-delete={`${serverURL}/board-members/remove`}
                                 hx-headers='{"Content-Type": "application/json"}'
-                                hx-vals=`js:{
-                                    sessionId: "${sessionId}",
-                                    boardId: ${boardID},
-                                    email: "${user.email}"
-                                }`
+                                hx-vals={`js:{
+                                sessionId: "${sessionId}",
+                                boardId: ${boardID},
+                                email: "${user.email}"
+                            }`}
                                 hx-trigger="click"
-                                hx-target=`#user-${user?.firstName + user?.lastName}`
-                                hx-swap="delete"
-                        >
+                                hx-target={`#user-${user?.firstName + user?.lastName}`}
+                                hx-swap="delete">
                             <i class="fa-solid fa-user-minus"></i>
                         </button>
-                    </li>))}
+                    </li>
+            ))}
         </ul>
 
         <!-- Add User Section -->
         <ul>
-            <hr/>
+            <hr />
             <li>Benutzer hinzufügen</li>
-            <div class="add-board-member" x-data=`{
-        showInput: false,
-        userData: { email: "", boardId: ${boardID} },
-        sessionId: "${sessionId}",
-        toggleInput() {
-            this.showInput = !this.showInput;
-        },
-        async saveMember() {
-            const email = this.userData.email.trim();
-            if (!email) {
-                alert('Bitte geben Sie eine E-Mail-Adresse ein.');
-                return;
-            }
-            
-            try {
-                const response = await fetch("${serverURL}/boards/board-member-to-board", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        sessionId: this.sessionId,
-                        boardId: this.userData.boardId,
-                        email: email
-                    })
-                });
-
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    if (response.status === 404) {
-                        alert('Benutzer mit dieser E-Mail wurde nicht gefunden');
-                    } else {
-                        alert('Fehler beim Hinzufügen: ' + response.statusText);
+            <div class="add-board-member" x-data={`{
+                showInput: false,
+                userData: { email: "", boardId: ${boardID} },
+                sessionId: "${sessionId}",
+                toggleInput() {
+                    this.showInput = !this.showInput;
+                },
+                async saveMember() {
+                    const email = this.userData.email.trim();
+                    if (!email) {
+                        alert('Bitte geben Sie eine E-Mail-Adresse ein.');
+                        return;
                     }
+
+                    try {
+                        const response = await fetch("${serverURL}/board-members/add", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                sessionId: this.sessionId,
+                                boardId: this.userData.boardId,
+                                email: email
+                            })
+                        });
+
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            if (response.status === 404) {
+                                alert('Benutzer mit dieser E-Mail wurde nicht gefunden');
+                            } else {
+                                alert('Fehler beim Hinzufügen: ' + response.statusText);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Fehler:', error);
+                        alert('Netzwerkfehler - Bitte Verbindung überprüfen');
+                    }
+                },
+                cancelMember() {
+                    this.showInput = false;
+                    this.userData.email = "";
                 }
-            } catch (error) {
-                console.error('Fehler:', error);
-                alert('Netzwerkfehler - Bitte Verbindung überprüfen');
-            }
-        },
-        cancelMember() {
-            this.showInput = false;
-            this.userData.email = "";
-        }
-    }`>
+            }`}>
                 <button @click="toggleInput" class="add-member-btn">
                     + Benutzer hinzufügen
                 </button>
 
-                <div x-show="showInput" class="member-input-container">
+                <div x-show="showInput" class="member-input-container" x-cloak>
                     <input type="email"
                            x-model="userData.email"
                            placeholder="Email des Benutzers"
                            class="member-input"
-                           x-cloak
-                    >
+                    />
 
                     <div class="member-action-btns">
-                        <button @click="saveMember" class="save-member-btn" x-cloak>
+                        <button @click="saveMember" class="save-member-btn">
                             hinzufügen
                         </button>
-                        <button @click="cancelMember" class="cancel-member-btn" x-cloak>
+                        <button @click="cancelMember" class="cancel-member-btn">
                             abbrechen
                         </button>
                     </div>
@@ -143,15 +144,15 @@ console.log('Users:', users);
         </ul>
     </nav>
 
+    <!-- Footer with Board Chat -->
     <footer>
         <div x-data="{ showBoardChat: false }">
             <button class="chatCheckBox" @click="showBoardChat = !showBoardChat">
                 <i class="fa-regular fa-comment"></i> Board Chat
             </button>
-            <template x-if="showBoardChat" x-cloak>
-                <BoardChat boardId={boardID}></BoardChat>
-            </template>
+            <div x-show="showBoardChat" x-cloak>
+                <BoardChat boardId={boardID} />
+            </div>
         </div>
     </footer>
-
 </aside>

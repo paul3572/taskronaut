@@ -14,7 +14,7 @@ const responseTasks = await fetch(`${serverURL}/tasks/get/byBoard`, {
 const {data: tasks} = await responseTasks.json();
 
 // Fetch lists
-const responseLists = await fetch(`${serverURL}/lists/lists/board/`, {
+const responseLists = await fetch(`${serverURL}/lists/get/`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({sessionId: sessionId, boardId: boardID}),
@@ -127,7 +127,7 @@ const {data: lists} = await responseLists.json();
     toggleInput() { this.showInput = !this.showInput; },
     saveList() {
       if (this.taskData.listName.trim() !== "") {
-        fetch("${serverURL}/lists/lists", {
+        fetch("${serverURL}/lists/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 

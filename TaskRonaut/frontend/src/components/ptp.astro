@@ -1,39 +1,19 @@
 ---
-import {serverURL} from "../pages/conf.js";
-
+import { serverURL } from "../pages/conf.js";
 let sessionId = Astro.cookies.get('sessionId').value;
-
-let localFullName = Astro.cookies.get('user').value;
-console.log("localFullName " + localFullName);
-
 let otherUserEmail = Astro.props.otherUserEmail;
-console.log("otherUserEmail " + otherUserEmail)
-
 let otherUserName = Astro.props.otherUserName;
-console.log("otherUserName " + otherUserName)
-
-const response = await fetch(`${serverURL}/ptp/view`, {
-    method: 'POST', headers: {
-        'Content-Type': 'application/json'
-    }, body: JSON.stringify({sessionId: sessionId, otherUserEmail: otherUserEmail})
-});
-
-const {data: ptp} = await response.json();
 ---
 <div class="chat">
     <div class="chat-container">
         <button class="chat-close" @click="showChat = false">X</button>
 
-        <div class="chat-messages" id="messages">
-            {ptp.flat().sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()).map((msg) => {
-                const isOwn = msg.senderID === `${localFullName}`;
-                console.log(msg.senderID + "," + localFullName)
-                return (
-                        <div class=`chat-message ${isOwn ? 'chat-message-own' : 'chat-message-other'}`>
-                            <div class="chat-sender">{isOwn ? 'Du' : `${otherUserName}`}</div>
-                            <div class="chat-content">{msg.message}</div>
-                        </div>);
-            })}
+        <!-- This container will be refreshed via htmx -->
+        <div id="chatContainer"
+             hx-get={`/api/chat?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
+             hx-trigger="load, refreshChat from:body"
+             hx-swap="outerHTML">
+            Loading chat...
         </div>
 
         <div class="chat-input-wrapper">
@@ -42,18 +22,25 @@ const {data: ptp} = await response.json();
                        type="text"
                        x-model="messageData.message"
                        maxlength="255"/>
-                <span class="chat-char-count" x-text="`${messageData.message.length}/255`"></span>
+                <span class="chat-char-count" x-text="messageData.message.length + '/255'"></span>
                 <button @click=`
-                    fetch('${serverURL}/ptp/send', {
+                    if (!messageData.message.trim()) return;
+                    fetch("${serverURL}/ptp/send", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            sessionId: "${sessionId}",
-                            otherUserEmail: "${otherUserEmail}",
+                            sessionId: '${sessionId}',
+                            otherUserEmail: '${otherUserEmail}',
                             message: messageData.message
                         })
-                    }).then(() => window.location.reload());
-                `>Senden
+                    }).then(() => {
+                        messageData.message = ''; // Clear input
+                        document.body.dispatchEvent(new CustomEvent('refreshChat'));
+                    }).catch(err => {
+                        console.error('Send failed:', err);
+                    });
+                `>
+                    Senden
                 </button>
             </div>
         </div>

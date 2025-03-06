@@ -6,7 +6,7 @@ const sessionId = Astro.cookies.get('sessionId').value;
 
 <div id="taskDetails" class="task-details-screen" x-cloak>
     <form class="task-details-block"
-          hx-patch={`${serverURL}/tasks/tasks/update`}
+          hx-patch={`${serverURL}/tasks/update`}
           hx-vals={`js:{sessionId: '${sessionId}', taskID: ${task.taskID}, listID: ${task.listID}, boardID: ${task.boardID} }`  }          hx-swap="none"
           hx-on::after-request="window.location.reload()">
 
