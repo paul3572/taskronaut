@@ -137,21 +137,26 @@ body {
 }
 
 .header {
+  display: flex;
+  flex-direction: row;
   padding: 10px 20px 10px 20px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--foreground);
 
+
   .left {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    width: 70%;
   }
 
   .right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 30%;
   }
 
   h1 {

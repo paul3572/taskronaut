@@ -11,7 +11,7 @@ export async function post({ request }) {
         }
 
         // Hier kannst du die Session ID serverseitig speichern (z. B. in einer Datenbank)
-        console.log(`Received sessionId: ${sessionId}`);
+        // console.log(`Received sessionId: ${sessionId}`);
 
         return new Response(
             JSON.stringify({ message: "Session ID saved successfully!" }),
