@@ -13,7 +13,7 @@ let otherUserName = Astro.props.otherUserName;
              hx-get={`/api/chat?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
              hx-trigger="load, refreshChat from:body"
              hx-swap="outerHTML">
-            Loading chat...
+            Chat wird geladen...
         </div>
 
         <div class="chat-input-wrapper">

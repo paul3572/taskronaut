@@ -27,14 +27,25 @@ import {serverURL} from '../pages/conf.js';
                 </button>
                 <div x-show="open" @click.away="open = false" class="dropdown" x-cloak>
                     <ul>
-                        <a href="/boards">
+                        <a hx-post=`/boards`
+                           hx-push-url=`/boards`
+                           hx-swap="outerHTML"
+                           hx-target=`.board-container`
+                        >
                             <li class="all-boards-button">
                                 Alle Boards
                             </li>
                         </a>
                     </ul>
                     <ul>
-                        {boards?.flat().map(board => (<a href={`?boardId=${board.boardID}`}>
+                        {boards?.flat().map(board => (<a
+
+                                hx-post=`/boards?boardId=${board.boardID}`
+                                hx-push-url=`/boards?boardId=${board.boardID}`
+                                hx-swap="outerHTML"
+                                hx-target=`.board-container`
+
+                        >
                             <li class="specific-boards-button">{board.boardName}</li>
                         </a>))}
                     </ul>
@@ -76,50 +87,50 @@ import {serverURL} from '../pages/conf.js';
 
 <style lang="scss">
 
-    .board-input{
-      transition: border 0.3s ease;
-      background-color: var(--background);
-      color: var(--copy);
-      margin-left: 15px;
-      font-size: medium;
-      cursor: pointer;
-      padding: 5px 10px 5px 10px;
-      border-radius: 5px;
+  .board-input {
+    transition: border 0.3s ease;
+    background-color: var(--background);
+    color: var(--copy);
+    margin-left: 15px;
+    font-size: medium;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .submit-board-button {
+    transition: border 0.3s ease;
+    background-color: var(--primary-dark);
+    color: var(--copy);
+    margin-left: 5px;
+    font-size: medium;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    border: none;
+
+    &:hover {
       border: none;
+      background-color: darken(#003B91FF, 10%);
     }
+  }
 
-    .submit-board-button{
-      transition: border 0.3s ease;
-      background-color: var(--primary-dark);
-      color: var(--copy);
-      margin-left: 5px;
-      font-size: medium;
-      cursor: pointer;
-      padding: 5px 10px 5px 10px;
-      border-radius: 5px;
+  .cancel-btn {
+    transition: border 0.3s ease;
+    background-color: var(--error);
+    color: var(--copy);
+    margin-left: 5px;
+    font-size: medium;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    border: none;
+
+    &:hover {
       border: none;
-
-      &:hover{
-        border: none;
-        background-color: darken(#003B91FF, 10%);
-      }
+      background-color: darken(#C40000FF, 10%);
     }
-
-    .cancel-btn{
-      transition: border 0.3s ease;
-      background-color: var(--error);
-      color: var(--copy);
-      margin-left: 5px;
-      font-size: medium;
-      cursor: pointer;
-      padding: 5px 10px 5px 10px;
-      border-radius: 5px;
-      border: none;
-
-      &:hover{
-        border: none;
-        background-color: darken(#C40000FF, 10%);
-      }
-    }
+  }
 
 </style>

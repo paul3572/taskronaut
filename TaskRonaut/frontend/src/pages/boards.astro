@@ -138,7 +138,11 @@ if (boards === null || boards === undefined) {
                                 </div>
 
 
-                                <a href=`/boards?boardId=${board.boardID}`>
+                                <a hx-post=`/boards?boardId=${board.boardID}`
+                                   hx-push-url=`/boards?boardId=${board.boardID}`
+                                   hx-swap="outerHTML"
+                                   hx-target=`.board-container`
+                                >
                                     Zum Board
                                 </a>
                             </div>))))}

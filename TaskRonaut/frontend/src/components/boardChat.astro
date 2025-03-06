@@ -14,16 +14,14 @@ let localFullName = Astro.cookies.get('user').value;
              hx-get={`/api/boardChat?boardId=${boardId}`}
              hx-trigger="load, refreshBoardChat from:body"
              hx-swap="outerHTML">
-            Loading board chat...
+            Chat wird geladen...
         </div>
 
         <div class="board-chat-input-container">
             <div class="board-chat-input" x-data="{ messageData: { message: '' } }">
                 <input placeholder="Schreibe eine Nachricht..."
                        type="text"
-                       x-model="messageData.message"
-                       maxlength="255"/>
-                <span class="chat-char-count" x-text="messageData.message.length + '/255'"></span>
+                       x-model="messageData.message"/>
                 <button @click=`
                     if (!messageData.message.trim()) return;
                     fetch('${serverURL}/boardChat/send', {
