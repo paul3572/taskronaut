@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import boardController from "../../controller/board/boardController.mjs";
 import {serverResponse} from "../../middleware/serverResponse.mjs";
-import boardMemberController from "../../controller/board/boardMemberController.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
