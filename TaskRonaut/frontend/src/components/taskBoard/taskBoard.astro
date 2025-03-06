@@ -70,34 +70,3 @@ const boardName = selectedBoard?.boardName || 'Default Board Name';
     </div>
     <Sidebar boardID={selectedBoardId}></Sidebar>
 </div>
-
-<style>
-    .toggle-switch {
-        display: inline-flex;
-        background: var(--background);
-        border-radius: 8px;
-        padding: 1px;
-        margin-left: 10px;
-    }
-
-    .toggle-option {
-        padding: 8px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        background: transparent;
-        color: #6b7280;
-    }
-
-    .toggle-option.active {
-        background: var(--foreground);
-        color: var(--copy);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .toggle-option:not(.active):hover {
-        color: var(--primary-light);
-    }
-</style>
