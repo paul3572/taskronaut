@@ -11,6 +11,8 @@ import {
     UserNotActivatedError,
     UserNotFoundError
 } from "../../middleware/errors.mjs";
+import chalk from "chalk";
+import {styles} from "../../database/loggingStyle.mjs";
 
 class LoginController {
 
@@ -54,29 +56,33 @@ class LoginController {
     async userLogin(req, email, password) {
         try {
             if (this.loginRegex(email, password)) {
-                const user = await psAuthentication.getUserIdByEmail(email)
+                const user = await psAuthentication.getUserIdByEmail(email);
                 if (user === null) {
-                    logger.info("user does not exist");
-                    throw new UserNotFoundError("User not found.");
+                    logger.info(chalk.hex(styles.info)(`No User found for email: ${email}`));
+                    throw new UserNotFoundError(email);
                 }
                 const hashedPassword = await sha256(password);
                 const isPasswordValid = hashedPassword === user.password;
-                const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
-                if (emailIsActivated === 0) {
-                    throw new UserNotActivatedError("User not activated.");
-                }
+                logger.debug(chalk.hex(styles.debug)(`Is Password ${hashedPassword} same as ${user.password}? It's ${isPasswordValid}.`));
 
-                if (isPasswordValid && emailIsActivated === 1) {
-                    logger.info("Passwort korrekt. Starte Session für Benutzer-ID:");
-                    const sessionDetails = await startSession(req, user.id);
-                    const result = await psSession.updateUserIdInSession(user.id, req.sessionID);
+
+
+                if (isPasswordValid) {
+                    const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
+                    logger.debug(chalk.hex(styles.debug)(`Email ${email} is activated: ${emailIsActivated}`));
+                    if (emailIsActivated === 0) {
+                        throw new UserNotActivatedError(user.id);
+                    }
+                    logger.info(chalk.hex(styles.debug)(`Starte Session für User ${user.id}:`));
+                    await startSession(req, user.id);
+                    await psSession.updateUserIdInSession(user.id, req.sessionID);
                     return {
                         statusCode: 200,
-                        message: `Start Session for User-ID: ${user.id}`,
+                        message: `Starte Session für User ${user.id}:`,
                         data: {session: req.session, sessionId: req.sessionID}
                     };
                 } else {
-                    logger.info("Ungültige Anmeldedaten, (Falsches Passwort).");
+                    logger.info(chalk.hex(styles.info)("Ungültige Anmeldedaten, (Falsches Passwort)."));
                     throw new InvalidLoginDataError("Invalid login data.");
                 }
             } else {

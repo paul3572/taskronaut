@@ -61,7 +61,7 @@ class BoardController {
                 throw new PermissionDeniedError("User is not allowed to board");
             } else {    
                 const result = await psBoard.deleteBoard(boardId);
-                logger.info(chalk.hex(styles.success)`Board mit ID ${boardId} erfolgreich entfernt`);
+                logger.info(chalk.hex(styles.success)(`Board mit ID ${boardId} erfolgreich entfernt`));
                 //TODO: Delete Chat
                 return {statusCode: 200};
             }

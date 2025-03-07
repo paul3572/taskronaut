@@ -48,12 +48,12 @@ class RegistrationController {
 
                         await generateToken(email);
                         const activationToken = await psAuthentication.getActivationTokenByUserEmail(email);
-                        logger.info(chalk.hex(styles.info)`...generating validdtion token...`);
+                        logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
 
                         const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
-                        logger.info(chalk.hex(styles.info)`...token generated!`)
+                        logger.info(chalk.hex(styles.info)(`...token generated!`));
 
-                        logger.info(chalk.hex(styles.info)`ACTIVATION TOKEN:  ${activationToken}`);
+                        logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
                         const mailOptions = {
                             // hihi tolle email dies ned gibt
                             from: "noreply@taskronaut.at",
@@ -69,7 +69,7 @@ class RegistrationController {
                         return {statusCode: 201};
                     } catch (error) {
                         if (error.code === 'ER_DUP_ENTRY') {
-                            logger.info(chalk.hex(styles.warning)`E-Mail already in use!`);
+                            logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
                             throw new EmailAlreadyInUseError("E-Mail already in use!");
                         } else {
                             logger.info(error);
@@ -77,11 +77,11 @@ class RegistrationController {
                         }
                     }
                 } else {
-                    logger.error(chalk.hex(styles.warning)`E-Mail already in use!`);
+                    logger.error(chalk.hex(styles.warning)(`E-Mail already in use!`));
                     throw new EmailAlreadyInUseError("E-Mail already in use!");
                 }
             } else {
-                logger.error(chalk.hex(styles.warning)`No valid input!`);
+                logger.error(chalk.hex(styles.warning)(`No valid input!`));
                 throw new InvalidInputError("No valid input!");
             }
         } catch (error) {

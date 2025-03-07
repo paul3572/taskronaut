@@ -17,14 +17,14 @@ class EmailActivationController {
         try {
             const [status] = await connection.query(authenticationQueries.getUserActivationStatus, [userId]);
             if (!status || status.length === 0) {
-                throw new UserNotFoundError("User not found or activation status not available.");
+                throw new UserNotFoundError(`User ${userId} not found or activation status not available.`);
             }
             const isUserActivated = status[0]?.activated;
             if (typeof isUserActivated === 'boolean' || isUserActivated === 1 || isUserActivated === true) {
-                logger.debug((chalk.hex(styles.debug))("User is authenticated"));
-                return {statusCode: 200, message: "User is authenticated"};
+                logger.debug((chalk.hex(styles.debug))(`User ${userId} is authenticated`));
+                return {statusCode: 200, message: `User ${userId} is authenticated`};
             } else {
-                throw new PermissionDeniedError("User is not authenticated");
+                throw new PermissionDeniedError(`User ${userId} is not authenticated`);
             }
         } catch (error) {
             return await errorHandler(error);
@@ -48,8 +48,8 @@ class EmailActivationController {
                 throw new ActivationError("Failed to update user activation status.");
             }
 
-            logger.info("User activated");
-            return {statusCode: 200, message: "User activation successful"};
+            logger.info(chalk.hex(styles.info)(`User ${userid} activated`));
+            return {statusCode: 200, message: `User ${userid} activated`};
         } catch (error) {
             return await errorHandler(error);
         }
