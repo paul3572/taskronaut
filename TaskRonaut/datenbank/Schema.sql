@@ -13,12 +13,13 @@ CREATE TABLE Users (
     activated       BOOLEAN DEFAULT FALSE
 );
 
-
--- Board Tabelle mit Chat-Verknüpfung
+-- Board Tabelle
 CREATE TABLE Boards (
     boardID   INT AUTO_INCREMENT PRIMARY KEY,
     boardName VARCHAR(255) NOT NULL
 );
+
+-- Tabelle für die Chat Kommunikation
 CREATE TABLE P2PMessages(
     messageID INT AUTO_INCREMENT PRIMARY KEY,
     message   VARCHAR(255) DEFAULT '',
@@ -65,7 +66,7 @@ CREATE TABLE Tasks (
     FOREIGN KEY (listID) REFERENCES Lists (listID) ON DELETE CASCADE
 );
 
--- Nachrichten in Chats
+-- Chats im ganzen Board
 CREATE TABLE BoardMessages (
     messageID INT AUTO_INCREMENT PRIMARY KEY,
     boardID    INT NOT NULL,
@@ -75,7 +76,6 @@ CREATE TABLE BoardMessages (
     FOREIGN KEY (boardID) REFERENCES Boards (boardID) ON DELETE CASCADE,
     FOREIGN KEY (senderID) REFERENCES Users (id) ON DELETE CASCADE
 );
-
 
 -- Autorisierte Benutzer für Aufgaben
 CREATE TABLE AuthorizedUsers (
