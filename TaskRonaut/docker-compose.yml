@@ -40,18 +40,14 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=TaskRonaut
-    volumes:
-      - mysql_data:/var/lib/mysql  # Persistente Speicherung der Datenbank
 
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"   # HTTP
-      - "443:443" # HTTPS für verschlüsselten Zugriff
+      - "80:80"
+      - "443:443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - frontend
 
-volumes:
-  mysql_data:  # Persistent Storage für MySQL
