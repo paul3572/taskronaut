@@ -1,5 +1,5 @@
 ---
-import { serverURL } from "../conf";
+import { serverURL } from "./conf";
 
 let sessionId = Astro.cookies.get('sessionId').value;
 let boardId = Astro.url.searchParams.get('boardId');
@@ -14,7 +14,7 @@ const { data: messages } = await response.json();
 let localFullName = Astro.cookies.get('user').value;
 ---
 <div id="boardChatContainer"
-     hx-get={`/api/boardChat?boardId=${boardId}`}
+     hx-get={`boardChatAPI?boardId=${boardId}`}
      hx-trigger="refreshBoardChat from:body"
      hx-swap="outerHTML">
     <div class="board-chat-messages-container">

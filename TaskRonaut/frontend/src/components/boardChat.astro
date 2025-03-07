@@ -11,7 +11,7 @@ let localFullName = Astro.cookies.get('user').value;
 
         <!-- HTMX-enabled chat container -->
         <div id="boardChatContainer"
-             hx-get={`/api/boardChat?boardId=${boardId}`}
+             hx-get={`/boardChatAPI?boardId=${boardId}`}
              hx-trigger="load, refreshBoardChat from:body"
              hx-swap="outerHTML">
             Chat wird geladen...

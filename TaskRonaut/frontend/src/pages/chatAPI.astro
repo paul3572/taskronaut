@@ -1,6 +1,6 @@
 ---
-// src/pages/api/chat.astro
-import { serverURL } from "../conf";
+// src/pages/api/chatAPI.astro
+import { serverURL } from "./conf";
 
 // Read cookies or query params as needed
 let sessionId = Astro.cookies.get('sessionId').value;
@@ -16,7 +16,7 @@ const response = await fetch(`${serverURL}/ptp/view`, {
 const { data: ptp } = await response.json();
 ---
 <div id="chatContainer"
-     hx-get={`/api/chat?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
+     hx-get={`/chatAPI?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
      hx-trigger="refreshChat from:body"
      hx-swap="outerHTML">
     <div class="chat-messages" id="messages">
