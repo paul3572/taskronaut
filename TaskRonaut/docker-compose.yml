@@ -49,8 +49,7 @@ services:
       - "80:80"   # HTTP
       - "443:443" # HTTPS für verschlüsselten Zugriff
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt/live/taskronaut.at:/etc/letsencrypt/live/taskronaut.at:ro  # Ganzes Verzeichnis einbinden
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - frontend
 
