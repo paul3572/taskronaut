@@ -17,7 +17,7 @@ const { data: ptp } = await response.json();
 ---
 <div id="chatContainer"
      hx-get={`/chatAPI?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
-     hx-trigger="refreshChat from:body"
+     hx-trigger="refreshChat from:body, every 2s"
      hx-swap="outerHTML">
     <div class="chat-messages" id="messages">
         {ptp.flat()

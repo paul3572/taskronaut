@@ -1,11 +1,11 @@
 ---
+import { serverURL } from "../pages/conf";
 ---
-<header class="header" x-data="{
+<header class="header" x-data=`{
     user: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : null,
-    serverURL: 'https://yourserverurl.com', // adjust to your server URL
     userDropdownOpen: false,
     logout() {
-        fetch(`${this.serverURL}/authentication/logout`, {
+        fetch("${serverURL}/authentication/logout", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: this.user })
@@ -20,7 +20,7 @@
         sessionStorage.removeItem('user');
         window.location.href = '/login';
     }
-}">
+}`>
     <div class="left">
         <h1>
             <a href="/" style="color: whitesmoke; text-decoration: none">

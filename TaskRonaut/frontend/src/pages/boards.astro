@@ -148,7 +148,7 @@ if (boards === null || boards === undefined) {
                             </div>))))}
 
                     <!-- Card Input Section Modified -->
-                    <div class="board-card add-board" @click="showCardInput = true">
+                    <div class="board-card add-board" @click="showCardInput = true" x-show="!showCardInput">
                         <div class="add-content">
                             <i class="fas fa-plus"></i>
                             <span>Neues Board anlegen</span>
