@@ -5,7 +5,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: taskronaut-frontend
     expose:
       - "4321"
     ports:
@@ -17,7 +16,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: taskronaut-backend
     expose:
       - "3001"
     ports:
@@ -35,7 +33,6 @@ services:
     build:
       context: ./datenbank
       dockerfile: Dockerfile
-    container_name: taskronaut-datenbank
     expose:
       - "3306"
     ports:
@@ -48,7 +45,6 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: taskronaut-nginx
     ports:
       - "80:80"   # HTTP
       - "443:443" # HTTPS für verschlüsselten Zugriff
