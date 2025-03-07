@@ -5,9 +5,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: taskronaut-frontend
     expose:
       - "4321"
-    tty: true
+    ports:
+      - "4321:4321"
     depends_on:
       - backend
 
@@ -15,8 +17,11 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: taskronaut-backend
     expose:
       - "3001"
+    ports:
+      - "3001:3001"
     tty: true
     depends_on:
       - datenbank
@@ -30,17 +35,30 @@ services:
     build:
       context: ./datenbank
       dockerfile: Dockerfile
+    container_name: taskronaut-datenbank
     expose:
       - "3306"
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=TaskRonaut
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistente Speicherung der Datenbank
 
   nginx:
     image: nginx:latest
+    container_name: taskronaut-nginx
     ports:
-      - "80:80" # NGINX stellt die Seite auf Port 80 bereit
+      - "80:80"   # HTTP
+      - "443:443" # HTTPS für verschlüsselten Zugriff
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/live/taskronaut.at:/etc/letsencrypt/live/taskronaut.at:ro
+      - /etc/letsencrypt/archive/taskronaut.at:/etc/letsencrypt/archive/taskronaut.at:ro
+      - /etc/letsencrypt/privkey.pem:/etc/letsencrypt/live/taskronaut.at/privkey.pem:ro
     depends_on:
       - frontend
+
+volumes:
+  mysql_data:  # Persistent Storage für MySQL
