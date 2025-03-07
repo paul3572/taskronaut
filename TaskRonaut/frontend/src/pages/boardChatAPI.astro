@@ -1,0 +1,33 @@
+---
+import { serverURL } from "./conf";
+
+let sessionId = Astro.cookies.get('sessionId').value;
+let boardId = Astro.url.searchParams.get('boardId');
+
+const response = await fetch(`${serverURL}/boardChat/view`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId, boardId })
+});
+
+const { data: messages } = await response.json();
+let localFullName = Astro.cookies.get('user').value;
+---
+<div id="boardChatContainer"
+     hx-get={`boardChatAPI?boardId=${boardId}`}
+     hx-trigger="refreshBoardChat from:body, every 2s"
+     hx-swap="outerHTML">
+    <div class="board-chat-messages-container">
+        {messages.flat()
+            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+            .map((msg) => {
+                const isOwn = msg.senderID === localFullName;
+                return (
+                        <div class={`board-chat-message ${isOwn ? 'board-chat-message-own' : 'board-chat-message-other'}`}>
+                            <div class="board-chat-message-sender">{isOwn ? 'Du' : msg.senderID}</div>
+                            <div class="board-chat-message-content">{msg.message}</div>
+                        </div>
+                );
+            })}
+    </div>
+</div>

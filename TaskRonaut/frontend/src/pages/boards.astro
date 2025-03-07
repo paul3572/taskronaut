@@ -20,10 +20,10 @@ const {data: boards} = await response.json();
 const url = new URL(Astro.request.url);
 const boardIdParam = url.searchParams.get('boardId');
 
-console.log('Board ID Param:', boardIdParam);
+// console.log('Board ID Param:', boardIdParam);
 
 if (boards === null || boards === undefined) {
-    console.log('Boards data is null or undefined');
+    // console.log('Boards data is null or undefined');
     // Check if the URL has a boardId parameter
     if (boardIdParam !== null) {
         // Redirect to /boards without the boardId parameter
@@ -36,7 +36,7 @@ if (boards === null || boards === undefined) {
             boardList.push(key);
         }
     }
-    console.log("boards: ", boards);
+    // console.log("boards: ", boards);
 }
 ---
 
@@ -138,16 +138,17 @@ if (boards === null || boards === undefined) {
                                 </div>
 
 
-                                <a href=`/boards?boardId=${board.boardID}`>
+                                <a hx-post=`/boards?boardId=${board.boardID}`
+                                   hx-push-url=`/boards?boardId=${board.boardID}`
+                                   hx-swap="outerHTML"
+                                   hx-target=`.board-container`
+                                >
                                     Zum Board
                                 </a>
                             </div>))))}
 
                     <!-- Card Input Section Modified -->
-                    <div class="board-card add-board"
-                         x-show="!showCardInput"
-                         x-cloak
-                         @click="showCardInput = true">
+                    <div class="board-card add-board" @click="showCardInput = true" x-show="!showCardInput">
                         <div class="add-content">
                             <i class="fas fa-plus"></i>
                             <span>Neues Board anlegen</span>
@@ -204,7 +205,7 @@ if (boards === null || boards === undefined) {
         showHeaderInput: false, showCardInput: false, boardName: '', async createBoard() {
             if (!this.boardName.trim()) return;
             try {
-                const response = await fetch(`${serverURL}/boards/boards/`, {
+                const response = await fetch(`${serverURL}/boards/add/`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
                         sessionId: sessionId, boardName: this.boardName
                     })

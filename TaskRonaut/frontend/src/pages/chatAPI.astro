@@ -1,0 +1,35 @@
+---
+// src/pages/api/chatAPI.astro
+import { serverURL } from "./conf";
+
+// Read cookies or query params as needed
+let sessionId = Astro.cookies.get('sessionId').value;
+let otherUserEmail = Astro.url.searchParams.get('otherUserEmail');
+let otherUserName = Astro.url.searchParams.get('otherUserName');
+
+// Fetch your chat messages
+const response = await fetch(`${serverURL}/ptp/view`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId, otherUserEmail })
+});
+const { data: ptp } = await response.json();
+---
+<div id="chatContainer"
+     hx-get={`/chatAPI?otherUserEmail=${otherUserEmail}&otherUserName=${otherUserName}`}
+     hx-trigger="refreshChat from:body, every 2s"
+     hx-swap="outerHTML">
+    <div class="chat-messages" id="messages">
+        {ptp.flat()
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+            .map((msg) => {
+                const isOwn = msg.senderID === Astro.cookies.get('user').value;
+                return (
+                        <div class={`chat-message ${isOwn ? 'chat-message-own' : 'chat-message-other'}`}>
+                            <div class="chat-sender">{isOwn ? 'Du' : otherUserName}</div>
+                            <div class="chat-content">{msg.message}</div>
+                        </div>
+                );
+            })}
+    </div>
+</div>

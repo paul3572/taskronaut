@@ -98,7 +98,7 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
                         x-transition
                         @click=`
                         if (taskData.taskName.trim()) {
-                            fetch("${serverURL}/tasks/tasks", {
+                            fetch("${serverURL}/tasks/add", {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(taskData)

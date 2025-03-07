@@ -52,7 +52,7 @@ async function getCompleteUser(sessionId) {
         });
         const data = await response.json();
         sessionStorage.setItem('user', JSON.stringify(data.data));
-        console.log(JSON.stringify(data.data));
+        // console.log(JSON.stringify(data.data));
     } catch (error) {
         console.error('Error fetching user:', error);
     }
@@ -68,7 +68,7 @@ async function logout(sessionId) {
             body: JSON.stringify({ sessionId: sessionId })
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         sessionStorage.removeItem('sessionCookie');
         sessionStorage.removeItem('sessionID');
         sessionStorage.removeItem('user');

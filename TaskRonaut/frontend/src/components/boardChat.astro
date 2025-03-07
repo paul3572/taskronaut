@@ -4,46 +4,26 @@ import {serverURL} from "../pages/conf.js";
 let sessionId = Astro.cookies.get('sessionId').value;
 let {boardId} = Astro.props;
 let localFullName = Astro.cookies.get('user').value;
-
-const response = await fetch(`${serverURL}/boardChat/view`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({sessionId: sessionId, boardId: boardId})
-});
-
-const {data: messages} = await response.json();
-
-console.log("Chat Messages:")
-console.log(messages);
 ---
 <div class="board-chat">
     <div class="board-chat-container">
         <button class="board-chat-close" @click="showBoardChat = false">×</button>
 
-        <div class="board-chat-messages-container">
-            {messages.flat().sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()).map((msg) => {
-                const isOwn = msg.senderID === `${localFullName}`;
-
-                return (
-                        <div class={`board-chat-message ${isOwn ? 'board-chat-message-own' : 'board-chat-message-other'}` }>
-                            <div class="board-chat-message-sender">{isOwn ? 'Du' : msg.senderID}</div>
-                            <div class="board-chat-message-content">{msg.message}</div>
-                        </div>)
-            })}
+        <!-- HTMX-enabled chat container -->
+        <div id="boardChatContainer"
+             hx-get={`/boardChatAPI?boardId=${boardId}`}
+             hx-trigger="load, refreshBoardChat from:body"
+             hx-swap="outerHTML">
+            Chat wird geladen...
         </div>
 
         <div class="board-chat-input-container">
-            <div class="board-chat-input"
-                 x-data=`{
-                    messageData: { message: '' }
-                 }`>
+            <div class="board-chat-input" x-data="{ messageData: { message: '' } }">
                 <input placeholder="Schreibe eine Nachricht..."
                        type="text"
-                       x-model="messageData.message"
-                />
+                       x-model="messageData.message"/>
                 <button @click=`
+                    if (!messageData.message.trim()) return;
                     fetch('${serverURL}/boardChat/send', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -52,8 +32,10 @@ console.log(messages);
                             boardId: "${boardId}",
                             message: messageData.message
                         })
-                    }).then(() => { window.location.reload();
-                    });
+                    }).then(() => {
+                        messageData.message = '';
+                        document.body.dispatchEvent(new CustomEvent('refreshBoardChat'));
+                    }).catch(err => console.error('Error sending message:', err));
                 `>Senden
                 </button>
             </div>

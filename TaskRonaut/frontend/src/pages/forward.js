@@ -42,7 +42,7 @@ export function forwarding(event) {
         case HTTP_STATUS.CREATED:
             if (window.location.pathname === "/register") {
                 updateResponse('#009900', "Erfolgreich erstellt!");
-                console.log("Erstellung erfolgreich!");
+                // console.log("Erstellung erfolgreich!");
 
                 // Parse the JSON response and store it in local storage
                 try {
@@ -76,7 +76,7 @@ export function forwarding(event) {
             // Überprüfen, ob die aktuelle Seite die Login-Seite ist und die Antwort vom Login-Endpunkt kommt
             if (window.location.pathname === "/login" && xhr.responseURL.includes("/api/authentication/login")) {
                 updateResponse('#009900', "Erfolgreich eingeloggt!");
-                console.log("Login erfolgreich!");
+                // console.log("Login erfolgreich!");
 
                 try {
                     const data = JSON.parse(responseText);
@@ -125,14 +125,16 @@ export function forwarding(event) {
             break;
 
         default:
-            console.log("Antwortstatus:", status);
+            // console.log("Antwortstatus:", status);
             break;
     }
 
     if (isSuccessful) {
+        /*
         console.log("Anfrage erfolgreich:", {
             status, responseText, target,
         });
+        */
     } else if (isFailed) {
         console.error("Anfrage fehlgeschlagen:", {
             status, responseText, target,
