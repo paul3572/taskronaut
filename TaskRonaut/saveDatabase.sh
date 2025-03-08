@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Konfiguration
-db_container_name="taskronaut-datenbank-1"
+db_container_name="datenbank"
 db_user="root"
 db_name="TaskRonaut"
 backup_file="backup.sql"

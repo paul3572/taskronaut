@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # MySQL-Login-Informationen
-CONTAINER_NAME="taskronaut-datenbank-1"
+CONTAINER_NAME="datenbank"
 DB_USER="root"
 DB_NAME="TaskRonaut"
 
