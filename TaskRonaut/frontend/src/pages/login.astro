@@ -13,7 +13,10 @@ import '../styles/global.css';
 <div class="login-register-container" id="login-register-container">
     <div class="login" id="login-container">
         <a class="close-button clickable"
-           href="/"
+           hx-get="/"
+           hx-push-url="/"
+           hx-swap="outerHTML"
+           hx-target="#login-register-container"
         aria-label="Close"
         >&#10006;</a>
         <h2>Einloggen</h2>
