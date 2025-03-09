@@ -16,8 +16,8 @@ export function forwarding(event) {
     const responseText = xhr.responseText;
 
     const requestOrigin = new URL(xhr.responseURL).origin + "/api";
-    if (requestOrigin !== "http://taskronaut.at/api") {
-        console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "http://taskronaut.at/api");
+    if (requestOrigin !== "https://taskronaut.at/api") {
+        console.error("Ungültige Anfrage von:", requestOrigin, ". Expected: " + "https://taskronaut.at/api");
         return;
     }
 
