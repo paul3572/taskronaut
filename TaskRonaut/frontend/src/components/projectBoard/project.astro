@@ -83,16 +83,13 @@ const listTasks = tasks.filter(task => task.listID === listID, boardID);
             </button>
 
             <div x-show="showForm" x-transition class="task-input">
-                <label x-cloak>
-                    Aufgabenname
-                    <input type="text"
-                           x-model="taskData.taskName"
-                           placeholder="Aufgabenname"
-                           class="task-name-input"
-                           x-cloak
-                           x-transition
-                    />
-                </label>
+                <input type="text"
+                       x-model="taskData.taskName"
+                       placeholder="Task-Name"
+                       class="task-name-input"
+                       x-cloak
+                       x-transition
+                />
                 <button
                         x-cloak
                         x-transition
