@@ -132,11 +132,11 @@ const { data: users } = await boardMembers.json();
                     />
 
                     <div class="member-action-btns">
-                        <button @click="saveMember" class="save-member-btn">
-                            hinzufügen
-                        </button>
                         <button @click="cancelMember" class="cancel-member-btn">
                             abbrechen
+                        </button>
+                        <button @click="saveMember" class="save-member-btn">
+                            hinzufügen
                         </button>
                     </div>
                 </div>
