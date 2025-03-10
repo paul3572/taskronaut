@@ -15,7 +15,7 @@ let localFullName = Astro.cookies.get('user').value;
 ---
 <div id="boardChatContainer"
      hx-get={`boardChatAPI?boardId=${boardId}`}
-     hx-trigger="refreshBoardChat from:body, every 2s"
+     hx-trigger="refreshBoardChat from:body, every 3s"
      hx-swap="outerHTML">
     <div class="board-chat-messages-container">
         {messages.flat()
