@@ -20,12 +20,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend
+          cd /root/taskronaut/TaskRonaut/backend
           npm install
 
       - name: Run Jest tests
         run: |
-          cd backend
+          cd /root/taskronaut/TaskRonaut/backend
           npm test 
 
       - name: SSH into VPS and deploy
