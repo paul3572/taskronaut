@@ -20,8 +20,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: |
-            cd /taskronaut/Taskronaut
-            sh /taskronaut/Taskronaut/updateServer.sh
+            cd /taskronaut/TaskRonaut
+            sh updateServer.sh
             #git pull origin main
             #docker-compose down 
             #docker-compose up -d --build
