@@ -24,7 +24,6 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {boardName, sessionId} = req.body;
-    logger.debug(boardName);
     await serverResponse(res, await boardController.addBoard(boardName, sessionId));
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });

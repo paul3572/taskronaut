@@ -18,7 +18,7 @@ router.post('/registration', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {email, password, firstName, lastName} = req.body;
     logger.debug([{Email: email, Password: password, FirstName: firstName, LastName: lastName}]);
-    await serverResponse(res, await registrationController.userRegistration(email, password, firstName, lastName))
+    await serverResponse(res, await registrationController.userRegistration(email, password, firstName, lastName));
     logger.info(chalk.hex(styles.dialogEnd)`Registration Process finished!`);
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });

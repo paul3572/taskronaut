@@ -5,7 +5,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import psSession from "../../database/preparedStatements/psSession.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {UserIsAlreadyMemberError, UserNotFoundError} from "../../middleware/errors.mjs";
+import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from "../../middleware/errors.mjs";
 
 
 class BoardMemberController {
@@ -54,7 +54,7 @@ class BoardMemberController {
             const myUserId = await psSession.getUserIdFromSessionId(sessionId);
             const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
             if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
-                throw new Error("Issuing User is not allowed to board");
+                throw new PermissionDeniedError("Issuing User is not allowed to board");
             }
             const userToAdd = await psAuthentication.getUserIdByEmail(email);
             const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
