@@ -59,3 +59,28 @@ services:
         - ./certbot/conf:/etc/letsencrypt
         - ./certbot/www:/var/www/certbot
       command: certonly --webroot -w /var/www/certbot --force-renewal --email paul.schreiber@it.htl-hl.ac.at -d taskronaut.at --agree-tos
+
+  mailserver:
+    container_name: mailserver
+    image: tvial/docker-mailserver:latest
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+    volumes:
+      - ./mail-data/config:/tmp/docker-mailserver/config:ro
+      - ./mail-data/data:/var/mail
+    environment:
+      - ENABLE_SPAMASSASSIN=1
+      - ENABLE_CLAMAV=1
+      - ONE_DIR=1
+      - ENABLE_POSTGREY=1
+      - MAILNAME=taskronaut.at
+      - OVERRIDE_QUOTA=524288000
+      - PERMIT_DOCKER=1
+      - ENABLE_SASLAUTH=1
+      - SASL_TYPE=dovecot
+      - DOVECOT_PASSWORDS=yes
+      - MAIL_USER=noreply@taskronaut.at
+      - MAIL_PASS=MeinSehrStarkesPasswort

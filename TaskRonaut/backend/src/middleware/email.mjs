@@ -4,10 +4,12 @@ import {styles} from "../database/loggingStyle.mjs";
 import logger from "./logger.mjs";
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "mailserver",
+    port: 587,
+    secure: false,
     auth: {
-        user: "platzerdominik5@gmail.com",
-        pass: "drtevlssezqzmlaw"
+        user: "noreply@taskronaut.at",
+        pass: "MeinSehrStarkesPasswort"
     }
 });
 
@@ -18,6 +20,11 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise<void>}
  */
 export async function sendEmail(mailOptions) {
-    await transporter.sendMail(mailOptions);
-    logger.info(chalk.hex(styles.success)`E-Mail sent successfully!`);
+    try {
+        await transporter.sendMail(mailOptions);
+        logger.info(chalk.hex(styles.success)`E-Mail sent successfully!`);
+    } catch (error) {
+        logger.error(chalk.hex(styles.error)`Error sending email: ${error}`);
+        throw error;
+    }
 }
