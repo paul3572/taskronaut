@@ -24,7 +24,7 @@ export async function sendEmail(mailOptions) {
         await transporter.sendMail(mailOptions);
         logger.info(chalk.hex(styles.success)`E-Mail sent successfully!`);
     } catch (error) {
-        logger.error(chalk.hex(styles.error)`Error sending email: ${error}`);
+        logger.error(chalk.hex(styles.critical)`Error sending email: ${error}`);
         throw error;
     }
 }
