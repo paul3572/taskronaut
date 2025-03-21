@@ -73,7 +73,8 @@ services:
     volumes:
       - ./mail-data/config:/tmp/docker-mailserver/config:ro
       - ./mail-data/data:/var/mail
-      - ./mail-data/config/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf:ro
+      - ./emailconf/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf:ro
+      - ./emailconf/saslauthd.conf:/etc/default/saslauthd:ro
     environment:
       - ENABLE_TLS=0
       - ENABLE_SPAMASSASSIN=1
