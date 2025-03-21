@@ -11,7 +11,7 @@ if ! command -v mkpasswd &> /dev/null; then
 fi
 
 echo "Hashing password..."
-HASHED_PASSWORD=$(mkpasswd -m sha-512 "$PASSWORD")
+HASHED_PASSWORD=$(openssl passwd -salt "$(openssl rand -base64 16)" -6 "$PASSWORD")
 
 echo "Updating $POSTFIX_ACCOUNTS_FILE with hashed password for $EMAIL"
 echo "$EMAIL|$HASHED_PASSWORD" > "$POSTFIX_ACCOUNTS_FILE"
