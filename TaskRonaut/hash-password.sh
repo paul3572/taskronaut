@@ -5,11 +5,6 @@ EMAIL="noreply@taskronaut.at"
 PASSWORD="MeinSehrStarkesPasswort"
 POSTFIX_ACCOUNTS_FILE="./emailconf/postfix-accounts.cf"
 
-if ! command -v mkpasswd &> /dev/null; then
-  echo "mkpasswd is not installed."
-  exit 1
-fi
-
 echo "Hashing password..."
 HASHED_PASSWORD=$(openssl passwd -salt "$(openssl rand -base64 16)" -6 "$PASSWORD")
 
