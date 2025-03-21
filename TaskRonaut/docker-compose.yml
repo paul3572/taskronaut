@@ -73,6 +73,7 @@ services:
     volumes:
       - ./mail-data/config:/tmp/docker-mailserver/config:ro
       - ./mail-data/data:/var/mail
+      - ./mail-data/config/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf:ro
     environment:
       - ENABLE_SPAMASSASSIN=1
       - ENABLE_CLAMAV=1
