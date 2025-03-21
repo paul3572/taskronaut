@@ -63,6 +63,8 @@ services:
   mailserver:
     container_name: mailserver
     image: tvial/docker-mailserver:latest
+    hostname: taskronaut.at
+    domainname: taskronaut.at
     ports:
       - "25:25"
       - "143:143"
