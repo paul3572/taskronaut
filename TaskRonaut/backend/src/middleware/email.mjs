@@ -5,12 +5,12 @@ import logger from "./logger.mjs";
 
 const transporter = nodemailer.createTransport({
     host: "mailserver",
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
         user: "noreply@taskronaut.at",
         pass: "MeinSehrStarkesPasswort"
-    }
+    },
 });
 
 /**
