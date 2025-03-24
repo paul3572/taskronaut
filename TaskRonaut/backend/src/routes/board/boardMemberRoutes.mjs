@@ -4,6 +4,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import {serverResponse} from "../../middleware/serverResponse.mjs";
 import boardMemberController from "../../controller/board/boardMemberController.mjs";
+import {errorHandler} from "../../middleware/errorHandler.js";
 
 const router = Router();
 
@@ -13,7 +14,11 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
-    await serverResponse(res, await boardMemberController.getAllBoardMembers(sessionId, boardId));
+    try {
+        await serverResponse(res, await boardMemberController.getAllBoardMembers(sessionId, boardId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -23,7 +28,11 @@ router.post('/board-members/hilfe', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {userId, boardId} = req.body;
-    await serverResponse(res, await boardMemberController.createNewBoardMember(userId, boardId));
+    try {
+        await serverResponse(res, await boardMemberController.createNewBoardMember(userId, boardId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -33,7 +42,11 @@ router.delete('/remove', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
-    await serverResponse(res, await boardMemberController.removeBoardMember(sessionId, boardId, email));
+    try {
+        await serverResponse(res, await boardMemberController.removeBoardMember(sessionId, boardId, email));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -43,7 +56,11 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
-    await serverResponse(res, await boardMemberController.addMemberToBoard(sessionId, boardId, email));
+    try {
+        await serverResponse(res, await boardMemberController.addMemberToBoard(sessionId, boardId, email));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

@@ -4,6 +4,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
 import {Router} from "express";
+import {errorHandler} from "../../middleware/errorHandler.js";
 
 const router = new Router();
 //TODO: Irrelevant
@@ -12,10 +13,13 @@ router.get('/lists', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)(`LIST REQUESTED: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    await serverResponse(res, await listController.listRequest());
+    try {
+        await serverResponse(res, await listController.listRequest());
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
-
 
 router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
@@ -23,7 +27,11 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
-    await serverResponse(res, await listController.listsForBoard(sessionId, boardId));
+    try {
+        await serverResponse(res, await listController.listsForBoard(sessionId, boardId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -32,9 +40,12 @@ router.post('/add', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)(`NEW LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-
     const {sessionId, boardId, listName} = req.body;
-    await serverResponse(res, await listController.createList(sessionId, boardId, listName));
+    try {
+        await serverResponse(res, await listController.createList(sessionId, boardId, listName));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -43,9 +54,12 @@ router.patch('/update', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)(`UPDATE LIST: `));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-
     const {sessionId, listId, listName} = req.body;
-    await serverResponse(res, await listController.updateList(sessionId, listId, listName));
+    try {
+        await serverResponse(res, await listController.updateList(sessionId, listId, listName));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -56,7 +70,11 @@ router.delete('/delete', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, listId} = req.body;
     logger.info(`DELETE LIST ID: ${listId}`);
-    await serverResponse(res, await listController.removeList(sessionId, listId));
+    try {
+        await serverResponse(res, await listController.removeList(sessionId, listId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

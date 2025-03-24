@@ -54,42 +54,37 @@ class LoginController {
      *  5. Logs errors and handles unexpected issues gracefully.
      */
     async userLogin(req, email, password) {
-        try {
-            if (this.loginRegex(email, password)) {
-                const user = await psAuthentication.getUserIdByEmail(email);
-                if (user === null) {
-                    logger.info(chalk.hex(styles.info)(`No User found for email: ${email}`));
-                    throw new UserNotFoundError(email);
-                }
-                const hashedPassword = await sha256(password);
-                const isPasswordValid = hashedPassword === user.password;
-                logger.debug(chalk.hex(styles.debug)(`Is Password ${hashedPassword} same as ${user.password}? It's ${isPasswordValid}.`));
-
-
-
-                if (isPasswordValid) {
-                    const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
-                    logger.debug(chalk.hex(styles.debug)(`Email ${email} is activated: ${emailIsActivated}`));
-                    if (emailIsActivated === 0) {
-                        throw new UserNotActivatedError(user.id);
-                    }
-                    logger.info(chalk.hex(styles.debug)(`Starte Session für User ${user.id}:`));
-                    await startSession(req, user.id);
-                    await psSession.updateUserIdInSession(user.id, req.sessionID);
-                    return {
-                        statusCode: 200,
-                        message: `Starte Session für User ${user.id}:`,
-                        data: {session: req.session, sessionId: req.sessionID}
-                    };
-                } else {
-                    logger.info(chalk.hex(styles.info)("Ungültige Anmeldedaten, (Falsches Passwort)."));
-                    throw new InvalidLoginDataError("Invalid login data.");
-                }
-            } else {
-                throw new InvalidInputError("Invalid input data.");
+        if (this.loginRegex(email, password)) {
+            const user = await psAuthentication.getUserIdByEmail(email);
+            if (user === null) {
+                logger.info(chalk.hex(styles.info)(`No User found for email: ${email}`));
+                throw new UserNotFoundError(email);
             }
-        } catch (error) {
-            return await errorHandler(error);
+            const hashedPassword = await sha256(password);
+            const isPasswordValid = hashedPassword === user.password;
+            logger.debug(chalk.hex(styles.debug)(`Is Password ${hashedPassword} same as ${user.password}? It's ${isPasswordValid}.`));
+
+
+            if (isPasswordValid) {
+                const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
+                logger.debug(chalk.hex(styles.debug)(`Email ${email} is activated: ${emailIsActivated}`));
+                if (emailIsActivated === 0) {
+                    throw new UserNotActivatedError(user.id);
+                }
+                logger.info(chalk.hex(styles.debug)(`Starte Session für User ${user.id}:`));
+                await startSession(req, user.id);
+                await psSession.updateUserIdInSession(user.id, req.sessionID);
+                return {
+                    statusCode: 200,
+                    message: `Starte Session für User ${user.id}:`,
+                    data: {session: req.session, sessionId: req.sessionID}
+                };
+            } else {
+                logger.info(chalk.hex(styles.info)("Ungültige Anmeldedaten, (Falsches Passwort)."));
+                throw new InvalidLoginDataError("Invalid login data.");
+            }
+        } else {
+            throw new InvalidInputError("Invalid input data.");
         }
     }
 }

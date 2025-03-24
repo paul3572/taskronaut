@@ -9,64 +9,47 @@ import {PermissionDeniedError} from "../../middleware/errors.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {
-        try {
-            const userId = await findUserBySessionId(sessionId);
-            logger.info(chalk.hex(styles.success)('User-ID: ' + userId));
-            const result = await psBoard.selectAllUserBoards(userId);
-            logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
-            return {statusCode: 200, data: result};
-        } catch (error) {
-            return await errorHandler(error);
-        }
+        const userId = await findUserBySessionId(sessionId);
+        logger.info(chalk.hex(styles.success)('User-ID: ' + userId));
+        const result = await psBoard.selectAllUserBoards(userId);
+        logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
+        return {statusCode: 200, data: result};
     }
-
 
     async addBoard(boardName, sessionId) {
-        try {
-            let userId;
-            if (sessionId[1] === true) {
-                userId = sessionId[0];
-            } else {
-                userId = await findUserBySessionId(sessionId);
-            }
 
-            //  Add Boards:
-            const result = await psBoard.insertNewBoard(boardName);
-            const boardId = result[0].insertId;
-            logger.info(chalk.hex(styles.success)('Boards successfully added'));
-            await psBoardMember.insertNewBoardMembers(userId, boardId);
-
-
-
-            return {statusCode: 200, data: result[0]};
-        } catch (error) {
-            return await errorHandler(error);
+        let userId;
+        if (sessionId[1] === true) {
+            userId = sessionId[0];
+        } else {
+            userId = await findUserBySessionId(sessionId);
         }
+
+        //  Add Boards:
+        const result = await psBoard.insertNewBoard(boardName);
+        const boardId = result[0].insertId;
+        logger.info(chalk.hex(styles.success)('Boards successfully added'));
+        await psBoardMember.insertNewBoardMembers(userId, boardId);
+
+        return {statusCode: 200, data: result[0]};
     }
+
     async updateBoard(sessionId, boardId, boardName) {
-        try {
-            const myUserId = await findUserBySessionId(sessionId);
-            const result = await psBoard.updateBoard(boardId, boardName);
-            return {statusCode: 200};
-        } catch (exception) {
-            return await errorHandler(exception);
-        }
+        const myUserId = await findUserBySessionId(sessionId);
+        const result = await psBoard.updateBoard(boardId, boardName);
+        return {statusCode: 200};
     }
 
     async removeBoard(sessionId, boardId) {
-        try {
-            const myUserId = await findUserBySessionId(sessionId);
-            const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
-            if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
-                throw new PermissionDeniedError("User is not allowed to board");
-            } else {    
-                const result = await psBoard.deleteBoard(boardId);
-                logger.info(chalk.hex(styles.success)(`Board mit ID ${boardId} erfolgreich entfernt`));
-                //TODO: Delete Chat
-                return {statusCode: 200};
-            }
-        } catch (error) {
-            return await errorHandler(error);
+        const myUserId = await findUserBySessionId(sessionId);
+        const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+        if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
+            throw new PermissionDeniedError("User is not allowed to board");
+        } else {
+            const result = await psBoard.deleteBoard(boardId);
+            logger.info(chalk.hex(styles.success)(`Board mit ID ${boardId} erfolgreich entfernt`));
+            //TODO: Delete Chat
+            return {statusCode: 200};
         }
     }
 }

@@ -4,7 +4,7 @@ import {serverResponse} from "../../middleware/serverResponse.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-
+import {errorHandler} from "../../middleware/errorHandler.js";
 
 const router = Router();
 
@@ -14,7 +14,11 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId} = req.body;
-    await serverResponse(res, await boardController.boardRequest(sessionId));
+    try {
+        await serverResponse(res, await boardController.boardRequest(sessionId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -24,7 +28,11 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {boardName, sessionId} = req.body;
-    await serverResponse(res, await boardController.addBoard(boardName, sessionId));
+    try {
+        await serverResponse(res, await boardController.addBoard(boardName, sessionId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -33,9 +41,12 @@ router.patch('/update', async (req, res) => {
     logger.info(chalk.hex(styles.dialogStart)`UPDATE BOARD-NAME: `);
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-
     const {sessionId, boardId, boardName} = req.body;
-    await serverResponse(res, await boardController.updateBoard(sessionId, boardId, boardName));
+    try {
+        await serverResponse(res, await boardController.updateBoard(sessionId, boardId, boardName));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
@@ -46,7 +57,11 @@ router.delete('/delete', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
     logger.info(`REMOVE BOARD WITH ID: ${boardId}`);
-    await serverResponse(res, await boardController.removeBoard(sessionId, boardId));
+    try {
+        await serverResponse(res, await boardController.removeBoard(sessionId, boardId));
+    } catch (exception) {
+        await serverResponse(res, await errorHandler(exception));
+    }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 

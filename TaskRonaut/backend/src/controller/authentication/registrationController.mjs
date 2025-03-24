@@ -27,65 +27,61 @@ class RegistrationController {
     }
 
     async userRegistration(email, password, firstName, lastName) {
-        try {
-            if (this.registrationRegex(email, password, firstName, lastName)) {
-                const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
-                if (rows.length === 0) {
-                    try {
-                        const hPw = await sha256(password);
-                        const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
-                        logger.info(chalk.hex(styles.info)`User added successfully to database!`);
-                        logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
+        if (this.registrationRegex(email, password, firstName, lastName)) {
+            const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
+            if (rows.length === 0) {
+                try {
+                    const hPw = await sha256(password);
+                    const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
+                    logger.info(chalk.hex(styles.info)`User added successfully to database!`);
+                    logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
 
-                        /*
-                        // Create Default Board for new User
-                        const userId = await getUserIdByEmail(email);
-                        const boardName = "Default Board";
-                        const returnValue = [userId?.id, true]
-                        await addBoard(boardName, returnValue);
-                        logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
-                         */
+                    /*
+                    // Create Default Board for new User
+                    const userId = await getUserIdByEmail(email);
+                    const boardName = "Default Board";
+                    const returnValue = [userId?.id, true]
+                    await addBoard(boardName, returnValue);
+                    logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
+                     */
 
-                        await generateToken(email);
-                        const activationToken = await psAuthentication.getActivationTokenByUserEmail(email);
-                        logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
+                    await generateToken(email);
+                    const activationToken = await psAuthentication.getActivationTokenByUserEmail(email);
+                    logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
 
-                        const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
-                        logger.info(chalk.hex(styles.info)(`...token generated!`));
+                    const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
+                    logger.info(chalk.hex(styles.info)(`...token generated!`));
 
-                        logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
-                        const mailOptions = {
-                            // hihi tolle email dies ned gibt
-                            from: "noreply@taskronaut.at",
-                            to: email,
-                            subject: "Willkommen bei unserem Service!",
-                            html: `
+                    logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
+                    const mailOptions = {
+                        // hihi tolle email dies ned gibt
+                        from: "noreply@taskronaut.at",
+                        to: email,
+                        subject: "Willkommen bei unserem Service!",
+                        html: `
                         <p>Hallo ${firstName} ${lastName},</p>
                         <p>Danke für deine Registrierung bei uns!</p>
                         <p>Klicke <a href=${url}>hier</a>, um zu unserer Seite zu gelangen.</p>
                     `
-                        };
-                        await sendEmail(mailOptions);
-                        return {statusCode: 201};
-                    } catch (error) {
-                        if (error.code === 'ER_DUP_ENTRY') {
-                            logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
-                            throw new EmailAlreadyInUseError("E-Mail already in use!");
-                        } else {
-                            logger.info(error);
-                            throw new DatabaseError("Error while adding user to database!");
-                        }
+                    };
+                    await sendEmail(mailOptions);
+                    return {statusCode: 201};
+                } catch (error) {
+                    if (error.code === 'ER_DUP_ENTRY') {
+                        logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
+                        throw new EmailAlreadyInUseError("E-Mail already in use!");
+                    } else {
+                        logger.info(error);
+                        throw new DatabaseError("Error while adding user to database!");
                     }
-                } else {
-                    logger.error(chalk.hex(styles.warning)(`E-Mail already in use!`));
-                    throw new EmailAlreadyInUseError("E-Mail already in use!");
                 }
             } else {
-                logger.error(chalk.hex(styles.warning)(`No valid input!`));
-                throw new InvalidInputError("No valid input!");
+                logger.error(chalk.hex(styles.warning)(`E-Mail already in use!`));
+                throw new EmailAlreadyInUseError("E-Mail already in use!");
             }
-        } catch (error) {
-            return await errorHandler(error);
+        } else {
+            logger.error(chalk.hex(styles.warning)(`No valid input!`));
+            throw new InvalidInputError("No valid input!");
         }
     }
 }
