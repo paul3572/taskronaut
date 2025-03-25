@@ -1,8 +1,8 @@
-import dbConnection from "../dbCon.mjs";
-import {listQueries, taskQueries} from "../dbQueries.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {listQueries, taskQueries} from "../../database/dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 
-class PsList {
+class ListModel {
     async selectAllLists() {
         const [lists] = await dbConnection.query(listQueries.getLists);
         return lists;
@@ -45,4 +45,4 @@ class PsList {
     }
 }
 
-export default new PsList();
+export default new ListModel();

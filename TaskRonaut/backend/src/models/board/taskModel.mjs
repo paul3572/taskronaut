@@ -1,10 +1,10 @@
-import dbConnection from "../dbCon.mjs";
-import {joins, taskQueries} from "../dbQueries.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {joins, taskQueries} from "../../database/dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../loggingStyle.mjs";
+import {styles} from "../../database/loggingStyle.mjs";
 
-class PsTask {
+class TaskModel {
     async selectAllTasks() {
         const [tasks] = await dbConnection.query(taskQueries.getAllTasks);
         return tasks;
@@ -69,4 +69,4 @@ class PsTask {
 
 }
 
-export default new PsTask();
+export default new TaskModel();

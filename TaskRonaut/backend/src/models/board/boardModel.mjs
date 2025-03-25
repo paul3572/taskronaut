@@ -1,16 +1,16 @@
-import dbConnection from "../dbCon.mjs";
-import {boardMemberQueries, boardQueries, listQueries, taskQueries} from "../dbQueries.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {boardMemberQueries, boardQueries, listQueries, taskQueries} from "../../database/dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 import {
     BoardNotFoundError,
     InvalidBoardMemberDataError,
     NoBoardsFoundError,
     QueryExecutionError
-} from "../../middleware/errors.mjs";
+} from "../../database/errors.mjs";
 import chalk from "chalk";
-import {styles} from "../loggingStyle.mjs";
+import {styles} from "../../database/loggingStyle.mjs";
 
-class PsBoard {
+class BoardModel {
     async selectAllUserBoards(userId) {
         let boardIds;
         try {
@@ -94,4 +94,4 @@ class PsBoard {
     }
 }
 
-export default new PsBoard();
+export default new BoardModel();

@@ -4,12 +4,11 @@ import {authenticationQueries} from "../../database/dbQueries.mjs";
 import {sha256} from "../../middleware/sha256.mjs";
 import {generateToken} from "../../middleware/token.mjs";
 import {sendEmail} from "../../middleware/email.mjs";
-import psAuthentication from "../../database/preparedStatements/psAuthentication.mjs";
+import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-import {DatabaseError, EmailAlreadyInUseError, InvalidInputError} from "../../middleware/errors.mjs";
-import {errorHandler} from "../../middleware/errorHandler.js";
+import {DatabaseError, EmailAlreadyInUseError, InvalidInputError} from "../../database/errors.mjs";
 
 
 class RegistrationController {
@@ -46,7 +45,7 @@ class RegistrationController {
                      */
 
                     await generateToken(email);
-                    const activationToken = await psAuthentication.getActivationTokenByUserEmail(email);
+                    const activationToken = await authenticationModel.getActivationTokenByUserEmail(email);
                     logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
 
                     const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;

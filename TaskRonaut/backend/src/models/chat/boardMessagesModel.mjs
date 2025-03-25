@@ -1,8 +1,8 @@
-import connection from "../dbCon.mjs";
-import {boardMessageQueries, p2pMessageQueries} from "../dbQueries.mjs";
-import psAuthentication from "./psAuthentication.mjs";
+import connection from "../../database/dbCon.mjs";
+import {boardMessageQueries, p2pMessageQueries} from "../../database/dbQueries.mjs";
+import authenticationModel from "../authentication/authenticationModel.mjs";
 
-class PsBoardMessages {
+class BoardMessagesModel {
     async insertNewMessage(boardId, senderID, message) {
         const [result] = await connection.query(boardMessageQueries.createMessage, [boardId, senderID, message]);
         if (result !== null) {
@@ -22,7 +22,7 @@ class PsBoardMessages {
             let boardId = nachtricht.boardID;
             let timestamp = nachtricht.timestamp;
 
-            const userSender = await psAuthentication.getUserById(userIdSender);
+            const userSender = await authenticationModel.getUserById(userIdSender);
 
             const senderName = userSender.firstName + " " + userSender.lastName;
 
@@ -54,4 +54,4 @@ class PsBoardMessages {
     }
 }
 
-export default new PsBoardMessages();
+export default new BoardMessagesModel();

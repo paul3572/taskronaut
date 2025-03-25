@@ -1,17 +1,16 @@
-import psBoard from "../../database/preparedStatements/psBoard.mjs";
+import boardModel from "../../models/board/boardModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
-import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
-import {errorHandler} from "../../middleware/errorHandler.js";
-import {PermissionDeniedError} from "../../middleware/errors.mjs";
+import boardMemberModel from "../../models/board/boardMemberModel.mjs";
+import {PermissionDeniedError} from "../../database/errors.mjs";
 
 class BoardController {
     async boardRequest(sessionId) {
         const userId = await findUserBySessionId(sessionId);
         logger.info(chalk.hex(styles.success)('User-ID: ' + userId));
-        const result = await psBoard.selectAllUserBoards(userId);
+        const result = await boardModel.selectAllUserBoards(userId);
         logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
         return {statusCode: 200, data: result};
     }
@@ -26,27 +25,27 @@ class BoardController {
         }
 
         //  Add Boards:
-        const result = await psBoard.insertNewBoard(boardName);
+        const result = await boardModel.insertNewBoard(boardName);
         const boardId = result[0].insertId;
         logger.info(chalk.hex(styles.success)('Boards successfully added'));
-        await psBoardMember.insertNewBoardMembers(userId, boardId);
+        await boardMemberModel.insertNewBoardMembers(userId, boardId);
 
         return {statusCode: 200, data: result[0]};
     }
 
     async updateBoard(sessionId, boardId, boardName) {
         const myUserId = await findUserBySessionId(sessionId);
-        const result = await psBoard.updateBoard(boardId, boardName);
+        const result = await boardModel.updateBoard(boardId, boardName);
         return {statusCode: 200};
     }
 
     async removeBoard(sessionId, boardId) {
         const myUserId = await findUserBySessionId(sessionId);
-        const userToAddEntry = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+        const userToAddEntry = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
         if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board");
         } else {
-            const result = await psBoard.deleteBoard(boardId);
+            const result = await boardModel.deleteBoard(boardId);
             logger.info(chalk.hex(styles.success)(`Board mit ID ${boardId} erfolgreich entfernt`));
             //TODO: Delete Chat
             return {statusCode: 200};

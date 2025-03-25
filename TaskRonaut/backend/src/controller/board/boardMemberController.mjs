@@ -1,19 +1,18 @@
-import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
-import psAuthentication from "../../database/preparedStatements/psAuthentication.mjs";
+import boardMemberModel from "../../models/board/boardMemberModel.mjs";
+import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
-import psSession from "../../database/preparedStatements/psSession.mjs";
-import {errorHandler} from "../../middleware/errorHandler.js";
-import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from "../../middleware/errors.mjs";
+import sessionModel from "../../models/authentication/sessionModel.mjs";
+import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from "../../database/errors.mjs";
 
 
 class BoardMemberController {
 
     async getAllBoardMembers(sessionId, boardId) {
-        const myUserId = await psSession.getUserIdFromSessionId(sessionId);
+        const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
         if (myUserId !== null || undefined) {
-            const result = await psBoardMember.selectAllBoardMembersId(boardId);
+            const result = await boardMemberModel.selectAllBoardMembersId(boardId);
 
             if (result !== undefined) {
                 logger.debug(chalk.hex(styles.debug)`Issued Ids: " + ${JSON.stringify(result[0])}`);
@@ -21,7 +20,7 @@ class BoardMemberController {
                 let userList = [];
 
                 for (let id of userIDs) {
-                    let user = await psAuthentication.getUserById(id);
+                    let user = await authenticationModel.getUserById(id);
                     userList.push(user);
                 }
                 logger.debug(chalk.hex(styles.debug)`All Board Members: " + ${JSON.stringify(userList)}`);
@@ -35,22 +34,22 @@ class BoardMemberController {
     }
 
     async createNewBoardMember(userId, boardId) {
-        const result = await psBoardMember.insertNewBoardMembers(userId, boardId);
+        const result = await boardMemberModel.insertNewBoardMembers(userId, boardId);
         logger.debug(chalk.hex(styles.debug)`User added to Board: ${result[0]}`);
         logger.info(chalk.hex(styles.success)`User added to Board successfully!`);
         return {statusCode: 201, data: result[0]};
     }
 
     async addMemberToBoard(sessionId, boardId, email) {
-        const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-        const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
+        const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
+        const issuerBoardEntry = await boardMemberModel.getBoardUserEntries(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
             throw new PermissionDeniedError("Issuing User is not allowed to board");
         }
-        const userToAdd = await psAuthentication.getUserIdByEmail(email);
-        const userToAddEntry = await psBoardMember.getBoardUserEntries(userToAdd.id, boardId);
+        const userToAdd = await authenticationModel.getUserIdByEmail(email);
+        const userToAddEntry = await boardMemberModel.getBoardUserEntries(userToAdd.id, boardId);
         if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
-            const result = await psBoardMember.insertNewBoardMembers(userToAdd.id, boardId);
+            const result = await boardMemberModel.insertNewBoardMembers(userToAdd.id, boardId);
             logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
             //TODO: Add user to board chat
             return {statusCode: 201, data: result};
@@ -60,18 +59,18 @@ class BoardMemberController {
     }
 
     async removeBoardMember(sessionId, boardId, email) {
-        const myUserId = await psSession.getUserIdFromSessionId(sessionId);
-        const issuerBoardEntry = await psBoardMember.getBoardUserEntries(myUserId.userId, boardId);
+        const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
+        const issuerBoardEntry = await boardMemberModel.getBoardUserEntries(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
             throw new Error("Issuing User is not allowed to board");
         }
 
-        const userToDelete = await psAuthentication.getUserIdByEmail(email);
-        const userToDeleteEntry = await psBoardMember.getBoardUserEntries(userToDelete.id, boardId);
+        const userToDelete = await authenticationModel.getUserIdByEmail(email);
+        const userToDeleteEntry = await boardMemberModel.getBoardUserEntries(userToDelete.id, boardId);
         if (userToDeleteEntry[0] === null || userToDeleteEntry[0] === undefined) {
             throw new UserNotFoundError(`User with email ${email} is not a member of board with id ${boardId}`);
         } else {
-            const result = await psBoardMember.deleteBoardMembers(userToDelete.id, boardId);
+            const result = await boardMemberModel.deleteBoardMembers(userToDelete.id, boardId);
             logger.info(chalk.hex(styles.success)`User with email ${email} deleted successfully`);
             //TODO: Add Chat member
             return {statusCode: 200, message: `User with email ${email} deleted successfully`};

@@ -1,16 +1,15 @@
 import {sha256} from "../../middleware/sha256.mjs";
 import regex from "../../database/regex.mjs";
-import psAuthentication from "../../database/preparedStatements/psAuthentication.mjs";
+import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import {startSession} from "../../middleware/session2.mjs";
-import psSession from "../../database/preparedStatements/psSession.mjs";
-import {errorHandler} from "../../middleware/errorHandler.js";
+import sessionModel from "../../models/authentication/sessionModel.mjs";
 import {
     InvalidInputError,
     InvalidLoginDataError,
     UserNotActivatedError,
     UserNotFoundError
-} from "../../middleware/errors.mjs";
+} from "../../database/errors.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 
@@ -55,7 +54,7 @@ class LoginController {
      */
     async userLogin(req, email, password) {
         if (this.loginRegex(email, password)) {
-            const user = await psAuthentication.getUserIdByEmail(email);
+            const user = await authenticationModel.getUserIdByEmail(email);
             if (user === null) {
                 logger.info(chalk.hex(styles.info)(`No User found for email: ${email}`));
                 throw new UserNotFoundError(email);
@@ -66,14 +65,14 @@ class LoginController {
 
 
             if (isPasswordValid) {
-                const emailIsActivated = await psAuthentication.getActivationStatusFromUserID(user.id);
+                const emailIsActivated = await authenticationModel.getActivationStatusFromUserID(user.id);
                 logger.debug(chalk.hex(styles.debug)(`Email ${email} is activated: ${emailIsActivated}`));
                 if (emailIsActivated === 0) {
                     throw new UserNotActivatedError(user.id);
                 }
                 logger.info(chalk.hex(styles.debug)(`Starte Session für User ${user.id}:`));
                 await startSession(req, user.id);
-                await psSession.updateUserIdInSession(user.id, req.sessionID);
+                await sessionModel.updateUserIdInSession(user.id, req.sessionID);
                 return {
                     statusCode: 200,
                     message: `Starte Session für User ${user.id}:`,

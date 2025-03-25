@@ -1,13 +1,13 @@
-import dbConnection from "../dbCon.mjs";
-import {boardMemberQueries} from "../dbQueries.mjs";
-import connection from "../dbCon.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {boardMemberQueries} from "../../database/dbQueries.mjs";
+import connection from "../../database/dbCon.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
-import {UserNotFoundError} from "../../middleware/errors.mjs";
+import {UserNotFoundError} from "../../database/errors.mjs";
 
 
-class PsBoardMember {
+class BoardMemberModel {
     async selectAllBoardMembersId(boardId) {
         const [boardMembers] = await dbConnection.query(boardMemberQueries.getAllBoardMembers, [boardId]);
         return boardMembers;
@@ -45,4 +45,4 @@ class PsBoardMember {
     }
 }
 
-export default new PsBoardMember();
+export default new BoardMemberModel();

@@ -1,8 +1,8 @@
-import connection from "../dbCon.mjs";
-import {authenticationQueries, p2pMessageQueries} from "../dbQueries.mjs";
-import psAuthentication from "./psAuthentication.mjs";
+import connection from "../../database/dbCon.mjs";
+import {authenticationQueries, p2pMessageQueries} from "../../database/dbQueries.mjs";
+import authenticationModel from "../authentication/authenticationModel.mjs";
 
-class psPtPMessages {
+class PtPMessagesModel {
     async insertNewMessage(myUserId, otherUser, message) {
         const [result] = await connection.query(p2pMessageQueries.createMessage, [myUserId, otherUser, message]);
         if (result !== null) {
@@ -22,8 +22,8 @@ class psPtPMessages {
             let userIdReceiver = sentMessage.reciverID;
             let timestamp = sentMessage.timestamp;
 
-            const userSender = await psAuthentication.getUserById(userIdSender);
-            const userReceiver = await psAuthentication.getUserById(userIdReceiver);
+            const userSender = await authenticationModel.getUserById(userIdSender);
+            const userReceiver = await authenticationModel.getUserById(userIdReceiver);
 
             const senderName = userSender.firstName + " " + userSender.lastName;
             const receiverName = userReceiver.firstName + " " + userReceiver.lastName;
@@ -45,8 +45,8 @@ class psPtPMessages {
             let userIdReceiver = returnMessage.reciverID;
             let timestamp = returnMessage.timestamp;
 
-            const userSender = await psAuthentication.getUserById(userIdSender);
-            const userReceiver = await psAuthentication.getUserById(userIdReceiver);
+            const userSender = await authenticationModel.getUserById(userIdSender);
+            const userReceiver = await authenticationModel.getUserById(userIdReceiver);
 
             const senderName = userSender.firstName + " " + userSender.lastName;
             const receiverName = userReceiver.firstName + " " + userReceiver.lastName;
@@ -79,4 +79,4 @@ class psPtPMessages {
     }
 }
 
-export default new psPtPMessages();
+export default new PtPMessagesModel();

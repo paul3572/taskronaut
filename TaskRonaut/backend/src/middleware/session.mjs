@@ -4,8 +4,8 @@ import dbConnection from '../database/dbCon.mjs';
 import logger from "./logger.mjs";
 import chalk from "chalk";
 import {styles} from "../database/loggingStyle.mjs";
-import psAuthentication from "../database/preparedStatements/psAuthentication.mjs";
-import {InvalidSessionError} from "./errors.mjs";
+import psAuthentication from "../models/authentication/authenticationModel.mjs";
+import {InvalidSessionError} from "../database/errors.mjs";
 
 const MySQLSessionStore = MySQLStore(session);
 

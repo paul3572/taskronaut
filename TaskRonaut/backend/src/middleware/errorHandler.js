@@ -14,7 +14,7 @@ import {
     PermissionDeniedError,
     QueryExecutionError, UserIsAlreadyMemberError, UserNotActivatedError,
     UserNotFoundError
-} from "./errors.mjs";
+} from "../database/errors.mjs";
 
 export async function errorHandler(error) {
     const errorMessage = `ERROR: ${error.message}`;

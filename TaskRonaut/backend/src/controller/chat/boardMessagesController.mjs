@@ -1,9 +1,7 @@
 import {findUserBySessionId} from "../../middleware/session.mjs";
-import {errorHandler} from "../../middleware/errorHandler.js";
-import psMessages from "../../database/preparedStatements/psBoardMessages.mjs";
-import psBoardMember from "../../database/preparedStatements/psBoardMember.mjs";
-import {PermissionDeniedError} from "../../middleware/errors.mjs";
-import psBoardMessages from "../../database/preparedStatements/psBoardMessages.mjs";
+import boardMemberModel from "../../models/board/boardMemberModel.mjs";
+import {PermissionDeniedError} from "../../database/errors.mjs";
+import boardMessagesModel from "../../models/chat/boardMessagesModel.mjs";
 import chalk from "chalk";
 import logger from "../../middleware/logger.mjs";
 import {styles} from "../../database/loggingStyle.mjs";
@@ -12,11 +10,11 @@ class BoardMessagesController {
     async send(sessionId, boardId, message) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Board-ID: ${boardId}, Message: ${message}`));
-        const myUserIdEntries = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {
-            await psBoardMessages.insertNewMessage(boardId, myUserId, message);
+            await boardMessagesModel.insertNewMessage(boardId, myUserId, message);
             return {statusCode: 201};
         }
     }
@@ -24,11 +22,11 @@ class BoardMessagesController {
     async view(sessionId, boardId) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Board-ID: ${boardId}`));
-        const myUserIdEntries = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {
-            const result = await psMessages.getMessages(boardId);
+            const result = await boardMessagesModel.getMessages(boardId);
             return {statusCode: 200, data: result};
         }
     }
@@ -36,13 +34,13 @@ class BoardMessagesController {
     async delete(sessionId, messageId) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Message-ID: ${messageId}`));
-        const boardId = await psBoardMessages.getBoardIdByMessageId(messageId);
+        const boardId = await boardMessagesModel.getBoardIdByMessageId(messageId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Message-ID: ${messageId}, Board-ID: ${boardId}`));
-        const myUserIdEntries = await psBoardMember.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {
-            await psBoardMessages.deleteMessage(messageId);
+            await boardMessagesModel.deleteMessage(messageId);
             return {statusCode: 200};
         }
     }

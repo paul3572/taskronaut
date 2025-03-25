@@ -1,8 +1,8 @@
-import dbConnection from "../dbCon.mjs";
-import {authenticationQueries} from "../dbQueries.mjs";
-import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} from "../../middleware/errors.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {authenticationQueries} from "../../database/dbQueries.mjs";
+import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} from "../../database/errors.mjs";
 
-class PsAuthentication {
+class AuthenticationModel {
     async getUserIdByEmail(email) {
         const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
         if (!rows || rows.length === 0) {
@@ -69,4 +69,4 @@ class PsAuthentication {
     }
 }
 
-export default new PsAuthentication();
+export default new AuthenticationModel();

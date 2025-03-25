@@ -1,7 +1,7 @@
-import dbConnection from "../dbCon.mjs";
-import {authenticationQueries, sessionQueries} from "../dbQueries.mjs";
+import dbConnection from "../../database/dbCon.mjs";
+import {authenticationQueries, sessionQueries} from "../../database/dbQueries.mjs";
 
-class PsSession {
+class SessionModel {
     async selectSessionByUserId(userId) {
         const [rows] = await dbConnection.query(authenticationQueries.getSessionByUserId, [userId]);
         return rows[0];
@@ -39,4 +39,4 @@ class PsSession {
     }
 }
 
-export default new PsSession();
+export default new SessionModel();

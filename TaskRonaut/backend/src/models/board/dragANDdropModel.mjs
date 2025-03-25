@@ -1,8 +1,8 @@
 import logger from "../../middleware/logger.mjs";
-import {dragANDdropQueries, taskQueries} from "../dbQueries.mjs";
-import dbConnection from "../dbCon.mjs";
+import {dragANDdropQueries, taskQueries} from "../../database/dbQueries.mjs";
+import dbConnection from "../../database/dbCon.mjs";
 
-class PsDragANDdrop {
+class DragANDdropModel {
     async patchListId(taskId, listID) {
         logger.debug(`Executing query: ${dragANDdropQueries.updateListId} with parameters: ${[listID, taskId]}`);
         const [result] = await dbConnection.query(dragANDdropQueries.updateListId, [listID, taskId]);
@@ -24,4 +24,4 @@ class PsDragANDdrop {
     }
 }
 
-export default new PsDragANDdrop();
+export default new DragANDdropModel();
