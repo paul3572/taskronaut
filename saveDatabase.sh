@@ -15,10 +15,10 @@ rm $backup_file
 echo "Backup-Datei wurde gelöscht."
 
 if [ -n "$db_password" ]; then
-    docker exec -i $db_container_name mysqldump -u "$db_user" -p"$db_password" --databases "$db_name" > "$backup_file"
+    docker exec -i "$db_container_name" mysqldump -u "$db_user" -p"$db_password" --databases "$db_name" > "$backup_file"
     echo "mit Passwort"
 else
-    docker exec -i $db_container_name mysqldump -u "$db_user" --databases "$db_name" > "$backup_file"
+    docker exec -i "$db_container_name" mysqldump -u "$db_user" --databases "$db_name" > "$backup_file"
     echo "ohne Passwort"
 fi
 
