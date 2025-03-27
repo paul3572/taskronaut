@@ -53,11 +53,13 @@ services:
       - frontend
 
   certbot:
-    image: certbot/certbot
     container_name: certbot
+    build:
+      context: ./cert
+      dockerfile: Dockerfile
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: ./check-cert.sh
+    entrypoint: /check-cert.sh
     depends_on:
       - nginx
