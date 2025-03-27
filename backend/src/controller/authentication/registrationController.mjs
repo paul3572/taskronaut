@@ -66,6 +66,7 @@ class RegistrationController {
                     await sendEmail(mailOptions);
                     return {statusCode: 201};
                 } catch (error) {
+                    console.log(error);
                     if (error.code === 'ER_DUP_ENTRY') {
                         logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
                         throw new EmailAlreadyInUseError("E-Mail already in use!");
