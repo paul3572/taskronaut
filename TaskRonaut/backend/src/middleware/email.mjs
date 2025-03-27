@@ -5,8 +5,8 @@ import logger from "./logger.mjs";
 
 const transporter = nodemailer.createTransport({
     host: "smtp.hostinger.com",
-    port: 587,  // SSL: 465
-    secure: false,  // true für SSL
+    port: 465,
+    secure: true,
     auth: {
         user: "noreply@taskronaut.at",
         pass: "J7$7fFXR3v?"
