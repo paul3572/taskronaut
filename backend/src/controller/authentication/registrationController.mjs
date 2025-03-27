@@ -30,53 +30,40 @@ class RegistrationController {
         if (this.registrationRegex(email, password, firstName, lastName)) {
             const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
             if (rows.length === 0) {
-                try {
-                    const hPw = await sha256(password);
-                    const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
-                    logger.info(chalk.hex(styles.info)`User added successfully to database!`);
-                    logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
+                const hPw = await sha256(password);
+                const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
+                logger.info(chalk.hex(styles.info)`User added successfully to database!`);
+                logger.info(chalk.hex(styles.info)`Start generating validation token for ${email}...`)
 
-                    /*
-                    // Create Default Board for new User
-                    const userId = await getUserIdByEmail(email);
-                    const boardName = "Default Board";
-                    const returnValue = [userId?.id, true]
-                    await addBoard(boardName, returnValue);
-                    logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
-                     */
+                /*
+                // Create Default Board for new User
+                const userId = await getUserIdByEmail(email);
+                const boardName = "Default Board";
+                const returnValue = [userId?.id, true]
+                await addBoard(boardName, returnValue);
+                logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
+                 */
 
-                    await generateToken(email);
-                    const activationToken = await authenticationModel.getActivationTokenByUserEmail(email);
-                    logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
+                await generateToken(email);
+                const activationToken = await authenticationModel.getActivationTokenByUserEmail(email);
+                logger.info(chalk.hex(styles.info)(`...generating validdtion token...`));
 
-                    const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
-                    logger.info(chalk.hex(styles.info)(`...token generated!`));
+                const url = `http://taskronaut.at/activateEmail?token=${activationToken}`;
+                logger.info(chalk.hex(styles.info)(`...token generated!`));
 
-                    logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
-                    const mailOptions = {
-                        from: config.nodeMailer.user,
-                        to: email,
-                        subject: "Willkommen bei unserem Service!",
-                        html: `
+                logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
+                const mailOptions = {
+                    from: config.nodeMailer.user,
+                    to: email,
+                    subject: "Willkommen bei unserem Service!",
+                    html: `
                         <p>Hallo ${firstName} ${lastName},</p>
                         <p>Danke für deine Registrierung bei uns!</p>
                         <p>Klicke <a href=${url}>hier</a>, um zu unserer Seite zu gelangen.</p>
                     `
-                    };
-                    await sendEmail(mailOptions);
-                    return {statusCode: 201};
-                } catch (error) {
-                    console.log(error);
-                    if (error.code === 'ER_DUP_ENTRY') {
-                        logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
-                        throw new EmailAlreadyInUseError("E-Mail already in use!");
-                    }else if (error instanceof EmailSendingError) {
-                        //
-                    } else {
-                        logger.info(error);
-                        throw new DatabaseError("Error while adding user to database!");
-                    }
-                }
+                };
+                await sendEmail(mailOptions);
+                return {statusCode: 201};
             } else {
                 logger.error(chalk.hex(styles.warning)(`E-Mail already in use!`));
                 throw new EmailAlreadyInUseError("E-Mail already in use!");
