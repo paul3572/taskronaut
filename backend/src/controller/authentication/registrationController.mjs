@@ -8,7 +8,7 @@ import authenticationModel from "../../models/authentication/authenticationModel
 import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-import {DatabaseError, EmailAlreadyInUseError, InvalidInputError} from "../../database/errors.mjs";
+import {DatabaseError, EmailAlreadyInUseError, EmailSendingError, InvalidInputError} from "../../database/errors.mjs";
 import {config} from "../../config/config.mjs";
 
 
@@ -69,6 +69,8 @@ class RegistrationController {
                     if (error.code === 'ER_DUP_ENTRY') {
                         logger.info(chalk.hex(styles.warning)(`E-Mail already in use!`));
                         throw new EmailAlreadyInUseError("E-Mail already in use!");
+                    }else if (error instanceof EmailSendingError) {
+                        //
                     } else {
                         logger.info(error);
                         throw new DatabaseError("Error while adding user to database!");

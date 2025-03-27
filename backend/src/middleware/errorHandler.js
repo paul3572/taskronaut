@@ -5,7 +5,7 @@ import {
     ActivationError, ActivationTokenNotFoundError,
     BoardNotFoundError, DatabaseConnectionError,
     DatabaseError,
-    EmailAlreadyInUseError,
+    EmailAlreadyInUseError, EmailSendingError,
     InvalidInputError,
     InvalidLoginDataError,
     InvalidSessionError,
@@ -86,6 +86,10 @@ export async function errorHandler(error) {
         return {statusCode: 404};
     } else if (error instanceof DatabaseConnectionError) {
         logger.error(chalk.hex(styles.critical)`DATABASE CONNECTION ERROR: ${error.message}`);
+        logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
+        return {statusCode: 500};
+    } else if (error instanceof EmailSendingError) {
+        logger.error(chalk.hex(styles.critical)`EMAIL SENDING ERROR: ${error.message}`);
         logger.debug(chalk.hex(styles.debug)`${errorDetails}`);
         return {statusCode: 500};
     } else {

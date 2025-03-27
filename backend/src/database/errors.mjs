@@ -129,5 +129,12 @@ export class ActivationTokenNotFoundError extends Error {
         this.name = "ActivationTokenNotFoundError";
     }
 }
+export class EmailSendingError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EmailSendingError";
+    }
+}
+
 
 

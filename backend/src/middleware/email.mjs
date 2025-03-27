@@ -3,6 +3,7 @@ import chalk from "chalk";
 import {styles} from "../database/loggingStyle.mjs";
 import logger from "./logger.mjs";
 import {config} from "../config/config.mjs";
+import {EmailSendingError} from "../database/errors.mjs";
 
 const transporter = nodemailer.createTransport({
     host: config.nodeMailer.host,
@@ -21,6 +22,10 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise<void>}
  */
 export async function sendEmail(mailOptions) {
-    await transporter.sendMail(mailOptions);
-    logger.info(chalk.hex(styles.success)`E-Mail sent successfully!`);
+    try {
+        await transporter.sendMail(mailOptions);
+        logger.info(chalk.hex(styles.success)`E-Mail sent successfully!`);
+    }catch (e) {
+        throw new EmailSendingError("Error while sending E-Mail");
+    }
 }
