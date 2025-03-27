@@ -36,6 +36,6 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: |
-            cd root/taskronaut
+            cd /root/taskronaut/
             sh updateServer.sh
          
