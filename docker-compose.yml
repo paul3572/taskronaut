@@ -31,9 +31,8 @@ services:
       dockerfile: Dockerfile
     expose:
       - "3306"
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=TaskRonaut
+    env_file:
+        - ./datenbank/.env
 
   nginx:
     image: nginx:latest
