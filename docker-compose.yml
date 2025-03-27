@@ -21,11 +21,8 @@ services:
     tty: true
     depends_on:
       - datenbank
-    environment:
-      - MYSQL_HOST=datenbank
-      - MYSQL_USER=root
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=TaskRonaut
+    env_file:
+      - ./backend/.env
 
   datenbank:
     container_name: datenbank

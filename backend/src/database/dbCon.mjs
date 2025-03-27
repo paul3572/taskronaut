@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise';
+import {config} from './../config/config.mjs';
 
 /**
  * Verwendung von "Pools" da man da mehrere abfragen gleichzeitig machen kann
@@ -6,10 +7,10 @@ import mysql from 'mysql2/promise';
  */
 const dbOptions = {
     //host: 'localhost',
-    host: 'datenbank',
-    user: 'root',
-    password: '',
-    database: 'TaskRonaut',
+    host: config.db.host,
+    user: config.db.user,
+    password: config.db.password,
+    database: config.db.database,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

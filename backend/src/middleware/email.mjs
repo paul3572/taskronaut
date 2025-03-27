@@ -2,14 +2,15 @@ import nodemailer from 'nodemailer';
 import chalk from "chalk";
 import {styles} from "../database/loggingStyle.mjs";
 import logger from "./logger.mjs";
+import {config} from "../config/config.mjs";
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true,
+    host: config.nodeMailer.host,
+    port: config.nodeMailer.port,
+    secure: config.nodeMailer.secure,
     auth: {
-        user: "noreply@taskronaut.at",
-        pass: "J7$7fFXR3v?"
+        user: config.nodeMailer.user,
+        pass: config.nodeMailer.pass
     }
 });
 

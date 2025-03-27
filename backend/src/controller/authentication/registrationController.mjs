@@ -9,6 +9,7 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
 import {DatabaseError, EmailAlreadyInUseError, InvalidInputError} from "../../database/errors.mjs";
+import {config} from "../../config/config.mjs";
 
 
 class RegistrationController {
@@ -53,7 +54,7 @@ class RegistrationController {
 
                     logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
                     const mailOptions = {
-                        from: "noreply@taskronaut.at",
+                        from: config.nodeMailer.user,
                         to: email,
                         subject: "Willkommen bei unserem Service!",
                         html: `
