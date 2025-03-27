@@ -37,6 +37,5 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: |
             cd /root/taskronaut/
-            chmod +x updateServer.sh
             sh updateServer.sh
          
