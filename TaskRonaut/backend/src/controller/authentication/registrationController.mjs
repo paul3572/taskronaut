@@ -53,7 +53,6 @@ class RegistrationController {
 
                     logger.info(chalk.hex(styles.info)(`ACTIVATION TOKEN:  ${activationToken}`));
                     const mailOptions = {
-                        // hihi tolle email dies ned gibt
                         from: "noreply@taskronaut.at",
                         to: email,
                         subject: "Willkommen bei unserem Service!",

@@ -4,10 +4,12 @@ import {styles} from "../database/loggingStyle.mjs";
 import logger from "./logger.mjs";
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.hostinger.com",
+    port: 587,  // SSL: 465
+    secure: false,  // true für SSL
     auth: {
-        user: "platzerdominik5@gmail.com",
-        pass: "drtevlssezqzmlaw"
+        user: "noreply@taskronaut.at",
+        pass: "J7$7fFXR3v?"
     }
 });
 
