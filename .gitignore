@@ -1,11 +1,18 @@
 # build output
 dist/
+TaskRonaut/backend/dist
+TaskRonaut/frontend/dist
 
 # generated types
 .astro/
+TaskRonaut/frontend/astro
+
+
 
 # dependencies
 node_modules/
+TaskRonaut/frontend/node_modules
+TaskRonaut/backend/node_modules
 
 # logs
 npm-debug.log*
@@ -22,3 +29,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+#certificates
+certbot
+TaskRonaut/certbot/
