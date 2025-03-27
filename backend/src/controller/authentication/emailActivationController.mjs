@@ -12,8 +12,8 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 
 class EmailActivationController {
-    async isEmailAuthenticated(userId) {
-        const [status] = await connection.query(authenticationQueries.getUserActivationStatus, [userId]);
+    async checkEmailVerifiedStatus(userId) {
+        const [status] = await connection.query(authenticationQueries.selectUserActivationStatus, [userId]);
         if (!status || status.length === 0) {
             throw new UserNotFoundError(`User ${userId} not found or activation status not available.`);
         }
@@ -27,7 +27,7 @@ class EmailActivationController {
     }
 
     async activateEmail(token) {
-        const [user] = await connection.query(authenticationQueries.getUserByActivationToken, [token]);
+        const [user] = await connection.query(authenticationQueries.selectUserByActivationToken, [token]);
         if (!user || user.length === 0 || !user[0]) {
             throw new InvalidTokenError("Invalid token or token does not match any registered user");
         }

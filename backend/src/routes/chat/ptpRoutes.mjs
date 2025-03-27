@@ -15,7 +15,7 @@ router.post('/send', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, otherUserEmail, message} = req.body;
     try {
-        await serverResponse(res, await ptpMessagesController.send(sessionId, otherUserEmail, message));
+        await serverResponse(res, await ptpMessagesController.sendMessage(sessionId, otherUserEmail, message));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -29,7 +29,7 @@ router.post('/view', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, otherUserEmail} = req.body;
     try {
-        await serverResponse(res, await ptpMessagesController.view(sessionId, otherUserEmail));
+        await serverResponse(res, await ptpMessagesController.viewMessage(sessionId, otherUserEmail));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -43,7 +43,7 @@ router.delete('/delete', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, messageId} = req.body;
     try {
-        await serverResponse(res, await ptpMessagesController.delete(sessionId, messageId));
+        await serverResponse(res, await ptpMessagesController.deleteMessage(sessionId, messageId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

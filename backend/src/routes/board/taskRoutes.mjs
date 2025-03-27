@@ -17,7 +17,7 @@ router.post('/tasks/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId} = req.body;
     try {
-        await serverResponse(res, await taskController.getAllTask(sessionId));
+        await serverResponse(res, await taskController.handleAllTasksRequest(sessionId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -31,7 +31,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, taskName, boardID, listID} = req.body;
     try {
-        await serverResponse(res, await taskController.addNewDefaultTask(sessionId, taskName, boardID, listID));
+        await serverResponse(res, await taskController.newDefaultTaskCreationProcess(sessionId, taskName, boardID, listID));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -44,7 +44,7 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, boardId} = req.body;
     try {
-        await serverResponse(res, await taskController.getSpecificTasks(sessionId, boardId));
+        await serverResponse(res, await taskController.handleSpecificTasksRequest(sessionId, boardId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -68,7 +68,7 @@ router.patch('/update', async (req, res) => {
         listID
     } = req.body;
     try {
-        await serverResponse(res, await taskController.updateTask(sessionID, taskID, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
+        await serverResponse(res, await taskController.handleTaskUpdateRequest(sessionID, taskID, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -82,7 +82,7 @@ router.delete('/delete', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, taskId} = req.body;
     try {
-        await serverResponse(res, await taskController.removeTask(sessionId, taskId));
+        await serverResponse(res, await taskController.handleTaskRemovalRequest(sessionId, taskId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -108,7 +108,7 @@ router.patch('/tasks/:id/listId', async (req, res) => {
         if (result.affectedRows === 0) {
             res.status(404).send('Task not found');
         } else {
-            const [rows] = await dbConnection.execute(taskQueries.getTaskById, [id]);
+            const [rows] = await dbConnection.execute(taskQueries.selectTaskById, [id]);
             const updatedTask = rows[0];
             res.status(200).send(updatedTask);
         }
@@ -127,7 +127,7 @@ router.get('/get/listId/:id', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const taskId = req.params.id;
     try {
-        await serverResponse(res, await taskController.getListIdFromTaskId(taskId));
+        await serverResponse(res, await taskController.convertTaskIdToListId(taskId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -141,7 +141,7 @@ router.post('/get/byBoard', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
     try {
-        await serverResponse(res, await taskController.getUserSpecificTasks(sessionId, boardId));
+        await serverResponse(res, await taskController.handleUserSpecificTasksRequest(sessionId, boardId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

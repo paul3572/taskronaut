@@ -7,22 +7,22 @@ import logger from "../../middleware/logger.mjs";
 import {styles} from "../../database/loggingStyle.mjs";
 
 class BoardMessagesController {
-    async send(sessionId, boardId, message) {
+    async sendMessage(sessionId, boardId, message) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Board-ID: ${boardId}, Message: ${message}`));
-        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getUserEntriesInBoard(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {
-            await boardMessagesModel.insertNewMessage(boardId, myUserId, message);
+            await boardMessagesModel.createNewMessage(boardId, myUserId, message);
             return {statusCode: 201};
         }
     }
 
-    async view(sessionId, boardId) {
+    async viewMessage(sessionId, boardId) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Board-ID: ${boardId}`));
-        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getUserEntriesInBoard(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {
@@ -31,12 +31,12 @@ class BoardMessagesController {
         }
     }
 
-    async delete(sessionId, messageId) {
+    async deleteMessage(sessionId, messageId) {
         const myUserId = await findUserBySessionId(sessionId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Message-ID: ${messageId}`));
         const boardId = await boardMessagesModel.getBoardIdByMessageId(messageId);
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Message-ID: ${messageId}, Board-ID: ${boardId}`));
-        const myUserIdEntries = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
+        const myUserIdEntries = await boardMemberModel.getUserEntriesInBoard(myUserId, boardId);
         if (myUserIdEntries[0] === null || myUserIdEntries[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board-chat");
         } else {

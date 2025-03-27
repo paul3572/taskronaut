@@ -15,7 +15,7 @@ router.post('/send', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, message} = req.body;
     try {
-        await serverResponse(res, await boardMessagesController.send(sessionId, boardId, message));
+        await serverResponse(res, await boardMessagesController.sendMessage(sessionId, boardId, message));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -29,7 +29,7 @@ router.post('/view', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
     try {
-        await serverResponse(res, await boardMessagesController.view(sessionId, boardId));
+        await serverResponse(res, await boardMessagesController.viewMessage(sessionId, boardId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -43,7 +43,7 @@ router.delete('/delete', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, messageId} = req.body;
     try {
-        await serverResponse(res, await boardMessagesController.delete(sessionId, messageId));
+        await serverResponse(res, await boardMessagesController.deleteMessage(sessionId, messageId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

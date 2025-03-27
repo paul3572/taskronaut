@@ -8,16 +8,16 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 
 class PtpMessagesController {
-    async send(sessionId, otherUserEmail, message) {
+    async sendMessage(sessionId, otherUserEmail, message) {
         const myUserId = await findUserBySessionId(sessionId);
         const otherUser = await psAuthentication.getUserIdByEmail(otherUserEmail);
         const otherUserId = otherUser.id;
         logger.debug(chalk.hex(styles.debug)(`My User-ID: ${myUserId}, Other User-ID: ${otherUserId}, Message: ${message}`));
-        await ptPMessagesModel.insertNewMessage(myUserId, otherUserId, message);
+        await ptPMessagesModel.createNewMessage(myUserId, otherUserId, message);
         return {statusCode: 201};
     }
 
-    async view(sessionId, otherUserEmail) {
+    async viewMessage(sessionId, otherUserEmail) {
         const myUserId = await findUserBySessionId(sessionId);
         const otherUser = await psAuthentication.getUserIdByEmail(otherUserEmail);
         const otherUserId = otherUser.id;
@@ -26,9 +26,9 @@ class PtpMessagesController {
         return {statusCode: 200, data: result};
     }
 
-    async delete(sessionId, messageId) {
+    async deleteMessage(sessionId, messageId) {
         const myUserId = await findUserBySessionId(sessionId);
-        const isUserAuthor = await ptPMessagesModel.isUserAuthor(myUserId, messageId);
+        const isUserAuthor = await ptPMessagesModel.getIsUserAuthorStatus(myUserId, messageId);
         if (isUserAuthor?.senderID === myUserId) {
             await ptPMessagesModel.deleteMessage(messageId);
             return {statusCode: 200};

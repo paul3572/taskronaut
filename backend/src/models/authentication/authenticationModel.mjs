@@ -4,7 +4,7 @@ import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} fr
 
 class AuthenticationModel {
     async getUserIdByEmail(email) {
-        const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
+        const [rows] = await dbConnection.query(authenticationQueries.selectUserByEmail, [email]);
         if (!rows || rows.length === 0) {
             throw new UserNotFoundError("Benutzer mit der angegebenen E-Mail-Adresse nicht gefunden.");
         }
@@ -15,7 +15,7 @@ class AuthenticationModel {
     }
 
     async getUserById(id) {
-        const [rows] = await dbConnection.query(authenticationQueries.getUserById, [id]);
+        const [rows] = await dbConnection.query(authenticationQueries.selectUserById, [id]);
         if (!rows || rows.length === 0) {
             //throw new UserNotFoundError("Benutzer mit der angegebenen ID nicht gefunden.");
         }
@@ -26,7 +26,7 @@ class AuthenticationModel {
     }
 
     async getActivationTokenByUserEmail(email) {
-        const [rows] = await dbConnection.query(authenticationQueries.getActivationTokenFromUser, [email]);
+        const [rows] = await dbConnection.query(authenticationQueries.selectActivationTokenFromUser, [email]);
         if (!rows || rows.length === 0) {
             throw new ActivationTokenNotFoundError("Aktivierungstoken für die angegebene E-Mail-Adresse nicht gefunden.");
         }
@@ -40,7 +40,7 @@ class AuthenticationModel {
     }
 
     async getUserIdBySessionId(sessionId) {
-        const [rows] = await dbConnection.query(authenticationQueries.getUserIdBySessionId, [sessionId]);
+        const [rows] = await dbConnection.query(authenticationQueries.selectUserIdBySessionId, [sessionId]);
 
         if (!rows || rows.length === 0) {
             throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");
@@ -57,7 +57,7 @@ class AuthenticationModel {
     }
 
     async getActivationStatusFromUserID(id) {
-        const [rows] = await dbConnection.query(authenticationQueries.userIdEmailActivated, [id]);
+        const [rows] = await dbConnection.query(authenticationQueries.selectActivatedFromUser, [id]);
         if (!rows || rows.length === 0) {
             throw new UserNotFoundError("Benutzer mit der angegebenen ID nicht gefunden.");
         }

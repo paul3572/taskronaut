@@ -15,7 +15,7 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId} = req.body;
     try {
-        await serverResponse(res, await boardController.boardRequest(sessionId));
+        await serverResponse(res, await boardController.handleBoardRequest(sessionId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -29,7 +29,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {boardName, sessionId} = req.body;
     try {
-        await serverResponse(res, await boardController.addBoard(boardName, sessionId));
+        await serverResponse(res, await boardController.boardCreationProcess(boardName, sessionId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -43,7 +43,7 @@ router.patch('/update', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, boardName} = req.body;
     try {
-        await serverResponse(res, await boardController.updateBoard(sessionId, boardId, boardName));
+        await serverResponse(res, await boardController.handleBoardUpdate(sessionId, boardId, boardName));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -58,7 +58,7 @@ router.delete('/delete', async (req, res) => {
     const {sessionId, boardId} = req.body;
     logger.info(`REMOVE BOARD WITH ID: ${boardId}`);
     try {
-        await serverResponse(res, await boardController.removeBoard(sessionId, boardId));
+        await serverResponse(res, await boardController.boardRemovalProcess(sessionId, boardId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

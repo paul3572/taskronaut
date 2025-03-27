@@ -20,7 +20,7 @@ router.post('/registration', async (req, res) => {
     const {email, password, firstName, lastName} = req.body;
     logger.debug([{Email: email, Password: password, FirstName: firstName, LastName: lastName}]);
     try {
-        await serverResponse(res, await registrationController.userRegistration(email, password, firstName, lastName));
+        await serverResponse(res, await registrationController.userRegistrationProcess(email, password, firstName, lastName));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     try {
-        await serverResponse(res, await loginController.userLogin(req, email, password));
+        await serverResponse(res, await loginController.userLoginProcess(req, email, password));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -49,7 +49,7 @@ router.get('/isEmailActivated/:userId', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const userId = req.params.userId;
     try {
-        await serverResponse(res, await emailActivationController.isEmailAuthenticated(userId));
+        await serverResponse(res, await emailActivationController.checkEmailVerifiedStatus(userId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

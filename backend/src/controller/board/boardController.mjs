@@ -7,16 +7,15 @@ import boardMemberModel from "../../models/board/boardMemberModel.mjs";
 import {PermissionDeniedError} from "../../database/errors.mjs";
 
 class BoardController {
-    async boardRequest(sessionId) {
+    async handleBoardRequest(sessionId) {
         const userId = await findUserBySessionId(sessionId);
         logger.info(chalk.hex(styles.success)('User-ID: ' + userId));
-        const result = await boardModel.selectAllUserBoards(userId);
+        const result = await boardModel.getAllUserBoards(userId);
         logger.info(chalk.hex(styles.success)('Boards successfully loaded'));
         return {statusCode: 200, data: result};
     }
 
-    async addBoard(boardName, sessionId) {
-
+    async boardCreationProcess(boardName, sessionId) {
         let userId;
         if (sessionId[1] === true) {
             userId = sessionId[0];
@@ -24,24 +23,23 @@ class BoardController {
             userId = await findUserBySessionId(sessionId);
         }
 
-        //  Add Boards:
-        const result = await boardModel.insertNewBoard(boardName);
+        const result = await boardModel.createNewBoard(boardName);
         const boardId = result[0].insertId;
         logger.info(chalk.hex(styles.success)('Boards successfully added'));
-        await boardMemberModel.insertNewBoardMembers(userId, boardId);
+        await boardMemberModel.createNewBoardMember(userId, boardId);
 
         return {statusCode: 200, data: result[0]};
     }
 
-    async updateBoard(sessionId, boardId, boardName) {
+    async handleBoardUpdate(sessionId, boardId, boardName) {
         const myUserId = await findUserBySessionId(sessionId);
         const result = await boardModel.updateBoard(boardId, boardName);
         return {statusCode: 200};
     }
 
-    async removeBoard(sessionId, boardId) {
+    async boardRemovalProcess(sessionId, boardId) {
         const myUserId = await findUserBySessionId(sessionId);
-        const userToAddEntry = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
+        const userToAddEntry = await boardMemberModel.getUserEntriesInBoard(myUserId, boardId);
         if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board");
         } else {

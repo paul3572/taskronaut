@@ -16,11 +16,11 @@ import logger from "./logger.mjs";
  */
 export async function generateToken(email) {
     try {
-        const [user] = await connection.query(authenticationQueries.getUserIdByEmail, [email]);
+        const [user] = await connection.query(authenticationQueries.selectUserIdByEmail, [email]);
         const userid = user[0]?.id;
         const activationToken = await sha256(userid);
 
-        const [rows] = await connection.query(authenticationQueries.setEmailActivationStatus, [activationToken, userid])
+        const [rows] = await connection.query(authenticationQueries.updateEmailActivationStatus, [activationToken, userid])
     } catch (e) {
         logger.error(e);
     }

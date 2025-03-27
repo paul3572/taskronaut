@@ -5,21 +5,21 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 
 class TaskModel {
-    async selectAllTasks() {
-        const [tasks] = await dbConnection.query(taskQueries.getAllTasks);
+    async getAllTasks() {
+        const [tasks] = await dbConnection.query(taskQueries.selectAllTasks);
         return tasks;
     }
 
     async createDefaultTask(taskCreatorID, taskName, boardID, listID) {
         const isAuthorized = 1;
         const isResponsible = 0;
-        const [result] = await dbConnection.query(taskQueries.addDeafaultTask, [taskCreatorID, taskName, boardID, listID]);
-        const [taskID] = await dbConnection.query(taskQueries.getTaskId, [taskCreatorID, taskName, boardID, listID]);
-        const [result3] = await dbConnection.query(taskQueries.authorizeUser, [taskCreatorID, taskID[0].taskID, isAuthorized, isResponsible]);
+        const [result] = await dbConnection.query(taskQueries.insertDefaultTask, [taskCreatorID, taskName, boardID, listID]);
+        const [taskID] = await dbConnection.query(taskQueries.selectTaskId, [taskCreatorID, taskName, boardID, listID]);
+        const [result3] = await dbConnection.query(taskQueries.insertAuthorizedUser, [taskCreatorID, taskID[0].taskID, isAuthorized, isResponsible]);
         return true;
     }
 
-    async patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
+    async updateTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
         logger.debug(`Executing query: ${taskQueries.updateTask} with parameters: ${[taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]}`);
         const [result] = await dbConnection.query(taskQueries.updateTask, [taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID, taskId]);
         if (result.affectedRows === 0) {
@@ -30,7 +30,6 @@ class TaskModel {
     }
 
     async deleteTask(id) {
-
         const [result] = await dbConnection.query(taskQueries.deleteTaskById, [id]);
         if (result.affectedRows === 0) {
             throw new Error("Task not found");
@@ -40,9 +39,8 @@ class TaskModel {
 
     }
 
-    async selectListIdByTaskId(taskId) {
-
-        const [tasks] = await dbConnection.query(taskQueries.getListIdFromTaskById, [taskId]);
+    async getListIdByTaskId(taskId) {
+        const [tasks] = await dbConnection.query(taskQueries.selectListIdFromTaskById, [taskId]);
         if (tasks.length === 0) {
             logger.info('not found');
             throw new Error("Task not found");
@@ -50,8 +48,8 @@ class TaskModel {
         return tasks;
     }
 
-    async selectBoardIdByTask(taskId) {
-        const [boardId] = await dbConnection.query(taskQueries.getBoardIdFromTaskById, [taskId]);
+    async getBoardIdByTask(taskId) {
+        const [boardId] = await dbConnection.query(taskQueries.selectBoardIdFromTaskById, [taskId]);
         console.log("Länge: " + boardId.length);
         if (boardId.length === 0) {
             logger.info('not found');
@@ -61,8 +59,8 @@ class TaskModel {
     }
 
 
-    async selectUserTasks(boardId) {
-        const [tasks] = await dbConnection.query(joins.getBoardTasks, [boardId]);
+    async getUserTasks(boardId) {
+        const [tasks] = await dbConnection.query(joins.selectBoardTasks, [boardId]);
         logger.debug(chalk.hex(styles.debug)(`Tasks: ${JSON.stringify(tasks)}`));
         return tasks;
     }

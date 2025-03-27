@@ -15,7 +15,7 @@ import logger from "../../middleware/logger.mjs";
         logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
         const sessionId = req.body.sessionId;
         try {
-            await serverResponse(res, await userDataController.getUserData(sessionId));
+            await serverResponse(res, await userDataController.loadUserData(sessionId));
         } catch (exception) {
             await serverResponse(res, await errorHandler(exception));
         }
@@ -28,7 +28,7 @@ import logger from "../../middleware/logger.mjs";
         logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
         logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
         try {
-            await serverResponse(res, await userDataController.getSessions());
+            await serverResponse(res, await userDataController.loadAllSessions());
         } catch (exception) {
             await serverResponse(res, await errorHandler(exception));
         }
@@ -42,7 +42,7 @@ import logger from "../../middleware/logger.mjs";
         logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
         const sessionId = req.body.sessionId;
         try {
-            await serverResponse(res, await userDataController.getUserId(sessionId));
+            await serverResponse(res, await userDataController.convertSessionIdToUserId(sessionId));
         } catch (exception) {
             await serverResponse(res, await errorHandler(exception));
         }

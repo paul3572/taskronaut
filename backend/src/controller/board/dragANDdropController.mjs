@@ -5,14 +5,14 @@ import dragANDdropModel from "../../models/board/dragANDdropModel.mjs";
 
 
 class DragANDdropController {
-    async updateListId(sessionId, taskId, listID) {
-        const result = await dragANDdropModel.patchListId(taskId, listID);
+    async handleListIdUpdateRequest(sessionId, taskId, listID) {
+        const result = await dragANDdropModel.updateListId(taskId, listID);
         logger.info(chalk.hex(styles.success)`Task successfully updated`);
         return {statusCode: 200};
     }
 
-    async updateStatus(sessionId, taskId, taskStatus) {
-        const result = await dragANDdropModel.patchStatus(taskId, taskStatus);
+    async handleStatusUpdateRequest(sessionId, taskId, taskStatus) {
+        const result = await dragANDdropModel.updateStatus(taskId, taskStatus);
         logger.info(chalk.hex(styles.success)`Task successfully updated`);
         return {statusCode: 200};
     }

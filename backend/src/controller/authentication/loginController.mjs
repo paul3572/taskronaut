@@ -47,12 +47,12 @@ class LoginController {
      * @description
      *  The function performs the following steps:
      *  1. Validates the input using the `loginRegex` function.
-     *  2. Retrieves the user details by email using the `getUserIdByEmail` function.
+     *  2. Retrieves the user details by email using the `selectUserIdByEmail` function.
      *  3. Hashes the provided password with `sha256` and compares it with the stored hash.
      *  4. Returns a success or failure response based on the password match.
      *  5. Logs errors and handles unexpected issues gracefully.
      */
-    async userLogin(req, email, password) {
+    async userLoginProcess(req, email, password) {
         if (this.loginRegex(email, password)) {
             const user = await authenticationModel.getUserIdByEmail(email);
             if (user === null) {

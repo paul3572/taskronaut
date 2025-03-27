@@ -15,26 +15,13 @@ router.post('/get', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId} = req.body;
     try {
-        await serverResponse(res, await boardMemberController.getAllBoardMembers(sessionId, boardId));
+        await serverResponse(res, await boardMemberController.handleAllBoardMemberRequest(sessionId, boardId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
     logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
 });
 
-router.post('/board-members/hilfe', async (req, res) => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)(`NEW BOARD-MEMBERS: `));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const {userId, boardId} = req.body;
-    try {
-        await serverResponse(res, await boardMemberController.createNewBoardMember(userId, boardId));
-    } catch (exception) {
-        await serverResponse(res, await errorHandler(exception));
-    }
-    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
-});
 
 router.delete('/remove', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
@@ -43,7 +30,7 @@ router.delete('/remove', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
     try {
-        await serverResponse(res, await boardMemberController.removeBoardMember(sessionId, boardId, email));
+        await serverResponse(res, await boardMemberController.boardMemberRemovalProcess(sessionId, boardId, email));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -57,7 +44,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
     try {
-        await serverResponse(res, await boardMemberController.addMemberToBoard(sessionId, boardId, email));
+        await serverResponse(res, await boardMemberController.newBoardMemberProcess(sessionId, boardId, email));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

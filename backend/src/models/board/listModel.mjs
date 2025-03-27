@@ -3,18 +3,18 @@ import {listQueries, taskQueries} from "../../database/dbQueries.mjs";
 import logger from "../../middleware/logger.mjs";
 
 class ListModel {
-    async selectAllLists() {
-        const [lists] = await dbConnection.query(listQueries.getLists);
+    async getAllLists() {
+        const [lists] = await dbConnection.query(listQueries.selectLists);
         return lists;
     }
 
-    async readListsFromBoard(boardId) {
+    async getListsFromBoard(boardId) {
         //TODO: Check if boardId exists
-        const [lists] = await dbConnection.query(listQueries.readListsFromBoard, [boardId]);
+        const [lists] = await dbConnection.query(listQueries.selectListsFromBoard, [boardId]);
         return lists;
     }
 
-    async insertList(listName, boardId) {
+    async createList(listName, boardId) {
         const [result] = await dbConnection.query(listQueries.createList, [listName, boardId]);
         return result;
     }
@@ -35,8 +35,8 @@ class ListModel {
         }
     }
 
-    async selectBoardIdFromList(listId) {
-        const [boardId] = await dbConnection.query(listQueries.getBoardIdFromList, [listId]);
+    async getBoardIdFromList(listId) {
+        const [boardId] = await dbConnection.query(listQueries.selectBoardIdFromList, [listId]);
         if (boardId.length === 0) {
             throw new Error('ListId not found');
         } else {

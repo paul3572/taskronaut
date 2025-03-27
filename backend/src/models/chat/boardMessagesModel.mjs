@@ -3,8 +3,8 @@ import {boardMessageQueries, p2pMessageQueries} from "../../database/dbQueries.m
 import authenticationModel from "../authentication/authenticationModel.mjs";
 
 class BoardMessagesModel {
-    async insertNewMessage(boardId, senderID, message) {
-        const [result] = await connection.query(boardMessageQueries.createMessage, [boardId, senderID, message]);
+    async createNewMessage(boardId, senderID, message) {
+        const [result] = await connection.query(boardMessageQueries.insertMessage, [boardId, senderID, message]);
         if (result !== null) {
             return result;
         } else {
@@ -13,7 +13,7 @@ class BoardMessagesModel {
     }
 
     async getMessages(boardId) {
-        const [messages] = await connection.query(boardMessageQueries.getMessagesByBoardId, [boardId]);
+        const [messages] = await connection.query(boardMessageQueries.selectMessagesByBoardId, [boardId]);
         let returnMessages = [];
         for (const nachtricht of messages) {
             let messageId = nachtricht.messageID;
@@ -46,7 +46,7 @@ class BoardMessagesModel {
     }
 
     async getBoardIdByMessageId(messageId) {
-        const [result] = await connection.query(boardMessageQueries.getBoardIdByMessageId, [messageId]);
+        const [result] = await connection.query(boardMessageQueries.selectBoardIdByMessageId, [messageId]);
         if (result !== null) {
             return result[0]?.messageID;
         }

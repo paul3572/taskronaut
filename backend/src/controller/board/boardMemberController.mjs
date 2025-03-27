@@ -9,7 +9,7 @@ import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from
 
 class BoardMemberController {
 
-    async getAllBoardMembers(sessionId, boardId) {
+    async handleAllBoardMemberRequest(sessionId, boardId) {
         const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
         if (myUserId !== null || undefined) {
             const result = await boardMemberModel.selectAllBoardMembersId(boardId);
@@ -33,23 +33,16 @@ class BoardMemberController {
         }
     }
 
-    async createNewBoardMember(userId, boardId) {
-        const result = await boardMemberModel.insertNewBoardMembers(userId, boardId);
-        logger.debug(chalk.hex(styles.debug)`User added to Board: ${result[0]}`);
-        logger.info(chalk.hex(styles.success)`User added to Board successfully!`);
-        return {statusCode: 201, data: result[0]};
-    }
-
-    async addMemberToBoard(sessionId, boardId, email) {
+    async newBoardMemberProcess(sessionId, boardId, email) {
         const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
-        const issuerBoardEntry = await boardMemberModel.getBoardUserEntries(myUserId.userId, boardId);
+        const issuerBoardEntry = await boardMemberModel.getUserEntriesInBoard(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
             throw new PermissionDeniedError("Issuing User is not allowed to board");
         }
         const userToAdd = await authenticationModel.getUserIdByEmail(email);
-        const userToAddEntry = await boardMemberModel.getBoardUserEntries(userToAdd.id, boardId);
+        const userToAddEntry = await boardMemberModel.getUserEntriesInBoard(userToAdd.id, boardId);
         if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
-            const result = await boardMemberModel.insertNewBoardMembers(userToAdd.id, boardId);
+            const result = await boardMemberModel.createNewBoardMember(userToAdd.id, boardId);
             logger.debug(chalk.hex(styles.debug)`User added to Board: ${result}`);
             //TODO: Add user to board chat
             return {statusCode: 201, data: result};
@@ -58,19 +51,19 @@ class BoardMemberController {
         }
     }
 
-    async removeBoardMember(sessionId, boardId, email) {
+    async boardMemberRemovalProcess(sessionId, boardId, email) {
         const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
-        const issuerBoardEntry = await boardMemberModel.getBoardUserEntries(myUserId.userId, boardId);
+        const issuerBoardEntry = await boardMemberModel.getUserEntriesInBoard(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
             throw new Error("Issuing User is not allowed to board");
         }
 
         const userToDelete = await authenticationModel.getUserIdByEmail(email);
-        const userToDeleteEntry = await boardMemberModel.getBoardUserEntries(userToDelete.id, boardId);
+        const userToDeleteEntry = await boardMemberModel.getUserEntriesInBoard(userToDelete.id, boardId);
         if (userToDeleteEntry[0] === null || userToDeleteEntry[0] === undefined) {
             throw new UserNotFoundError(`User with email ${email} is not a member of board with id ${boardId}`);
         } else {
-            const result = await boardMemberModel.deleteBoardMembers(userToDelete.id, boardId);
+            const result = await boardMemberModel.deleteBoardMember(userToDelete.id, boardId);
             logger.info(chalk.hex(styles.success)`User with email ${email} deleted successfully`);
             //TODO: Add Chat member
             return {statusCode: 200, message: `User with email ${email} deleted successfully`};

@@ -8,15 +8,15 @@ import boardMemberModel from "../../models/board/boardMemberModel.mjs";
 
 class TaskController {
 
-    async getAllTask(sessionId) {
+    async handleAllTasksRequest(sessionId) {
         const userId = await findUserBySessionId(sessionId);
-        const result = await taskModel.selectAllTasks();
+        const result = await taskModel.getAllTasks();
 
         logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
         return {statusCode: 200, data: result[0]};
     }
 
-    async addNewDefaultTask(sessionId, taskName, boardID, listID) {
+    async newDefaultTaskCreationProcess(sessionId, taskName, boardID, listID) {
         const taskCreatorID = await findUserBySessionId(sessionId);
         if (taskCreatorID === null || undefined) {
             logger.error(chalk.hex(styles.critical) + `ERROR: User not found`);
@@ -27,16 +27,16 @@ class TaskController {
         return {statusCode: 201};
     }
 
-    async updateTask(sessionId, taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
-        const result = await taskModel.patchTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID);
+    async handleTaskUpdateRequest(sessionId, taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID) {
+        const result = await taskModel.updateTask(taskId, taskName, dueDate, taskDescription, priorities, taskStatus, comments, boardID, listID);
         logger.info(chalk.hex(styles.success)`Task successfully updated`);
         return {statusCode: 200};
     }
 
-    async removeTask(sessionId, taskId) {
+    async handleTaskRemovalRequest(sessionId, taskId) {
         const myUserId = await findUserBySessionId(sessionId);
-        const boardId = await taskModel.selectBoardIdByTask(taskId);
-        const userToAddEntry = await boardMemberModel.getBoardUserEntries(myUserId, boardId);
+        const boardId = await taskModel.getBoardIdByTask(taskId);
+        const userToAddEntry = await boardMemberModel.getUserEntriesInBoard(myUserId, boardId);
         if (userToAddEntry[0] === null || userToAddEntry[0] === undefined) {
             throw new PermissionDeniedError("User is not allowed to board");
         } else {
@@ -46,25 +46,25 @@ class TaskController {
         }
     }
 
-    async getListIdFromTaskId(taskId) {
-        const result = await taskModel.selectListIdByTaskId(taskId);
+    async convertTaskIdToListId(taskId) {
+        const result = await taskModel.getListIdByTaskId(taskId);
         logger.info(chalk.hex(styles.success)`List ID found`);
         return {statusCode: 200, data: result};
     }
 
-    async getUserSpecificTasks(sessionId, boardId) {
+    async handleUserSpecificTasksRequest(sessionId, boardId) {
         const userid = await findUserBySessionId(sessionId);
         // TODO: Check if user is allwoed to board
-        const result = await taskModel.selectUserTasks(boardId);
+        const result = await taskModel.getUserTasks(boardId);
 
         logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
         return {statusCode: 200, data: result};
     }
 
-    async getSpecificTasks(sessionId, boardId) {
+    async handleSpecificTasksRequest(sessionId, boardId) {
         const userid = await findUserBySessionId(sessionId);
         // TODO: where boardId = ....
-        const result = await taskModel.selectUserTasks(boardId);
+        const result = await taskModel.getUserTasks(boardId);
         logger.info(chalk.hex(styles.success)('Tasks successfully loaded'));
         return {statusCode: 200, data: result};
     }

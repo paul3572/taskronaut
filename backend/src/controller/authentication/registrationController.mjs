@@ -26,9 +26,9 @@ class RegistrationController {
         return (regex.authenticationRegex.emailRegex.test(email) && regex.authenticationRegex.passwordRegex.test(password) && regex.authenticationRegex.nameRegex.test(firstName) && regex.authenticationRegex.nameRegex.test(lastName)) === true;
     }
 
-    async userRegistration(email, password, firstName, lastName) {
+    async userRegistrationProcess(email, password, firstName, lastName) {
         if (this.registrationRegex(email, password, firstName, lastName)) {
-            const [rows] = await dbConnection.query(authenticationQueries.getUserByEmail, [email]);
+            const [rows] = await dbConnection.query(authenticationQueries.selectUserByEmail, [email]);
             if (rows.length === 0) {
                 const hPw = await sha256(password);
                 const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
@@ -37,10 +37,10 @@ class RegistrationController {
 
                 /*
                 // Create Default Board for new User
-                const userId = await getUserIdByEmail(email);
+                const userId = await selectUserIdByEmail(email);
                 const boardName = "Default Board";
                 const returnValue = [userId?.id, true]
-                await addBoard(boardName, returnValue);
+                await boardCreationProcess(boardName, returnValue);
                 logger.info(chalk.hex(styles.info)`Default Board ${boardName} added to user ${JSON.stringify(returnValue)}`);
                  */
 

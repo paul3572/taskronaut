@@ -11,13 +11,13 @@ import chalk from "chalk";
 import {styles} from "../../database/loggingStyle.mjs";
 
 class BoardModel {
-    async selectAllUserBoards(userId) {
+    async getAllUserBoards(userId) {
         let boardIds;
         try {
-            [boardIds] = await dbConnection.query(boardMemberQueries.getBoardMemberByUserId, [userId]);
+            [boardIds] = await dbConnection.query(boardMemberQueries.selectBoardMemberByUserId, [userId]);
             logger.info(chalk.hex(styles.success)('Board-Ids: ' + JSON.stringify(boardIds)));
         } catch (queryError) {
-            throw new QueryExecutionError(boardMemberQueries.getBoardMemberByUserId, [userId], queryError);
+            throw new QueryExecutionError(boardMemberQueries.selectBoardMemberByUserId, [userId], queryError);
         }
         if (!boardIds) {
             // bin mir nicht sicher ob das bei 0 boards auch anschlägt
@@ -33,9 +33,9 @@ class BoardModel {
             }
             let board;
             try {
-                [board] = await dbConnection.query(boardQueries.getBoardById, [boardId.boardID]);
+                [board] = await dbConnection.query(boardQueries.selectBoardById, [boardId.boardID]);
             } catch (queryError) {
-                throw new QueryExecutionError(boardQueries.getBoardById, [boardId.boardID], queryError);
+                throw new QueryExecutionError(boardQueries.selectBoardById, [boardId.boardID], queryError);
             }
             if (!board || board.length === 0) {
                 throw new BoardNotFoundError(boardId.boardID);
@@ -47,7 +47,7 @@ class BoardModel {
     }
 
 
-    async insertNewBoard(boardName) {
+    async createNewBoard(boardName) {
         try {
             const [result] = await dbConnection.query(boardQueries.insertBoard, [boardName]);
             if (result !== null) {
@@ -74,8 +74,8 @@ class BoardModel {
         logger.info(`Deleted ${membersResult.affectedRows} member(s) related to the board`);
 
         logger.info("...deleting lists...");
-        const [taskboardlists] = await dbConnection.query(taskQueries.deleteTaskbyBoardList, [boardId]);
-        logger.info(`Deleted ${taskboardlists.affectedRows} list(s) related to the list`);
+        const [taskBoardLists] = await dbConnection.query(taskQueries.deleteTaskByBoardList, [boardId]);
+        logger.info(`Deleted ${taskBoardLists.affectedRows} list(s) related to the list`);
 
         logger.info("...deleting lists...");
         const [listResult] = await dbConnection.query(listQueries.deleteListByBoardId, [boardId]);
@@ -90,7 +90,6 @@ class BoardModel {
         } else {
             return boardResult;
         }
-
     }
 }
 

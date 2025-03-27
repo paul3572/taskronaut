@@ -9,12 +9,12 @@ import {UserNotFoundError} from "../../database/errors.mjs";
 
 class BoardMemberModel {
     async selectAllBoardMembersId(boardId) {
-        const [boardMembers] = await dbConnection.query(boardMemberQueries.getAllBoardMembers, [boardId]);
+        const [boardMembers] = await dbConnection.query(boardMemberQueries.selectAllBoardMembers, [boardId]);
         return boardMembers;
 
     }
 
-    async isUserAllowedToBoard(userId, boardId) {
+    async getUserAllowedToBoardStatus(userId, boardId) {
         const boardLists = await this.selectAllBoardMembersId(boardId);
         for (let boardList of boardLists) {
             if (boardList.userID === userId && boardList.boardID === boardId) {
@@ -26,20 +26,20 @@ class BoardMemberModel {
         return false;
     }
 
-    async insertNewBoardMembers(userId, boardId) {
+    async createNewBoardMember(userId, boardId) {
         const [result] = await dbConnection.query(boardMemberQueries.insertBoardMember, [userId, boardId]);
         //TODO: Insert boardmember to chatmember
         return result;
     }
 
 
-    async deleteBoardMembers(userId, boardId) {
+    async deleteBoardMember(userId, boardId) {
         await connection.query(boardMemberQueries.deleteBoardMemberById, [userId, boardId]);
         //TODO: Delete member from chat member
         return null;
     }
 
-    async getBoardUserEntries(userId, boardId) {
+    async getUserEntriesInBoard(userId, boardId) {
         const [rows] = await connection.query(boardMemberQueries.selectBoardUserEntries, [userId, boardId]);
         return rows;
     }

@@ -15,7 +15,7 @@ router.patch('/list', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionID, taskID, listID} = req.body;
     try {
-        await serverResponse(res, await dragANDdropController.updateListId(sessionID, taskID, listID));
+        await serverResponse(res, await dragANDdropController.handleListIdUpdateRequest(sessionID, taskID, listID));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -29,7 +29,7 @@ router.patch('/status', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionID, taskID, taskStatus} = req.body;
     try {
-        await serverResponse(res, await dragANDdropController.updateStatus(sessionID, taskID, taskStatus));
+        await serverResponse(res, await dragANDdropController.handleStatusUpdateRequest(sessionID, taskID, taskStatus));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

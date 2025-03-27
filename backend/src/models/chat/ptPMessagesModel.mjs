@@ -3,8 +3,8 @@ import {authenticationQueries, p2pMessageQueries} from "../../database/dbQueries
 import authenticationModel from "../authentication/authenticationModel.mjs";
 
 class PtPMessagesModel {
-    async insertNewMessage(myUserId, otherUser, message) {
-        const [result] = await connection.query(p2pMessageQueries.createMessage, [myUserId, otherUser, message]);
+    async createNewMessage(myUserId, otherUser, message) {
+        const [result] = await connection.query(p2pMessageQueries.insertMessage, [myUserId, otherUser, message]);
         if (result !== null) {
             return result;
         } else {
@@ -13,7 +13,7 @@ class PtPMessagesModel {
     }
 
     async getMessages(myUserId, otherUser) {
-        const [sentMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [myUserId, otherUser]);
+        const [sentMessages] = await connection.query(p2pMessageQueries.selectMessagesByUsers, [myUserId, otherUser]);
         let returnMessagesS = [];
         for (const sentMessage of sentMessages) {
             let messageId = sentMessage.messageID;
@@ -36,7 +36,7 @@ class PtPMessagesModel {
                 timestamp: timestamp
             });
         }
-        const [receivedMessages] = await connection.query(p2pMessageQueries.getMessagesByUsers, [otherUser, myUserId]);
+        const [receivedMessages] = await connection.query(p2pMessageQueries.selectMessagesByUsers, [otherUser, myUserId]);
         let returnMessagesR = [];
         for (const returnMessage of receivedMessages) {
             let messageId = returnMessage.messageID;
@@ -70,8 +70,8 @@ class PtPMessagesModel {
         throw new Error();
     }
 
-    async isUserAuthor(myUserId, messageId) {
-        const [result] = await connection.query(p2pMessageQueries.isUserAuthor, [myUserId, messageId]);
+    async getIsUserAuthorStatus(myUserId, messageId) {
+        const [result] = await connection.query(p2pMessageQueries.selectAuthorisationStatus, [myUserId, messageId]);
         if (result !== null) {
             return result[0];
         }
