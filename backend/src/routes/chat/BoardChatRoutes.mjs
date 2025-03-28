@@ -2,7 +2,7 @@ import {Router} from 'express';
 import chalk from "chalk";
 import {styles} from "../../config/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-import {serverResponse} from "../../config/serverResponse.mjs";
+import {serverResponse} from "../../middleware/serverResponse.mjs";
 import boardMessagesController from "../../controller/chat/boardMessagesController.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 

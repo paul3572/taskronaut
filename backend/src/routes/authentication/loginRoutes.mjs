@@ -3,7 +3,7 @@ import {destroySession} from "../../middleware/session2.mjs";
 import loginController from "../../controller/authentication/loginController.mjs";
 import registrationController from "../../controller/authentication/registrationController.mjs";
 import emailActivationController from "../../controller/authentication/emailActivationController.mjs";
-import {serverResponse} from "../../config/serverResponse.mjs";
+import {serverResponse} from "../../middleware/serverResponse.mjs";
 import chalk from "chalk";
 import {styles} from "../../config/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";

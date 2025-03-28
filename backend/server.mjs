@@ -19,7 +19,7 @@ import userDataRoutes from "./src/routes/authentication/userDataRoutes.mjs";
 import {styles} from "./src/config/loggingStyle.mjs";
 import logger from "./src/middleware/logger.mjs";
 import boardMemberRoutes from "./src/routes/board/boardMemberRoutes.mjs";
-import { config } from './src/config/config.mjs';
+import {config} from './src/config/config.mjs';
 
 
 logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
@@ -33,8 +33,7 @@ app.use(cors({
     origin: ['https://taskronaut.at'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
-}
-));
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

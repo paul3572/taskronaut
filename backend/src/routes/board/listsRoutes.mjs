@@ -1,5 +1,5 @@
 import listController from "../../controller/board/listController.mjs";
-import {serverResponse} from "../../config/serverResponse.mjs";
+import {serverResponse} from "../../middleware/serverResponse.mjs";
 import chalk from "chalk";
 import {styles} from "../../config/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
