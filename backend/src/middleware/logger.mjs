@@ -1,15 +1,13 @@
 import winston from 'winston';
 import {extraErrorLog, logInConsole, logInFile} from "../config/serverOptions.mjs";
 
+const transports = [];
 const {combine, timestamp, printf, colorize} = winston.format;
-
 const logFormat = printf(({level, message, timestamp}) => {
     return `${timestamp} ${level}: ${message}`;
 });
-const transports = [];
 
-export function initalizeLogger() {
-// Logging in der Konsole
+export async function initializeLogger() {
     if (logInConsole) {
         transports.push(new winston.transports.Console({
             level: 'debug',
@@ -20,7 +18,6 @@ export function initalizeLogger() {
         }));
     }
 
-// Logging in einer Datei
     if (logInFile) {
         transports.push(new winston.transports.File({
             filename: 'combined.log',
@@ -28,7 +25,6 @@ export function initalizeLogger() {
         }));
     }
 
-// Fehler-Logs
     if (extraErrorLog) {
         transports.push(new winston.transports.File({
             filename: 'errors.log',
@@ -37,7 +33,7 @@ export function initalizeLogger() {
     }
 }
 
-initalizeLogger();
+await initializeLogger();
 
 const logger = winston.createLogger({
     level: 'info',
@@ -47,7 +43,6 @@ const logger = winston.createLogger({
         logFormat
     ),
     transports: transports
-
 });
 
 export default logger;

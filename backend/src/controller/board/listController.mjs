@@ -1,7 +1,7 @@
 import listModel from "../../models/board/listModel.mjs";
 import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import boardMemberModel from "../../models/board/boardMemberModel.mjs";
-import {PermissionDeniedError, UserNotFoundError} from "../../database/errors.mjs";
+import {PermissionDeniedError, UserNotFoundError} from "../../config/errors.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 
 class ListController {

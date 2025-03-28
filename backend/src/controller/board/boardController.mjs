@@ -1,10 +1,10 @@
 import boardModel from "../../models/board/boardModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import boardMemberModel from "../../models/board/boardMemberModel.mjs";
-import {PermissionDeniedError} from "../../database/errors.mjs";
+import {PermissionDeniedError} from "../../config/errors.mjs";
 
 class BoardController {
     async handleBoardRequest(sessionId) {

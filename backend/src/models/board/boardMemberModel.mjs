@@ -3,8 +3,8 @@ import {boardMemberQueries} from "../../database/dbQueries.mjs";
 import connection from "../../database/dbCon.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
-import {UserNotFoundError} from "../../database/errors.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
+import {UserNotFoundError} from "../../config/errors.mjs";
 
 
 class BoardMemberModel {

@@ -1,8 +1,9 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
 import chalk from 'chalk';
+
+import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './src/config/swaggerAll.json' assert {type: 'json'};
 
 
@@ -15,7 +16,7 @@ import taskRoutes from './src/routes/board/taskRoutes.mjs';
 import boardRoutes from './src/routes/board/boardRoutes.mjs';
 import listRoutes from './src/routes/board/listsRoutes.mjs';
 import userDataRoutes from "./src/routes/authentication/userDataRoutes.mjs";
-import {styles} from "./src/database/loggingStyle.mjs";
+import {styles} from "./src/config/loggingStyle.mjs";
 import logger from "./src/middleware/logger.mjs";
 import boardMemberRoutes from "./src/routes/board/boardMemberRoutes.mjs";
 import { config } from './src/config/config.mjs';
@@ -28,7 +29,12 @@ const app = express();
 
 
 app.use(express.urlencoded({extended: true}));
-app.use(cors());
+app.use(cors({
+    origin: ['https://taskronaut.at'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}
+));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -50,7 +56,6 @@ app.use('/api', apiRouter);
 app.use(testRoutes);
 
 app.listen(config.server.port, async () => {
-    console.log(config.nodeMailer.user, config.db.password);
     logger.info(chalk.hex(styles.serverStatusInfo)(`Server running at https://${config.server.domainName}:${config.server.port}`));
     logger.info(chalk.hex(styles.serverStatusInfo)(`SwaggerUI available at https://${config.server.domainName}:${config.server.port}/api-docs`));
     logger.info(chalk.hex(styles.serverStatusInfo)(`Website is reachable at https://${config.server.domainName}:4321`));

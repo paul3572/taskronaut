@@ -2,9 +2,9 @@ import {Router} from 'express';
 import dbConnection from '../../database/dbCon.mjs';
 import {taskQueries} from "../../database/dbQueries.mjs";
 import taskController from "../../controller/board/taskController.mjs";
-import {serverResponse} from "../../middleware/serverResponse.mjs";
+import {serverResponse} from "../../config/serverResponse.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 

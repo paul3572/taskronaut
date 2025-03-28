@@ -1,6 +1,6 @@
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import dragANDdropModel from "../../models/board/dragANDdropModel.mjs";
 
 

@@ -1,6 +1,6 @@
 import dbConnection from "../../database/dbCon.mjs";
 import {authenticationQueries} from "../../database/dbQueries.mjs";
-import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} from "../../database/errors.mjs";
+import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} from "../../config/errors.mjs";
 
 class AuthenticationModel {
     async getUserIdByEmail(email) {

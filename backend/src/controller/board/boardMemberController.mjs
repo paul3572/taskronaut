@@ -2,9 +2,9 @@ import boardMemberModel from "../../models/board/boardMemberModel.mjs";
 import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import sessionModel from "../../models/authentication/sessionModel.mjs";
-import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from "../../database/errors.mjs";
+import {PermissionDeniedError, UserIsAlreadyMemberError, UserNotFoundError} from "../../config/errors.mjs";
 
 
 class BoardMemberController {

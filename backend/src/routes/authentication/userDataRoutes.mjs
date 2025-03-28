@@ -1,7 +1,7 @@
 import logger from "../../middleware/logger.mjs";
     import chalk from "chalk";
-    import {styles} from "../../database/loggingStyle.mjs";
-    import {serverResponse} from "../../middleware/serverResponse.mjs";
+    import {styles} from "../../config/loggingStyle.mjs";
+    import {serverResponse} from "../../config/serverResponse.mjs";
     import {Router} from "express";
     import userDataController from "../../controller/authentication/userDataController.mjs";
     import {errorHandler} from "../../middleware/errorHandler.js";

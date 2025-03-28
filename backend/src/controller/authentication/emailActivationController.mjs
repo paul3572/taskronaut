@@ -7,9 +7,9 @@ import {
     InvalidTokenError,
     PermissionDeniedError,
     UserNotFoundError
-} from "../../database/errors.mjs";
+} from "../../config/errors.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 
 class EmailActivationController {
     async checkEmailVerifiedStatus(userId) {

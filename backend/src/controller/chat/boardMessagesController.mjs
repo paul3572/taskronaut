@@ -1,10 +1,10 @@
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import boardMemberModel from "../../models/board/boardMemberModel.mjs";
-import {PermissionDeniedError} from "../../database/errors.mjs";
+import {PermissionDeniedError} from "../../config/errors.mjs";
 import boardMessagesModel from "../../models/chat/boardMessagesModel.mjs";
 import chalk from "chalk";
 import logger from "../../middleware/logger.mjs";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 
 class BoardMessagesController {
     async sendMessage(sessionId, boardId, message) {

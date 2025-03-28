@@ -6,9 +6,9 @@ import {generateToken} from "../../middleware/token.mjs";
 import {sendEmail} from "../../middleware/email.mjs";
 import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import logger from "../../middleware/logger.mjs";
-import {DatabaseError, EmailAlreadyInUseError, EmailSendingError, InvalidInputError} from "../../database/errors.mjs";
+import {DatabaseError, EmailAlreadyInUseError, EmailSendingError, InvalidInputError} from "../../config/errors.mjs";
 import {config} from "../../config/config.mjs";
 
 

@@ -1,7 +1,7 @@
 import logger from "./src/middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "./src/database/loggingStyle.mjs";
-import {serverResponse} from "./src/middleware/serverResponse.mjs";
+import {styles} from "./src/config/loggingStyle.mjs";
+import {serverResponse} from "./src/config/serverResponse.mjs";
 import {Router} from "express";
 
 const router = Router();

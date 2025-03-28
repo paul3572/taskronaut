@@ -1,11 +1,11 @@
 import {findUserBySessionId} from "../../middleware/session.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
-import {PermissionDeniedError} from "../../database/errors.mjs";
+import {PermissionDeniedError} from "../../config/errors.mjs";
 import psAuthentication from "../../models/authentication/authenticationModel.mjs";
 import ptPMessagesModel from "../../models/chat/ptPMessagesModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 
 class PtpMessagesController {
     async sendMessage(sessionId, otherUserEmail, message) {

@@ -1,6 +1,6 @@
 import logger from "./logger.mjs";
 import chalk from "chalk";
-import {styles} from "../database/loggingStyle.mjs";
+import {styles} from "../config/loggingStyle.mjs";
 import {
     ActivationError, ActivationTokenNotFoundError,
     BoardNotFoundError, DatabaseConnectionError,
@@ -14,7 +14,7 @@ import {
     PermissionDeniedError,
     QueryExecutionError, UserIsAlreadyMemberError, UserNotActivatedError,
     UserNotFoundError
-} from "../database/errors.mjs";
+} from "../config/errors.mjs";
 
 export async function errorHandler(error) {
     const errorMessage = `ERROR: ${error.message}`;

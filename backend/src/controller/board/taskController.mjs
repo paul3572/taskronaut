@@ -1,9 +1,9 @@
 import taskModel from "../../models/board/taskModel.mjs";
 import chalk from "chalk";
 import logger from "../../middleware/logger.mjs";
-import {styles} from "../../database/loggingStyle.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
 import {findUserBySessionId} from "../../middleware/session.mjs";
-import {PermissionDeniedError, UserNotFoundError} from "../../database/errors.mjs";
+import {PermissionDeniedError, UserNotFoundError} from "../../config/errors.mjs";
 import boardMemberModel from "../../models/board/boardMemberModel.mjs";
 
 class TaskController {

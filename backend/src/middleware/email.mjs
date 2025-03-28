@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 import chalk from "chalk";
-import {styles} from "../database/loggingStyle.mjs";
+import {styles} from "../config/loggingStyle.mjs";
 import logger from "./logger.mjs";
 import {config} from "../config/config.mjs";
-import {EmailSendingError} from "../database/errors.mjs";
+import {EmailSendingError} from "../config/errors.mjs";
 
 const transporter = nodemailer.createTransport({
     host: config.nodeMailer.host,

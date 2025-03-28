@@ -1,8 +1,8 @@
 import {Router} from "express";
 import logger from "../../middleware/logger.mjs";
 import chalk from "chalk";
-import {styles} from "../../database/loggingStyle.mjs";
-import {serverResponse} from "../../middleware/serverResponse.mjs";
+import {styles} from "../../config/loggingStyle.mjs";
+import {serverResponse} from "../../config/serverResponse.mjs";
 import boardMemberController from "../../controller/board/boardMemberController.mjs";
 import {errorHandler} from "../../middleware/errorHandler.js";
 
