@@ -52,7 +52,7 @@ class LoginController {
      *  4. Returns a success or failure response based on the password match.
      *  5. Logs errors and handles unexpected issues gracefully.
      */
-    async userLoginProcess(req, email, password) {
+    async handleLoginRequest(req, email, password) {
         if (this.loginRegex(email, password)) {
             const user = await authenticationModel.getUserIdByEmail(email);
             if (user === null) {

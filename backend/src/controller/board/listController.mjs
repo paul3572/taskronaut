@@ -24,7 +24,7 @@ class ListController {
         return {statusCode: 200, data: result};
     }
 
-    async ListCreationProcess(sessionId, boardId, listName) {
+    async handleListCreation(sessionId, boardId, listName) {
         const userId = await authenticationModel.getUserIdBySessionId(sessionId);
         if (userId == null) {
             throw new UserNotFoundError("Benutzer mit der angegebenen Session-ID nicht gefunden.");

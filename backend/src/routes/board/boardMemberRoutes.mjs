@@ -30,7 +30,7 @@ router.delete('/remove', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
     try {
-        await serverResponse(res, await boardMemberController.boardMemberRemovalProcess(sessionId, boardId, email));
+        await serverResponse(res, await boardMemberController.handleBoardMemberRemovalRequest(sessionId, boardId, email));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }
@@ -44,7 +44,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, email} = req.body;
     try {
-        await serverResponse(res, await boardMemberController.newBoardMemberProcess(sessionId, boardId, email));
+        await serverResponse(res, await boardMemberController.handleNewBoardMember(sessionId, boardId, email));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

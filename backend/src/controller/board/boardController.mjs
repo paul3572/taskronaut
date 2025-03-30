@@ -15,7 +15,7 @@ class BoardController {
         return {statusCode: 200, data: result};
     }
 
-    async boardCreationProcess(boardName, sessionId) {
+    async handleBoardCreation(boardName, sessionId) {
         let userId;
         if (sessionId[1] === true) {
             userId = sessionId[0];

@@ -26,7 +26,7 @@ class EmailActivationController {
         }
     }
 
-    async activateEmail(token) {
+    async handleEmailActivationRequest(token) {
         const [user] = await connection.query(authenticationQueries.selectUserByActivationToken, [token]);
         if (!user || user.length === 0 || !user[0]) {
             throw new InvalidTokenError("Invalid token or token does not match any registered user");

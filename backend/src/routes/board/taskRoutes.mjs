@@ -31,7 +31,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     let {sessionId, taskName, boardID, listID} = req.body;
     try {
-        await serverResponse(res, await taskController.newDefaultTaskCreationProcess(sessionId, taskName, boardID, listID));
+        await serverResponse(res, await taskController.handleNewDefaultTaskCreation(sessionId, taskName, boardID, listID));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

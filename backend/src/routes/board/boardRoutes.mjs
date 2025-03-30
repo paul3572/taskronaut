@@ -29,7 +29,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {boardName, sessionId} = req.body;
     try {
-        await serverResponse(res, await boardController.boardCreationProcess(boardName, sessionId));
+        await serverResponse(res, await boardController.handleBoardCreation(boardName, sessionId));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

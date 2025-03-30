@@ -1,4 +1,4 @@
-import {responseMessages} from "../database/responseMessages.mjs";
+import {responseMessages} from "../config/responseMessages.mjs";
 import logger from "./logger.mjs";
 import chalk from "chalk";
 import {styles} from "../config/loggingStyle.mjs";

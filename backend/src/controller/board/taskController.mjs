@@ -16,7 +16,7 @@ class TaskController {
         return {statusCode: 200, data: result[0]};
     }
 
-    async newDefaultTaskCreationProcess(sessionId, taskName, boardID, listID) {
+    async handleNewDefaultTaskCreation(sessionId, taskName, boardID, listID) {
         const taskCreatorID = await findUserBySessionId(sessionId);
         if (taskCreatorID === null || undefined) {
             logger.error(chalk.hex(styles.critical) + `ERROR: User not found`);

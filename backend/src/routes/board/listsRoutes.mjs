@@ -42,7 +42,7 @@ router.post('/add', async (req, res) => {
     logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
     const {sessionId, boardId, listName} = req.body;
     try {
-        await serverResponse(res, await listController.ListCreationProcess(sessionId, boardId, listName));
+        await serverResponse(res, await listController.handleListCreation(sessionId, boardId, listName));
     } catch (exception) {
         await serverResponse(res, await errorHandler(exception));
     }

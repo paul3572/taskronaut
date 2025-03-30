@@ -33,7 +33,7 @@ class BoardMemberController {
         }
     }
 
-    async newBoardMemberProcess(sessionId, boardId, email) {
+    async handleNewBoardMember(sessionId, boardId, email) {
         const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
         const issuerBoardEntry = await boardMemberModel.getUserEntriesInBoard(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
@@ -51,7 +51,7 @@ class BoardMemberController {
         }
     }
 
-    async boardMemberRemovalProcess(sessionId, boardId, email) {
+    async handleBoardMemberRemovalRequest(sessionId, boardId, email) {
         const myUserId = await sessionModel.getUserIdFromSessionId(sessionId);
         const issuerBoardEntry = await boardMemberModel.getUserEntriesInBoard(myUserId.userId, boardId);
         if (issuerBoardEntry[0] === null || issuerBoardEntry[0] === undefined) {
