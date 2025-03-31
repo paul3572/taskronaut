@@ -7,19 +7,6 @@ import {Router} from "express";
 import {errorHandler} from "../../middleware/errorHandler.js";
 
 const router = new Router();
-//TODO: Irrelevant
-router.get('/lists', async (req, res) => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)(`LIST REQUESTED: `));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    try {
-        await serverResponse(res, await listController.handleListRequest());
-    } catch (exception) {
-        await serverResponse(res, await errorHandler(exception));
-    }
-    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
-});
 
 router.post('/get', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));

@@ -1,5 +1,5 @@
 import {sha256} from "../../middleware/sha256.mjs";
-import regex from "../../database/regex.mjs";
+import regex from "../../config/regex.mjs";
 import authenticationModel from "../../models/authentication/authenticationModel.mjs";
 import logger from "../../middleware/logger.mjs";
 import {startSession} from "../../middleware/session2.mjs";
@@ -40,9 +40,6 @@ class LoginController {
      * @param {string} password - The user's plain-text password to be verified.
      * @returns {Promise<Object>} - A promise that resolves to an object containing a status code and message.
      * - `statusCode: 200`: Login successful; the session can start.
-     * - `statusCode: 401`: Unauthorized due to invalid credentials.
-     * - `statusCode: 400`: Bad request due to invalid input.
-     * - `statusCode: 500`: Internal server error.
      *
      * @description
      *  The function performs the following steps:
@@ -50,7 +47,6 @@ class LoginController {
      *  2. Retrieves the user details by email using the `selectUserIdByEmail` function.
      *  3. Hashes the provided password with `sha256` and compares it with the stored hash.
      *  4. Returns a success or failure response based on the password match.
-     *  5. Logs errors and handles unexpected issues gracefully.
      */
     async handleLoginRequest(req, email, password) {
         if (this.loginRegex(email, password)) {
@@ -62,7 +58,6 @@ class LoginController {
             const hashedPassword = await sha256(password);
             const isPasswordValid = hashedPassword === user.password;
             logger.debug(chalk.hex(styles.debug)(`Is Password ${hashedPassword} same as ${user.password}? It's ${isPasswordValid}.`));
-
 
             if (isPasswordValid) {
                 const emailIsActivated = await authenticationModel.getActivationStatusFromUserID(user.id);

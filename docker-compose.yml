@@ -25,14 +25,14 @@ services:
       - ./backend/.env
 
   datenbank:
-    container_name: datenbank
+    container_name: database
     build:
-      context: ./datenbank
+      context: database
       dockerfile: Dockerfile
     expose:
       - "3306"
     env_file:
-        - ./datenbank/.env
+        - database/.env
 
   nginx:
     image: nginx:latest

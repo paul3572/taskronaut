@@ -1,6 +1,11 @@
 import dbConnection from "../../database/dbCon.mjs";
 import {authenticationQueries} from "../../database/dbQueries.mjs";
-import {ActivationTokenNotFoundError, QueryExecutionError, UserNotFoundError} from "../../config/errors.mjs";
+import {
+    ActivationTokenNotFoundError,
+    EmailAlreadyInUseError,
+    QueryExecutionError,
+    UserNotFoundError
+} from "../../config/errors.mjs";
 
 class AuthenticationModel {
     async getUserIdByEmail(email) {
@@ -66,6 +71,24 @@ class AuthenticationModel {
             throw new QueryExecutionError("Fehler bei der Datenbankabfrage: " + rows.message);
         }
         return rows[0]?.activated;
+    }
+
+    async checkIfEmailExists(email) {
+        const [rows] = await dbConnection.query(authenticationQueries.selectUserByEmail, [email]);
+        if (rows instanceof Error) {
+            throw new QueryExecutionError("Fehler bei der Datenbankabfrage: " + rows.message);
+        } else if (rows.length === 0) {
+            throw new EmailAlreadyInUseError("E-Mail already in use!");
+        }
+        return rows;
+    }
+
+    async createUser(email, hPw, firstName, lastName) {
+        const [result] = await dbConnection.query(authenticationQueries.insertUser, [email, hPw, firstName, lastName]);
+        if (result instanceof Error) {
+            throw new QueryExecutionError("Fehler bei der Datenbankabfrage: " + rows.message);
+        }
+        return result;
     }
 }
 

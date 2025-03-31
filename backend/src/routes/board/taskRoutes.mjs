@@ -88,51 +88,6 @@ router.delete('/delete', async (req, res) => {
     }
     logger.info(chalk.hex(styles.dialogEnd)`Task deletion finished!`);
 });
-//TODO: Irrelevant
-router.patch('/tasks/:id/listId', async (req, res) => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)(`SET NEW LIST-ID FOR TASK: `));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-
-    const {id} = req.params;
-    const {listId} = req.body;
-
-    if (!listId) {
-        res.status(400).send("Fehlende listId im Request Body");
-    }
-
-    try {
-        const [result] = await dbConnection.execute(taskQueries.updateTaskListId, [listId, id]);
-
-        if (result.affectedRows === 0) {
-            res.status(404).send('Task not found');
-        } else {
-            const [rows] = await dbConnection.execute(taskQueries.selectTaskById, [id]);
-            const updatedTask = rows[0];
-            res.status(200).send(updatedTask);
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-
-    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
-});
-
-router.get('/get/listId/:id', async (req, res) => {
-    logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));
-    logger.info(chalk.hex(styles.dialogStart)(`GET LIST-ID FROM TASK-ID: `));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter URL: ${JSON.stringify(req.params)}`));
-    logger.debug(chalk.hex(styles.debug)(`Übergabe Parameter Body: ${JSON.stringify(req.body)}`));
-    const taskId = req.params.id;
-    try {
-        await serverResponse(res, await taskController.convertTaskIdToListId(taskId));
-    } catch (exception) {
-        await serverResponse(res, await errorHandler(exception));
-    }
-    logger.info(chalk.hex(styles.dELColour)(styles.dialogEndLine));
-});
 
 router.post('/get/byBoard', async (req, res) => {
     logger.info(chalk.hex(styles.dSLColour)(styles.dialogStartLine));

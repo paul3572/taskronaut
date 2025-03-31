@@ -1,5 +1,5 @@
 // regex.test.js
-import Regex from '../database/regex.mjs';
+import Regex from '../config/regex.mjs';
 
 describe('Regex', () => {
     test('should validate email addresses correctly', () => {
