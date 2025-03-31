@@ -77,7 +77,7 @@ class AuthenticationModel {
         const [rows] = await dbConnection.query(authenticationQueries.selectUserByEmail, [email]);
         if (rows instanceof Error) {
             throw new QueryExecutionError("Fehler bei der Datenbankabfrage: " + rows.message);
-        } else if (rows.length === 0) {
+        } else if (rows.length !== 0) {
             throw new EmailAlreadyInUseError("E-Mail already in use!");
         }
         return rows;
