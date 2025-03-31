@@ -865,9 +865,9 @@
         }
       }
     },
-    "/login": {
+    "/api/authentication/login": {
       "post": {
-        "summary": "Benutzer-Login",
+        "summary": "Login",
         "tags": [
           "Authentication"
         ],

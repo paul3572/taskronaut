@@ -36,7 +36,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 const apiRouter = express.Router();
@@ -50,6 +50,7 @@ apiRouter.use('/lists', listRoutes);
 apiRouter.use('/user', userDataRoutes);
 apiRouter.use('/dragANDdrop', dragANDdropRoutes);
 apiRouter.use('/board-members', boardMemberRoutes);
+apiRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api', apiRouter);
 app.use(testRoutes);
