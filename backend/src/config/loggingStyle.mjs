@@ -19,7 +19,7 @@ export const styles = {
     critical: '#FF0000',
     notice: '#FFD700',
 
-    dSLColour: '#14699c',
+    dSLColour: '#13ffbf',
     dELColour: '#f85e01',
 
     dialogStartLine:'##################################################################################################',

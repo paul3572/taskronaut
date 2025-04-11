@@ -58,13 +58,11 @@ class TaskModel {
         return boardId[0].boardID;
     }
 
-
     async getUserTasks(boardId) {
         const [tasks] = await dbConnection.query(joins.selectBoardTasks, [boardId]);
         logger.debug(chalk.hex(styles.debug)(`Tasks: ${JSON.stringify(tasks)}`));
         return tasks;
     }
-
 }
 
 export default new TaskModel();
