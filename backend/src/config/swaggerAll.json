@@ -3,7 +3,7 @@
   "info": {
     "title": "Taskronaut API",
     "version": "1.0.0",
-    "description": "API documentation for Taskronaut"
+    "description": "Taskronaut ist eine moderne Projektmanagement-Software mit integrierter Chat-Funktion, die Arbeiten in Teams durch Task-, Board- und Kommunikationsfunktionen effizient unterstützt."
   },
   "tags": [
     {
